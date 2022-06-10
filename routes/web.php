@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,15 +16,26 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::post('/me',[AuthController::class, 'authenticate'])
-            ->middleware(['guest'])->name('me');
+Route::middleware(['auth:sanctum'])->get('/auth', function (Request $request) {
+    return response()->json(['user' => $request->user()]);
+});
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/admin', function () {
+    return view('admin');
+})->middleware(['admin']);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
+
+Route::post('/tokens/create', function (Request $request) {
+    $token = $request->user()->createToken($request->token_name);
+
+    return ['token' => $token->plainTextToken];
+})->middleware(['admin'])->name('token.create');
