@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Effect;
+use App\Models\Inventory;
+
 
 class Item extends Model
 {
@@ -25,11 +29,16 @@ class Item extends Model
 
     public function user()
     {
-        return $this->belongsTo(App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function effects()
     {
-        return $this->hasMany(App\Models\Effect::class);
+        return $this->hasMany(Effect::class);
+    }
+
+    public function inventory()
+    {
+        return $this->belongsToMany(Inventory::class)->withPivot('created_at', 'updated_at', 'deleted_at');
     }
 }

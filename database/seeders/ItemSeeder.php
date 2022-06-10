@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Item;
+use App\Models\Inventory;
+use App\Models\Effect;
 
 class ItemSeeder extends Seeder
 {
@@ -16,30 +18,60 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
-        Item::create([
+
+        $inventory = Inventory::create([
             'user_id' => 1,
-            'name' => 'Rusty Sword',
-            'description' => 'A rusty sword',
-            'weight' => 1,
-            'interactive' => true,
-            'wieldable' => true,
-            'throwable' => false,
-            'wearable' => false,
-            'consumable' => false,
-            'durability' => 100,
+            'gold' => 1000,
+            'size' => 2,
         ]);
 
-        Item::create([
-            'user_id' => 1,
-            'name' => 'Rusty Sword',
-            'description' => 'A rusty sword',
-            'weight' => 1,
-            'interactive' => true,
-            'wieldable' => true,
-            'throwable' => false,
-            'wearable' => false,
-            'consumable' => false,
-            'durability' => 100,
-        ]);
+        $items = [
+            Item::create([
+                'user_id' => 1,
+                'name' => 'Rusty Sword',
+                'description' => 'A rusty sword',
+                'weight' => 2,
+                'interactive' => true,
+                'wieldable' => true,
+                'throwable' => false,
+                'wearable' => false,
+                'consumable' => false,
+                'durability' => 5,
+            ]),
+            Item::create([
+                'user_id' => 1,
+                'name' => 'Robust Sword',
+                'description' => 'A robust sword',
+                'weight' => 5,
+                'interactive' => true,
+                'wieldable' => true,
+                'throwable' => false,
+                'wearable' => false,
+                'consumable' => false,
+                'durability' => 55,
+            ])];
+
+        foreach ($items as $item) {
+            $item->inventory()->attach($inventory);
+        }
+
+        Effect::create([
+            'name' => 'Rusty',
+            'description' => 'The sword is rusty',
+            'duration' => -1,
+            'health_change' => 0,
+            'mana_change' => 0,
+            'stamina_change' => 0,
+            'strength_change' => 0,
+            'luck_change' => 0,
+            'damage_change' => 0,
+            'armor_change' => 0,
+            'speed_change' => 0,
+            'critical_chance' => 0,
+            'critical_damage' => 0,
+            'compounds' => false,
+            'compound_chance' => 0,
+        ])->items()->attach($items[0]);
+
     }
 }

@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreign("user_id")->references("id")->on("users");
         });
 
-        Schema::create('inventory_items', function (Blueprint $table) {
+        Schema::create('inventory_item', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
@@ -42,7 +42,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventory_items');
+        Schema::dropIfExists('inventory_item');
         Schema::dropIfExists('inventories');
     }
 };

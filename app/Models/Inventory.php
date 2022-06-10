@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Users;
-use App\Models\InventoryItems;
+use App\Models\Item;
 
 class Inventory extends Model
 {
@@ -13,17 +13,17 @@ class Inventory extends Model
 
     protected $fillable = [
         'user_id',
-        'item_id',
+        'gold',
         'size',
     ];
 
     public function user()
     {
-        return $this->belongsTo(App\Models\User::class);
+        return $this->belongsTo(User::class);
     }
 
-    public function inventory_items()
+    public function items()
     {
-        return $this->hasMany(App\Models\Item::class);
+        return $this->hasMany(Item::class);
     }
 }

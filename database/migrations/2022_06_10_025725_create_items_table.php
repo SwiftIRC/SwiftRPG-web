@@ -52,7 +52,7 @@ return new class extends Migration
             $table->smallInteger("compound_chance")->unsigned();
         });
 
-        Schema::create('item_effects', function (Blueprint $table) {
+        Schema::create('effect_item', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
@@ -63,7 +63,7 @@ return new class extends Migration
             $table->foreign("effect_id")->references("id")->on("effects");
         });
 
-        Schema::table('inventory_items', function (Blueprint $table) {
+        Schema::table('inventory_item', function (Blueprint $table) {
             $table->foreign("item_id")->references("id")->on("items");
         });
     }
@@ -75,11 +75,11 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('inventory_items', function (Blueprint $table) {
-            $table->dropForeign("inventory_items_item_id_foreign");
+        Schema::table('inventory_item', function (Blueprint $table) {
+            $table->dropForeign("inventory_item_item_id_foreign");
         });
 
-        Schema::dropIfExists('item_effects');
+        Schema::dropIfExists('effect_item');
         Schema::dropIfExists('effects');
         Schema::dropIfExists('items');
     }
