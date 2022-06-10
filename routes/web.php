@@ -16,10 +16,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/auth', function (Request $request) {
-    return response()->json(['user' => $request->user()]);
-});
-
 Route::get('/', function () {
     return view('welcome');
 });

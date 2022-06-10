@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-// Route::middleware(['auth:sanctum'])->post('/auth', [AuthController::class, 'authenticate'])->name('auth.check');
+
 Route::middleware(['auth:sanctum'])->post('/auth', function(Request $request) {
     $credentials = $request->validate([
         'name' => ['bail', 'required', 'max:255'],
