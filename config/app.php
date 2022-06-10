@@ -17,6 +17,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'token' => env('BOT_TOKEN'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

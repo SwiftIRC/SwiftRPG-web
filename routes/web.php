@@ -28,10 +28,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::post('/tokens/create', function (Request $request) {
     $token = $request->user()->createToken($request->token_name);
 
-    return ['token' => $token->plainTextToken];
+    return response()->json(['token' => $token->plainTextToken]);
 })->middleware(['admin'])->name('token.create');

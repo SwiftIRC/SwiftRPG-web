@@ -18,7 +18,6 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
-
         $inventory = Inventory::create([
             'user_id' => 1,
             'gold' => 1000,

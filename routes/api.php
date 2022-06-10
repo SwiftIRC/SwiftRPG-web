@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ThievingController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,23 +18,25 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::middleware(['auth:sanctum'])->post('/auth', function(Request $request) {
+Route::middleware(['app'])->post('/auth', function (Request $request) {
     $credentials = $request->validate([
-        'name' => ['bail', 'required', 'max:255'],
+        'name' => ['bail', 'required', 'max:15'],
         'password' => ['required'],
     ]);
 
     if (Auth::guard('web')->attempt($credentials)) {
-        return;
+        $token = Auth::guard('web')->user()->createToken('bot-managed');
+
+        return response()->json(['token' => $token->plainTextToken]);
     }
 
     return abort(403);
 })->name('auth.check');
 
-Route::middleware(['auth:sanctum'])->get('/auth', function(Request $request) {
-    return response()->json(['user' => $request->user()]);
+
+Route::middleware(['auth:sanctum', 'app'])->group(function () {
+    Route::name('thieving.')->prefix('thieving')->group(function () {
+        Route::get('/', [ThievingController::class, 'index']);
+        Route::post('/pickpocket', [ThievingController::class, 'pickpocket']);
+    });
 });

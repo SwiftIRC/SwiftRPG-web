@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Models\Effect;
 use App\Models\Inventory;
 
-
 class Item extends Model
 {
     use HasFactory, SoftDeletes;
