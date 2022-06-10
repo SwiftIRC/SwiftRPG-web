@@ -30,6 +30,10 @@ class ThievingController extends Controller
     {
         $user = Auth::user();
 
+        if ($user->thieving < 10010) { # Level 10
+            return response()->json(['error' => 'You need to be level 10 to steal.'], 403);
+        }
+
         $user->thieving += 10;
         $user->save();
 
@@ -43,6 +47,11 @@ class ThievingController extends Controller
     public function pilfer()
     {
         $user = Auth::user();
+
+        if ($user->thieving < 80020) { # Level 20
+            return response()->json(['error' => 'You need to be level 20 to pilfer.'], 403);
+        }
+
         $user->thieving += 50;
         $user->save();
 
@@ -56,6 +65,11 @@ class ThievingController extends Controller
     public function plunder()
     {
         $user = Auth::user();
+
+        if ($user->thieving < 270030) { # Level 30
+            return response()->json(['error' => 'You need to be level 30 to plunder.'], 403);
+        }
+
         $user->thieving += 100;
         $user->save();
 
