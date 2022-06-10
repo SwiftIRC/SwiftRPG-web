@@ -19,6 +19,5 @@ class AuthController extends Controller
         }
 
         return abort(403);
-
     }
 }

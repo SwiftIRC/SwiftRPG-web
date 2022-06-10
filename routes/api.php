@@ -38,5 +38,8 @@ Route::middleware(['auth:sanctum', 'app'])->group(function () {
     Route::name('thieving.')->prefix('thieving')->group(function () {
         Route::get('/', [ThievingController::class, 'index']);
         Route::post('/pickpocket', [ThievingController::class, 'pickpocket']);
+        Route::post('/steal', [ThievingController::class, 'steal']);
+        Route::post('/pilfer', [ThievingController::class, 'pilfer']);
+        Route::post('/plunder', [ThievingController::class, 'plunder']);
     });
 });

@@ -16,7 +16,7 @@ class AdminsOnly
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! $request->user() || ! $request->user()->admin) {
+        if (!$request->user() || !$request->user()->is_admin) {
             return redirect('/');
         }
 

@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Dragon',
             'password' => '$2y$10$x6Y1U8RCssg.IqOUk7MQQOngUvYCmntyaxLP2UR1BiZUyzy5ov/rq',
-            'admin' => true,
+            'is_admin' => true,
         ]);
 
         DB::table('personal_access_tokens')->insert([

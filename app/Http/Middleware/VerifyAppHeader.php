@@ -16,7 +16,7 @@ class VerifyAppHeader
      */
     public function handle(Request $request, Closure $next)
     {
-        abort_if(empty($request->header('X-Bot-Token')) || $request->header('X-Bot-Token') != config('app.token'), 403);
+        abort_if(empty($request->header('X-Bot-Token')) || $request->header('X-Bot-Token') != config('app.token'), 403, "Invalid app token");
 
         return $next($request);
     }
