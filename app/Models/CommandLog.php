@@ -12,6 +12,7 @@ class CommandLog extends Model
     protected $fillable = [
         'user_id',
         'command',
+        'message',
         'created_at',
         'updated_at',
     ];
