@@ -19,6 +19,8 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'password',
+        'thieving',
+        'woodcutting',
     ];
 
     /**
@@ -31,4 +33,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function hiscores()
+    {
+        return $this->selectRaw('SUM(thieving + woodcutting)');
+    }
 }
