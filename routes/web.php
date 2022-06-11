@@ -29,7 +29,7 @@ Route::get('/help', function () {
 })->name('help');
 
 Route::get('/hiscores', function () {
-    $users = User::selectRaw('*, sum(thieving + woodcutting) as total')->get()->sortByDesc('total');
+    $users = User::selectRaw('*, sum(thieving + woodcutting) as total')->orderBy('total')->get();
 
     return view('hiscores', compact('users'));
 })->name('hiscores');
@@ -39,7 +39,7 @@ Route::get('/admin', function () {
 })->middleware(['admin']);
 
 Route::get('/dashboard', function () {
-    $inventory = Inventory::first();
+    $inventory = Inventory::where('user_id', Auth::id())->first();
     $items = $inventory->items;
 
     $inventory_size = $inventory->size;
