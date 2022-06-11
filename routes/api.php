@@ -19,21 +19,10 @@ use App\Http\Controllers\WoodcuttingController;
 |
 */
 
-Route::middleware(['app'])->post('/auth', function (Request $request) {
-    $credentials = $request->validate([
-        'name' => ['bail', 'required', 'max:15'],
-        'password' => ['required'],
-    ]);
-
-    if (Auth::guard('web')->attempt($credentials)) {
-        $token = Auth::guard('web')->user()->createToken('bot-managed');
-
-        return response()->json(['token' => $token->plainTextToken]);
-    }
-
-    return abort(403);
-})->name('auth.check');
-
+Route::middleware(['app'])->name('auth.')->prefix('auth')->group(function () {
+    Route::post('/', [AuthController::class, 'check']);
+    Route::post('/register', [AuthController::class, 'register']);
+});
 
 Route::middleware(['auth:sanctum', 'app'])->group(function () {
     Route::name('thieving.')->prefix('thieving')->group(function () {
