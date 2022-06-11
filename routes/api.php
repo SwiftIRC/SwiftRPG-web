@@ -42,4 +42,8 @@ Route::middleware(['auth:sanctum', 'app'])->group(function () {
         Route::post('/pilfer', [ThievingController::class, 'pilfer']);
         Route::post('/plunder', [ThievingController::class, 'plunder']);
     });
+    Route::name('woodcutting.')->prefix('woodcutting')->group(function () {
+        Route::get('/', [WoodcuttingController::class, 'index']);
+        Route::post('/chop', [WoodcuttingController::class, 'chop']);
+    });
 });

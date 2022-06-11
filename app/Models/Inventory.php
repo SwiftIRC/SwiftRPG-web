@@ -26,4 +26,9 @@ class Inventory extends Model
     {
         return $this->hasMany(Item::class);
     }
+
+    public function addItem(Item $item)
+    {
+        $this->items()->save($item);
+    }
 }
