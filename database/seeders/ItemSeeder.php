@@ -26,7 +26,6 @@ class ItemSeeder extends Seeder
 
         $items = [
             Item::create([
-                'user_id' => 1,
                 'name' => 'Rusty Sword',
                 'description' => 'A rusty sword',
                 'weight' => 2,
@@ -38,7 +37,6 @@ class ItemSeeder extends Seeder
                 'durability' => 5,
             ]),
             Item::create([
-                'user_id' => 1,
                 'name' => 'Robust Sword',
                 'description' => 'A robust sword',
                 'weight' => 5,
@@ -48,10 +46,8 @@ class ItemSeeder extends Seeder
                 'wearable' => false,
                 'consumable' => false,
                 'durability' => 55,
-                'quantity' => 1,
             ]),
             Item::create([
-                'user_id' => 1,
                 'name' => 'Logs',
                 'description' => 'A bundle of logs',
                 'weight' => 2,
@@ -60,13 +56,14 @@ class ItemSeeder extends Seeder
                 'throwable' => false,
                 'wearable' => false,
                 'consumable' => false,
+                'stackable' => true,
                 'durability' => 100,
-                'quantity' => 10,
             ])
         ];
 
         foreach ($items as $item) {
             $item->inventory()->attach($inventory);
+            $items[2]->inventory()->attach($inventory);
         }
 
         Effect::create([

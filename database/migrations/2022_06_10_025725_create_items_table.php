@@ -17,10 +17,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->bigInteger("user_id")->unsigned();
             $table->string("name", 100);
             $table->string("description", 255)->nullable();
-            $table->bigInteger("quantity")->unsigned()->default(1);
             $table->bigInteger("weight")->unsigned();
             $table->boolean("interactive")->default(false);
             $table->boolean("wieldable")->default(false);
@@ -29,8 +27,6 @@ return new class extends Migration
             $table->boolean("consumable")->default(false);
             $table->boolean("stackable")->default(false);
             $table->smallInteger("durability")->unsigned()->default(100);
-
-            $table->foreign("user_id")->references("id")->on("users");
         });
 
         Schema::create('effects', function (Blueprint $table) {
