@@ -28,6 +28,16 @@ class ItemSeeder extends Seeder
             'gold' => 0,
             'size' => 5,
         ]);
+        Inventory::create([
+            'user_id' => 3,
+            'gold' => 0,
+            'size' => 5,
+        ]);
+        Inventory::create([
+            'user_id' => 4,
+            'gold' => 0,
+            'size' => 5,
+        ]);
 
         $items = [
             Item::create([
