@@ -35,9 +35,8 @@ Route::get('/dashboard', function () {
     $items = $inventory->items;
 
     $inventory_size = $inventory->size;
-    $user = Auth::user();
 
-    return view('dashboard', compact('inventory_size', 'items', 'user'));
+    return view('dashboard', compact('inventory_size', 'items'));
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__ . '/auth.php';

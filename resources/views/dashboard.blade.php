@@ -32,8 +32,16 @@
                     Skills
 
                     <ol class="list-decimal">
-                        <li>Thieving: {{ xp_to_level($user->thieving) }} ({{ $user->thieving }}xp)</li>
-                        <li>Woodcutting: {{ xp_to_level($user->woodcutting) }} ({{ $user->woodcutting }}xp)</li>
+                        <li>
+                            Thieving:
+                            {{ xp_to_level(Auth::user()->thieving) }}
+                            ({{ Auth::user()->thieving }}xp)
+                        </li>
+                        <li>
+                            Woodcutting:
+                            {{ xp_to_level(Auth::user()->woodcutting) }}
+                            ({{ Auth::user()->woodcutting }}xp)
+                        </li>
                     </ol>
                 </div>
             </div>
