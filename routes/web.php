@@ -28,24 +28,16 @@ Route::get('/admin', function () {
 
 Route::get('/dashboard', function () {
     $inventory = Inventory::where('user_id', Auth::id())->first();
-    $items = $inventory->distinctItems()->get();
-    $rawItems = $inventory->items()->get();
-    foreach ($items as $item) {
-        $item->effects = $item->effects()->get();
-        $item->quantity = count(array_filter($rawItems->all(), function ($rawItem) use ($item) {
-            return $rawItem->id === $item->id;
-        }));
-    }
+    $items = $inventory->items;
+
     $inventory_size = $inventory->size;
     $user = Auth::user();
 
     return view('dashboard', compact('inventory_size', 'items', 'user'));
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('/help', function () {
+    return view('help');
+});
+
 require __DIR__ . '/auth.php';
-
-// Route::post('/tokens/create', function (Request $request) {
-//     $token = $request->user()->createToken($request->token_name);
-
-//     return response()->json(['token' => $token->plainTextToken]);
-// })->middleware(['admin'])->name('token.create');

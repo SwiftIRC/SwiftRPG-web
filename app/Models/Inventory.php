@@ -7,6 +7,7 @@ use App\Models\Users;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Inventory extends Model
 {
@@ -25,13 +26,6 @@ class Inventory extends Model
 
     public function items()
     {
-        return $this->belongsToMany(Item::class)->withPivot('created_at', 'updated_at', 'deleted_at');
-    }
-
-    public function distinctItems()
-    {
-        return $this->belongsToMany(Item::class)->distinct('id');
-        // Why does this line not work?
-        return $this->belongsToMany(Item::class)->withPivot('created_at', 'updated_at', 'deleted_at')->distinct('id');
+        return $this->belongsToMany(Item::class)->withTimestamps()->groupBy('pivot_item_id')->selectRaw('items.*, count(item_id) as quantity');
     }
 }
