@@ -38,6 +38,6 @@ class Item extends Model
 
     public function inventory()
     {
-        return $this->hasMany(Inventory::class)->groupBy('name');
+        return $this->hasMany(Inventory::class)->distinct('name');
     }
 }

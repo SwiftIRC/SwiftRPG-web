@@ -23,9 +23,9 @@ class WoodcuttingController extends Controller
         $inventory = Inventory::where('user_id', $user->id)->first();
 
         $item = Item::where('name', 'Logs')->first();
-        $inventory->items()->save($item);
+        $inventory->items()->attach($item);
 
-        $logs = $inventory->items()->where('name', 'Logs')->count;
+        $logs = count($inventory->items()->where('name', 'Logs')->get()->all());
 
         return response()->json(['woodcutting' => $user->woodcutting, 'logs' => $logs]);
     }

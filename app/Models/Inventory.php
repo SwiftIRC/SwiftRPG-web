@@ -30,6 +30,8 @@ class Inventory extends Model
 
     public function distinctItems()
     {
-        return $this->belongsToMany(Item::class)->withPivot('created_at', 'updated_at', 'deleted_at')->distinct('name');
+        return $this->belongsToMany(Item::class)->distinct('id');
+        // Why does this line not work?
+        return $this->belongsToMany(Item::class)->withPivot('created_at', 'updated_at', 'deleted_at')->distinct('id');
     }
 }

@@ -33,7 +33,7 @@ Route::get('/dashboard', function () {
     foreach ($items as $item) {
         $item->effects = $item->effects()->get();
         $item->quantity = count(array_filter($rawItems->all(), function ($rawItem) use ($item) {
-            return $rawItem->name === $item->name;
+            return $rawItem->id === $item->id;
         }));
     }
     $inventory_size = $inventory->size;
