@@ -34,8 +34,28 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function inventories()
+    {
+        return $this->hasMany(Inventory::class);
+    }
+
     public function inventory()
     {
-        return $this->hasOne(Inventory::class);
+        return $this->inventories()->first();
+    }
+
+    public function addToInventory(Item $item)
+    {
+        $inventory = $this->inventory();
+
+        if (!$inventory) {
+            $inventory = $this->inventories()->create([
+                'user_id' => $this->id,
+            ]);
+        }
+
+        $inventory->items()->attach($item);
+
+        return $inventory->items()->where('name', $item->name)->count();
     }
 }

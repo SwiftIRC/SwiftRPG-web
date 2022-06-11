@@ -21,9 +21,7 @@ class Woodcutting
         $user->save();
 
         $item = Item::where('name', 'Logs')->first();
-        $user->inventory->items()->attach($item);
-
-        $logs = $user->inventory->items()->where('name', 'Logs')->count();
+        $logs = $user->addToInventory($item);
 
         $output = ['woodcutting' => $user->woodcutting, 'logs' => $logs];
 
