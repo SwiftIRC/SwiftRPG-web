@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventory;
+use App\Models\CommandLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Inventory;
 
 class ThievingController extends Controller
 {
@@ -15,6 +16,11 @@ class ThievingController extends Controller
 
     public function pickpocket()
     {
+        $last_run = CommandLog::where('user_id', Auth::id())->where('command', 'pickpocket')->where('created_at', '>=', now()->subMinutes(1))->get()->count();
+        if ($last_run > 0) {
+            return response()->json(['error' => 'You can only run this command once every minute.'], 403);
+        }
+
         $user = Auth::user();
         $user->thieving += 5;
         $user->save();
@@ -28,6 +34,11 @@ class ThievingController extends Controller
 
     public function steal()
     {
+        $last_run = CommandLog::where('user_id', Auth::id())->where('command', 'steal')->where('created_at', '>=', now()->subMinutes(1))->get()->count();
+        if ($last_run > 0) {
+            return response()->json(['error' => 'You can only run this command once every minute.'], 403);
+        }
+
         $user = Auth::user();
 
         if ($user->thieving < 10010) { # Level 10
@@ -46,6 +57,11 @@ class ThievingController extends Controller
 
     public function pilfer()
     {
+        $last_run = CommandLog::where('user_id', Auth::id())->where('command', 'pilfer')->where('created_at', '>=', now()->subMinutes(1))->get()->count();
+        if ($last_run > 0) {
+            return response()->json(['error' => 'You can only run this command once every minute.'], 403);
+        }
+
         $user = Auth::user();
 
         if ($user->thieving < 80020) { # Level 20
@@ -64,6 +80,11 @@ class ThievingController extends Controller
 
     public function plunder()
     {
+        $last_run = CommandLog::where('user_id', Auth::id())->where('command', 'plunder')->where('created_at', '>=', now()->subMinutes(1))->get()->count();
+        if ($last_run > 0) {
+            return response()->json(['error' => 'You can only run this command once every minute.'], 403);
+        }
+
         $user = Auth::user();
 
         if ($user->thieving < 270030) { # Level 30
