@@ -435,7 +435,7 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white border-b border-gray-200">
                             <h1>{{ __('Help') }}</h1>
-                            The following are all valid command prefixes: +-@.!
+                            The following are all valid command prefixes: <strong>+-@.!</strong>
 
                             <h2>Login</h2>
                             <p>
