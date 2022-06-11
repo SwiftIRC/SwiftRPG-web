@@ -21,12 +21,12 @@ class AdminSeeder extends Seeder
             'is_admin' => true,
         ]);
 
-        DB::table('personal_access_tokens')->insert([
-            'tokenable_type' => 'App\Models\User',
-            'tokenable_id' => 1,
-            'name' => 'bot',
-            'token' => '195a14888e8a8f8b47bdf6ce62decd5c845390039e223e7f59b48471933e3605',
-            'abilities' => '["*"]',
-        ]);
+        // DB::table('personal_access_tokens')->insert([
+        //     'tokenable_type' => 'App\Models\User',
+        //     'tokenable_id' => 1,
+        //     'name' => 'bot',
+        //     'token' => '195a14888e8a8f8b47bdf6ce62decd5c845390039e223e7f59b48471933e3605',
+        //     'abilities' => '["*"]',
+        // ]);
     }
 }

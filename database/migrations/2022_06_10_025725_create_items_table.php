@@ -20,13 +20,14 @@ return new class extends Migration
             $table->bigInteger("user_id")->unsigned();
             $table->string("name", 100);
             $table->string("description", 255)->nullable();
+            $table->bigInteger("quantity")->unsigned()->default(1);
             $table->bigInteger("weight")->unsigned();
-            $table->boolean("interactive");
-            $table->boolean("wieldable");
-            $table->boolean("throwable");
-            $table->boolean("wearable");
-            $table->boolean("consumable");
-            $table->smallInteger("durability")->unsigned();
+            $table->boolean("interactive")->default(false);
+            $table->boolean("wieldable")->default(false);
+            $table->boolean("throwable")->default(false);
+            $table->boolean("wearable")->default(false);
+            $table->boolean("consumable")->default(false);
+            $table->smallInteger("durability")->unsigned()->default(100);
 
             $table->foreign("user_id")->references("id")->on("users");
         });

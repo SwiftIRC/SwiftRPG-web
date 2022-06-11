@@ -21,7 +21,7 @@ class ItemSeeder extends Seeder
         $inventory = Inventory::create([
             'user_id' => 1,
             'gold' => 1000,
-            'size' => 2,
+            'size' => 5,
         ]);
 
         $items = [
@@ -48,7 +48,20 @@ class ItemSeeder extends Seeder
                 'wearable' => false,
                 'consumable' => false,
                 'durability' => 55,
-            ])];
+            ]),
+            Item::create([
+                'user_id' => 1,
+                'name' => 'Logs',
+                'description' => 'A bundle of logs',
+                'weight' => 5,
+                'interactive' => true,
+                'wieldable' => true,
+                'throwable' => false,
+                'wearable' => false,
+                'consumable' => false,
+                'durability' => 55,
+            ])
+        ];
 
         foreach ($items as $item) {
             $item->inventory()->attach($inventory);
@@ -71,6 +84,5 @@ class ItemSeeder extends Seeder
             'compounds' => false,
             'compound_chance' => 0,
         ])->items()->attach($items[0]);
-
     }
 }
