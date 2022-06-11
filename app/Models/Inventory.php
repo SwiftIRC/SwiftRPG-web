@@ -21,6 +21,6 @@ class Inventory extends Model
 
     public function items()
     {
-        return $this->belongsToMany(Item::class)->withTimestamps()->groupBy('pivot_item_id')->selectRaw('items.*, count(item_id) as quantity');
+        return $this->belongsToMany(Item::class)->withTimestamps()->groupBy('item_id')->selectRaw('items.*, count(item_id) as quantity');
     }
 }

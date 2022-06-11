@@ -38,9 +38,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(Inventory::class);
     }
-
-    public function hiscores()
-    {
-        return $this->selectRaw('SUM(thieving + woodcutting)');
-    }
 }
