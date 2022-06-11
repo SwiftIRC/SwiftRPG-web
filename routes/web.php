@@ -29,7 +29,7 @@ Route::get('/help', function () {
 })->name('help');
 
 Route::get('/hiscores', function () {
-    $users = User::all();
+    $users = User::all()->sortByDesc(DB::raw('sum(thieving + woodcutting)'));
 
     return view('hiscores', compact('users'));
 })->name('hiscores');
