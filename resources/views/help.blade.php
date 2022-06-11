@@ -408,7 +408,7 @@
     <div
         class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
         @if (Route::has('login'))
-            <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+            <div class="hidden fixed top-0 right-2 px-6 py-4 sm:block">
                 @auth
                     <a href="{{ url('/dashboard') }}"
                         class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
@@ -434,7 +434,83 @@
                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white border-b border-gray-200">
-                            {{ __('This is a placeholder for the help page.') }}
+                            <h1>{{ __('Help') }}</h1>
+                            The following are all valid command prefixes: +-@.!
+
+                            <h2>Login</h2>
+                            <p>
+                                To login, use the below command. Please note this can only be done in a private message
+                                with the bot.
+                                <br>
+                                <code>
+                                    !login <strong>&lt;username&gt;</strong> <strong>&lt;password&gt;</strong>
+                                </code>
+                            </p>
+                            <h2>Logout</h2>
+                            <p>
+                                To logout, use the below command. Please note this can only be done in a private message
+                                with the bot, and you must be logged in for this to work.
+                                <br>
+                                <code>
+                                    !logout
+                                </code>
+                            </p>
+                            <h2>Login Status</h2>
+                            <p>
+                                To verify if you are logged into the bot, you may use the following:
+                                <br>
+                                <code>
+                                    !loggedin
+                                </code>
+                            </p>
+                            <h2>Experience</h2>
+                            <p>
+                                To check how much experience you need for a given level, you may use the below command.
+                                Please note you must be logged in for this to work.
+                                <br>
+                                <code>
+                                    !xp <strong>&lt;level&gt;</strong>
+                                </code>
+                            </p>
+                            <h2>Level</h2>
+                            <p>
+                                To check which level a given experience translates to, you may use the below command.
+                                Please note you must be logged in for this to work.
+                                <br>
+                                <code>
+                                    !level <strong>&lt;level&gt;</strong>
+                                </code>
+                            </p>
+                            <h2>Thieving</h2>
+                            <h3>Pickpocket</h3>
+                            <p>
+                                To pickpocket an NPC, use the below command. This command will yield 5 xp and 5 gold.
+                                Please note you must be logged in for this to work.
+                                <br>
+                                <code>
+                                    !pickpocket
+                                </code>
+                            </p>
+                            <h3>Steal</h3>
+                            <p>
+                                To steal from an NPC, use the below command. This command will yield 10 xp and 10 gold.
+                                Please note you must be logged in for this to work, and you must have level 10 thieving.
+                                <br>
+                                <code>
+                                    !steal
+                                </code>
+                            </p>
+                            <h2>Woodcutting</h2>
+                            <h3>Chop</h3>
+                            <p>
+                                To chop some logs from a tree, use the below command. This command will yield 5 xp and 1
+                                bundle of logs.
+                                Please note you must be logged in for this to work.
+                                <br>
+                                <code>
+                                    !chop
+                                </code>
+                            </p>
                         </div>
                     </div>
                 </div>
