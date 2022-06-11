@@ -39,12 +39,9 @@ Route::get('/admin', function () {
 })->middleware(['admin']);
 
 Route::get('/dashboard', function () {
-    $inventory = Inventory::where('user_id', Auth::id())->first();
-    $items = $inventory->items;
+    $inventory = Inventory::first();
 
-    $inventory_size = $inventory->size;
-
-    return view('dashboard', compact('inventory_size', 'items'));
+    return view('dashboard', compact('inventory'));
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
