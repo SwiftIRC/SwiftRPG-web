@@ -15,7 +15,7 @@ class AuthController extends Controller
     public function check(Request $request)
     {
         $credentials = $request->validate([
-            'name' => ['bail', 'required', 'unique:users,name', 'alpha_dash', 'max:15'],
+            'name' => ['bail', 'required', 'alpha_dash', 'max:15'],
             'password' => ['required'],
         ]);
 
