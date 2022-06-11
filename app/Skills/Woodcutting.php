@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Skills;
+
 use App\Models\Item;
 use App\Models\Inventory;
 use App\Models\CommandLog;
