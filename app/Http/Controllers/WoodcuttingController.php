@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use RangeException;
 use App\Models\Item;
 use App\Models\Inventory;
 use App\Models\CommandLog;
@@ -18,6 +19,10 @@ class WoodcuttingController extends Controller
 
     public function chop()
     {
-        return response()->json(app(Woodcutting::class)->chop());
+        try {
+            return response()->json(app(Woodcutting::class)->chop());
+        } catch (RangeException $e) {
+            return response()->json(['error' => $e->getMessage()], 403);
+        }
     }
 }

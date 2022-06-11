@@ -6,6 +6,7 @@ use App\Models\Item;
 use App\Models\Inventory;
 use App\Models\CommandLog;
 use Illuminate\Support\Facades\Auth;
+use RangeException;
 
 class Woodcutting
 {
@@ -13,6 +14,7 @@ class Woodcutting
     {
         $last_run = CommandLog::where('user_id', Auth::id())->where('command', 'chop')->where('created_at', '>=', now()->subMinutes(1))->get()->count();
         if ($last_run > 0) {
+            throw new RangeException('You can only run this command once every minute.');
             return response()->json(['error' => 'You can only run this command once every minute.'], 403);
         }
 
