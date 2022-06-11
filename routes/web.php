@@ -22,6 +22,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/help', function () {
+    return view('help');
+})->name('help');
+
 Route::get('/admin', function () {
     return view('admin');
 })->middleware(['admin']);
@@ -35,9 +39,5 @@ Route::get('/dashboard', function () {
 
     return view('dashboard', compact('inventory_size', 'items', 'user'));
 })->middleware(['auth'])->name('dashboard');
-
-Route::get('/help', function () {
-    return view('help');
-})->name('help');
 
 require __DIR__ . '/auth.php';
