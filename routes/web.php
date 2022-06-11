@@ -38,6 +38,6 @@ Route::get('/dashboard', function () {
 
 Route::get('/help', function () {
     return view('help');
-});
+})->name('help');
 
 require __DIR__ . '/auth.php';
