@@ -27,6 +27,7 @@ return new class extends Migration
             $table->boolean("throwable")->default(false);
             $table->boolean("wearable")->default(false);
             $table->boolean("consumable")->default(false);
+            $table->boolean("stackable")->default(false);
             $table->smallInteger("durability")->unsigned()->default(100);
 
             $table->foreign("user_id")->references("id")->on("users");

@@ -48,18 +48,20 @@ class ItemSeeder extends Seeder
                 'wearable' => false,
                 'consumable' => false,
                 'durability' => 55,
+                'quantity' => 1,
             ]),
             Item::create([
                 'user_id' => 1,
                 'name' => 'Logs',
                 'description' => 'A bundle of logs',
-                'weight' => 5,
+                'weight' => 2,
                 'interactive' => true,
-                'wieldable' => true,
+                'wieldable' => false,
                 'throwable' => false,
                 'wearable' => false,
                 'consumable' => false,
-                'durability' => 55,
+                'durability' => 100,
+                'quantity' => 10,
             ])
         ];
 
