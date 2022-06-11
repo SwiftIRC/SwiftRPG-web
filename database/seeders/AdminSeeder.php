@@ -20,6 +20,11 @@ class AdminSeeder extends Seeder
             'password' => '$2y$10$x6Y1U8RCssg.IqOUk7MQQOngUvYCmntyaxLP2UR1BiZUyzy5ov/rq',
             'is_admin' => true,
         ]);
+        DB::table('users')->insert([
+            'name' => 'TechSquid',
+            'password' => '$2y$10$mOK0QZvQH8qpzD3wAUQSB.MXT1U22cAvtmdCnKjMUy/nK.DzNy/zS',
+            'is_admin' => false,
+        ]);
 
         // DB::table('personal_access_tokens')->insert([
         //     'tokenable_type' => 'App\Models\User',
