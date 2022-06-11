@@ -29,10 +29,7 @@ Route::get('/help', function () {
 })->name('help');
 
 Route::get('/hiscores', function () {
-    // $users = User::orderByDesc('thieving')->get();
     $users = User::selectRaw('*, thieving + woodcutting as total')->orderByDesc('total')->get();
-    // $total = $users->sortBy('thieving');
-    // dd($users);
 
     return view('hiscores', compact('users'));
 })->name('hiscores');

@@ -436,11 +436,13 @@
                         <div class="p-6 bg-white border-b border-gray-200">
                             <h1>{{ __('HiScores') }}</h1>
 
-                            @foreach ($users as $user)
-                                <p>
-                                    <strong>{{ $user->name }}</strong>
-                                </p>
-                            @endforeach
+                            <ol>
+                                @foreach ($users as $user)
+                                    <li>
+                                        <strong>{{ $user->name }}</strong>
+                                    </li>
+                                @endforeach
+                            </ol>
                         </div>
                     </div>
                 </div>
