@@ -34,6 +34,11 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function inventory()
+    {
+        return $this->hasOne(Inventory::class);
+    }
+
     public function hiscores()
     {
         return $this->selectRaw('SUM(thieving + woodcutting)');

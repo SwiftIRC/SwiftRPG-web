@@ -24,12 +24,10 @@ class ThievingController extends Controller
         $user = Auth::user();
         $user->thieving += 5;
         $user->save();
+        $user->inventory->gold += 5;
+        $user->inventory->save();
 
-        $gold = Inventory::where('user_id', $user->id)->first();
-        $gold->gold += 5;
-        $gold->save();
-
-        return response()->json(['thieving' => $user->thieving, 'gold' => $gold->gold]);
+        return response()->json(['thieving' => $user->thieving, 'gold' => $user->inventory->gold]);
     }
 
     public function steal()

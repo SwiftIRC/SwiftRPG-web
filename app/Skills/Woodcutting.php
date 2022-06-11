@@ -1,20 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
-
 use App\Models\Item;
 use App\Models\Inventory;
 use App\Models\CommandLog;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class WoodcuttingController extends Controller
+class Woodcutting
 {
-    public function index()
-    {
-        return view('woodcutting.index');
-    }
-
     public function chop()
     {
         $last_run = CommandLog::where('user_id', Auth::id())->where('command', 'chop')->where('created_at', '>=', now()->subMinutes(1))->get()->count();
@@ -26,12 +18,10 @@ class WoodcuttingController extends Controller
         $user->woodcutting += 5;
         $user->save();
 
-        $inventory = Inventory::first();
-
         $item = Item::where('name', 'Logs')->first();
-        $inventory->items()->attach($item);
+        $user->inventory->items()->attach($item);
 
-        $logs = $inventory->items()->where('name', 'Logs')->count();
+        $logs = $user->inventory->items()->where('name', 'Logs')->count();
 
         $output = ['woodcutting' => $user->woodcutting, 'logs' => $logs];
 
@@ -41,6 +31,6 @@ class WoodcuttingController extends Controller
             'message' => json_encode($output),
         ]);
 
-        return response()->json($output);
+        return $output;
     }
 }
