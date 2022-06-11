@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\Item;
+use App\Models\User;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -25,6 +27,12 @@ Route::get('/', function () {
 Route::get('/help', function () {
     return view('help');
 })->name('help');
+
+Route::get('/hiscores', function () {
+    $users = User::all();
+
+    return view('hiscores', compact('users'));
+})->name('hiscores');
 
 Route::get('/admin', function () {
     return view('admin');
