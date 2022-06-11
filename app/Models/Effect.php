@@ -30,6 +30,6 @@ class Effect extends Model
 
     public function items()
     {
-        return $this->belongsToMany(Item::class)->withPivot('created_at', 'updated_at', 'deleted_at');
+        return $this->hasMany(Item::class);
     }
 }

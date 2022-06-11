@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->string("name", 100);
+            $table->string("name", 100)->unique();
             $table->string("description", 255)->nullable();
             $table->bigInteger("weight")->unsigned();
             $table->boolean("interactive")->default(false);

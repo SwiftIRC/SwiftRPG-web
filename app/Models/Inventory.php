@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Users;
 use App\Models\Item;
+use App\Models\Users;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Inventory extends Model
 {
@@ -24,11 +25,11 @@ class Inventory extends Model
 
     public function items()
     {
-        return $this->hasMany(Item::class);
+        return $this->belongsToMany(Item::class)->withPivot('created_at', 'updated_at', 'deleted_at');
     }
 
-    public function addItem(Item $item)
+    public function distinctItems()
     {
-        $this->items()->save($item);
+        return $this->belongsToMany(Item::class)->withPivot('created_at', 'updated_at', 'deleted_at')->distinct('name');
     }
 }

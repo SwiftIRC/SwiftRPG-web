@@ -62,15 +62,15 @@ class ItemSeeder extends Seeder
         ];
 
         foreach ($items as $item) {
-            $item->inventory()->attach($inventory);
-            $items[2]->inventory()->attach($inventory);
+            $inventory->items()->attach($item);
+            $inventory->items()->attach($items[2]);
         }
 
-        Effect::create([
-            'name' => 'Rusty',
-            'description' => 'The sword is rusty',
+        $effect = Effect::create([
+            'name' => 'Tetanus',
+            'description' => 'The sword was rusty',
             'duration' => -1,
-            'health_change' => 0,
+            'health_change' => -5,
             'mana_change' => 0,
             'stamina_change' => 0,
             'strength_change' => 0,
@@ -82,6 +82,8 @@ class ItemSeeder extends Seeder
             'critical_damage' => 0,
             'compounds' => false,
             'compound_chance' => 0,
-        ])->items()->attach($items[0]);
+        ]);
+
+        $items[0]->effects()->attach($effect);
     }
 }

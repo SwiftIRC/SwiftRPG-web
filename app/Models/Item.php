@@ -33,11 +33,11 @@ class Item extends Model
 
     public function effects()
     {
-        return $this->hasMany(Effect::class);
+        return $this->belongsToMany(Effect::class)->withPivot('created_at', 'updated_at', 'deleted_at');
     }
 
     public function inventory()
     {
-        return $this->belongsToMany(Inventory::class)->withPivot('created_at', 'updated_at', 'deleted_at');
+        return $this->hasMany(Inventory::class)->groupBy('name');
     }
 }

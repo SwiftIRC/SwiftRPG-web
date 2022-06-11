@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use App\Models\Item;
+use App\Models\Inventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,13 +27,24 @@ Route::get('/admin', function () {
 })->middleware(['admin']);
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $inventory = Inventory::where('user_id', Auth::id())->first();
+    $items = $inventory->distinctItems()->get();
+    $rawItems = $inventory->items()->get();
+    foreach ($items as $item) {
+        $item->effects = $item->effects()->get();
+        $item->quantity = count(array_filter($rawItems->all(), function ($rawItem) use ($item) {
+            return $rawItem->name === $item->name;
+        }));
+    }
+    $inventory_size = $inventory->size;
+
+    return view('dashboard', compact('inventory_size', 'items'));
 })->middleware(['auth'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
 
-Route::post('/tokens/create', function (Request $request) {
-    $token = $request->user()->createToken($request->token_name);
+// Route::post('/tokens/create', function (Request $request) {
+//     $token = $request->user()->createToken($request->token_name);
 
-    return response()->json(['token' => $token->plainTextToken]);
-})->middleware(['admin'])->name('token.create');
+//     return response()->json(['token' => $token->plainTextToken]);
+// })->middleware(['admin'])->name('token.create');
