@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use RangeException;
 use App\Models\Inventory;
 use App\Models\CommandLog;
 use Illuminate\Http\Request;
@@ -16,18 +17,11 @@ class ThievingController extends Controller
 
     public function pickpocket()
     {
-        $last_run = CommandLog::where('user_id', Auth::id())->where('command', 'pickpocket')->where('created_at', '>=', now()->subMinutes(1))->get()->count();
-        if ($last_run > 0) {
-            return response()->json(['error' => 'You can only run this command once every minute.'], 403);
+        try {
+            return response()->json(app(Thieving::class)->pickpocket());
+        } catch (RangeException $e) {
+            return response()->json(['error' => $e->getMessage()], 403);
         }
-
-        $user = Auth::user();
-        $user->thieving += 5;
-        $user->save();
-        $user->inventory->gold += 5;
-        $user->inventory->save();
-
-        return response()->json(['thieving' => $user->thieving, 'gold' => $user->inventory->gold]);
     }
 
     public function steal()

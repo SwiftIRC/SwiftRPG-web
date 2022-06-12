@@ -19,8 +19,6 @@ class Woodcutting extends Skill
         $item = Item::where('name', 'Logs')->first();
         $logs = $user->addToInventory($item);
 
-        $output = ['woodcutting' => $user->woodcutting, 'logs' => $logs];
-
-        return $output;
+        return ['woodcutting' => $user->woodcutting, 'logs' => $logs];
     }
 }
