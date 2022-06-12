@@ -19,4 +19,14 @@ class Thieving extends Skill
 
         return ['thieving' => $user->thieving, 'gold' => $user->getGold()];
     }
+
+    protected function steal()
+    {
+        $user = Auth::user();
+        $user->thieving += 10;
+        $user->addGold(10);
+        $user->save();
+
+        return ['thieving' => $user->thieving, 'gold' => $user->getGold()];
+    }
 }

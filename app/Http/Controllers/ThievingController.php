@@ -27,25 +27,15 @@ class ThievingController extends Controller
 
     public function steal()
     {
-        $last_run = CommandLog::where('user_id', Auth::id())->where('command', 'steal')->where('created_at', '>=', now()->subMinutes(1))->get()->count();
-        if ($last_run > 0) {
-            return response()->json(['error' => 'You can only run this command once every minute.'], 403);
+        try {
+            if (Auth::user()->thieving < level_to_xp(10)) { # Level 10
+                return response()->json(['error' => 'You need to be level 10 to steal.'], 403);
+            }
+
+            return response()->json(app(Thieving::class)->steal());
+        } catch (RangeException $e) {
+            return response()->json(['error' => $e->getMessage()], 403);
         }
-
-        $user = Auth::user();
-
-        if ($user->thieving < 10010) { # Level 10
-            return response()->json(['error' => 'You need to be level 10 to steal.'], 403);
-        }
-
-        $user->thieving += 10;
-        $user->save();
-
-        $gold = Inventory::where('user_id', $user->id)->first();
-        $gold->gold += 10;
-        $gold->save();
-
-        return response()->json(['thieving' => $user->thieving, 'gold' => $gold->gold]);
     }
 
     public function pilfer()
