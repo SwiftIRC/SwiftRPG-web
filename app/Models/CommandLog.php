@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Sbine\Tenancy\HasTenancy;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CommandLog extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenancy;
 
     protected $fillable = [
         'user_id',
