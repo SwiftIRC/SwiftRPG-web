@@ -58,4 +58,31 @@ class User extends Authenticatable
 
         return $inventory->items()->where('name', $item->name)->count();
     }
+
+    public function addGold(int $amount)
+    {
+        $inventory = $this->inventory();
+
+        if (!$inventory) {
+            $inventory = $this->inventories()->create([
+                'user_id' => $this->id,
+            ]);
+        }
+
+        $inventory->gold += $amount;
+        $inventory->save();
+
+        return $inventory->gold;
+    }
+
+    public function getGold()
+    {
+        $inventory = $this->inventories()->selectRaw('SUM(gold) as gold')->first();
+
+        if (!$inventory) {
+            return 0;
+        }
+
+        return $inventory->gold;
+    }
 }

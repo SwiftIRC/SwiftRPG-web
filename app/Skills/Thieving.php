@@ -14,10 +14,9 @@ class Thieving extends Skill
     {
         $user = Auth::user();
         $user->thieving += 5;
+        $user->addGold(5);
         $user->save();
-        $user->inventory->gold += 5;
-        $user->inventory->save();
 
-        return ['thieving' => $user->thieving, 'gold' => $user->inventory->gold];
+        return ['thieving' => $user->thieving, 'gold' => $user->getGold()];
     }
 }
