@@ -17,9 +17,13 @@ class Skill
             throw new RangeException('You can only run this command once every minute.');
         }
 
+        $output = $this->$methodName($parameters);
+
         CommandLog::create([
             'command' => $action,
-            'message' => json_encode($this->$methodName($parameters)),
+            'message' => json_encode($output),
         ]);
+
+        return $output;
     }
 }
