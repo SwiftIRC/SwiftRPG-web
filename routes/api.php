@@ -43,7 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             return Auth::user();
         });
         Route::get('/{user}', function ($user) {
-            return User::name($user)->first();
+            return User::where('name', $user)->first();
         });
     });
     Route::name('map.')->prefix('map')->group(function () {
