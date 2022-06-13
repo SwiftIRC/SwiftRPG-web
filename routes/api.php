@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ThievingController;
 use App\Http\Controllers\WoodcuttingController;
-
+use App\Models\Edge;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +50,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::name('tile.')->prefix('tile')->group(function () {
             Route::get('/{x}/{y}', function ($x, $y) {
                 return Tile::where('x', $x)->where('y', $y)->first();
+            });
+            Route::get('/{x}/{y}/edges', function ($x, $y) {
+                return Tile::where('x', $x)->where('y', $y)->first()->edges()->get();
             });
         });
     });
