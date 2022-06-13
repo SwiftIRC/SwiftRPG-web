@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Item;
+use App\Models\Tile;
 use App\Models\User;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
@@ -43,5 +44,9 @@ Route::get('/dashboard', function () {
 
     return view('dashboard', compact('inventory'));
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/tile/{x}/{y}', function ($x, $y) {
+    return Tile::where('x', $x)->where('y', $y)->first();
+});
 
 require __DIR__ . '/auth.php';
