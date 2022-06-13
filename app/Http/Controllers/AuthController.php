@@ -48,6 +48,6 @@ class AuthController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
+        return response()->json(compact('user'));
     }
 }
