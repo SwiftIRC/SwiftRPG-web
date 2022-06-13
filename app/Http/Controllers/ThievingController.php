@@ -54,7 +54,7 @@ class ThievingController extends Controller
     public function plunder()
     {
         if (Auth::user()->thieving < level_to_xp(30)) {
-            return response()->json(['error' => 'You need to be level 20 to plunder.'], 403);
+            return response()->json(['error' => 'You need to be level 30 to plunder.'], 403);
         }
 
         try {
