@@ -440,6 +440,7 @@
                                 @foreach ($users as $user)
                                     <li>
                                         <strong>{{ $user->name }}</strong>
+                                        ({{ $user->total }}xp)
                                     </li>
                                 @endforeach
                             </ol>
