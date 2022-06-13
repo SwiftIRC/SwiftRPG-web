@@ -78,7 +78,6 @@ class ItemSeeder extends Seeder
 
         foreach ($items as $item) {
             $inventory->items()->attach($item);
-            $inventory->items()->attach($items[2]);
         }
 
         $effect = Effect::create([
