@@ -41,6 +41,16 @@ class UserSeeder extends Seeder
             'password' => '$2y$10$OEUxB0aT1y3/rLNGrIxh8OdY2G9pHjEm/d.DrX.hd2VLCq6bI9vT2',
             'is_admin' => false,
         ]);
+        User::create([
+            'name' => 'Helix',
+            'password' => '$2y$10$B.wzWPJMmvYvsXPqLbLa..qlA1Us.Z/eYiNz7aoDVAN5.IhdMHIxG',
+            'is_admin' => false,
+        ]);
+        User::create([
+            'name' => 'Shrimp',
+            'password' => '$2y$10$pB5S4GHXxckQ8ujVu4H9..H1khSRmyu0q0wu7RFRn5cvReny52Yqa',
+            'is_admin' => false,
+        ]);
 
         // DB::table('personal_access_tokens')->insert([
         //     'tokenable_type' => 'App\Models\User',
