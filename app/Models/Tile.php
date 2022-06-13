@@ -23,4 +23,19 @@ class Tile extends Model
         'west_edge',
         'last_disturbed',
     ];
+
+    public function buildings()
+    {
+        return $this->belongsToMany(Building::class)->withTimestamps();
+    }
+
+    public function npcs()
+    {
+        return $this->belongsToMany(Npc::class)->withTimestamps();
+    }
+
+    public function edges()
+    {
+        return $this->belongsToMany(Edge::class)->withTimestamps();
+    }
 }

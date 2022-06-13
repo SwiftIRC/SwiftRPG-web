@@ -23,7 +23,8 @@ class TileFactory extends Factory
             'x' => $x,
             'y' => $y,
 
-            'trees' => $this->faker->randomDigit(0, 100),
+            'max_trees' => $this->faker->randomDigit(50, 100),
+            'available_trees' => $this->faker->randomDigit(0, 50),
 
             'north_edge' => $this->faker->randomDigit(0, 100),
             'east_edge' => $this->faker->randomDigit(0, 100),
