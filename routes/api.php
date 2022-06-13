@@ -25,7 +25,7 @@ Route::middleware(['app'])->name('auth.')->prefix('auth')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-Route::middleware(['auth:sanctum', 'app'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::name('thieving.')->prefix('thieving')->group(function () {
         Route::get('/', [ThievingController::class, 'index']);
         Route::post('/pickpocket', [ThievingController::class, 'pickpocket']);
@@ -42,7 +42,7 @@ Route::middleware(['auth:sanctum', 'app'])->group(function () {
             return Auth::user();
         });
         Route::get('/{user}', function ($user) {
-            return User::id($user)->first();
+            return User::name($user)->first();
         });
     });
 });
