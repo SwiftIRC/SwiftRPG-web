@@ -9,13 +9,14 @@ use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 
 class Tile extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasTimestamps, SoftDeletes;
 
     protected $fillable = [
         'discovered_by',
         'x',
         'y',
-        'trees',
+        'max_trees',
+        'available_trees',
         'north_edge',
         'east_edge',
         'south_edge',
