@@ -31,7 +31,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => ['bail', 'required', 'unique:users,name', 'alpha_dash', 'max:15'],
+            'name' => ['bail', 'required', 'unique:users', 'alpha_dash', 'max:15'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
