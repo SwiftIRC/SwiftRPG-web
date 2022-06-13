@@ -32,6 +32,9 @@ class User extends Authenticatable
         'is_admin',
         'password',
         'remember_token',
+        'updated_at',
+        'created_at',
+        'deleted_at',
     ];
 
     public function inventories()
