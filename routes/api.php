@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Tile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -43,6 +44,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
         Route::get('/{user}', function ($user) {
             return User::name($user)->first();
+        });
+    });
+    Route::name('map.')->prefix('map')->group(function () {
+        Route::name('tile.')->prefix('tile')->group(function () {
+            Route::get('/{x}/{y}', function ($x, $y) {
+                return Tile::where('x', $x)->where('y', $y)->first();
+            });
         });
     });
 });

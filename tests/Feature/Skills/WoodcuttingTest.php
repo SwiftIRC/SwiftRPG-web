@@ -49,4 +49,23 @@ class WoodcuttingTest extends TestCase
             'item_id' => $item->id,
         ]);
     }
+
+    public function test_user_cannot_chop()
+    {
+        $user = User::factory()->create();
+        $inventory = Inventory::factory()->create([
+            'user_id' => $user->id,
+        ]);
+        $item = Item::factory()->create([
+            'name' => 'Logs',
+        ]);
+
+        $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Bot-Token' => config('app.token')]);
+
+        $response->assertStatus(200);
+
+        $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Bot-Token' => config('app.token')]);
+
+        $response->assertStatus(403);
+    }
 }
