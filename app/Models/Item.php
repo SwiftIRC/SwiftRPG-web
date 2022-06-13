@@ -34,7 +34,7 @@ class Item extends Model
 
     public function effects()
     {
-        return $this->belongsToMany(Effect::class)->withPivot('created_at', 'updated_at', 'deleted_at');
+        return $this->belongsToMany(Effect::class)->withTimestamps();
     }
 
     public function inventory()
