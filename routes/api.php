@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -35,5 +36,13 @@ Route::middleware(['auth:sanctum', 'app'])->group(function () {
     Route::name('woodcutting.')->prefix('woodcutting')->group(function () {
         Route::get('/', [WoodcuttingController::class, 'index']);
         Route::post('/chop', [WoodcuttingController::class, 'chop']);
+    });
+    Route::name('stats.')->prefix('stats')->group(function () {
+        Route::get('/', function () {
+            return Auth::user();
+        });
+        Route::get('/{user}', function ($user) {
+            return User::id($user)->first();
+        });
     });
 });
