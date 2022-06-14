@@ -20,4 +20,9 @@ class Npc extends Model
     {
         return $this->hasMany(Building::class)->withTimestamps();
     }
+
+    public function occupation()
+    {
+        return $this->belongsTo(Occupation::class);
+    }
 }

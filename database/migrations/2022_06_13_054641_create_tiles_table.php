@@ -36,7 +36,7 @@ return new class extends Migration
             $table->id();
 
             $table->string("name", 100)->unique();
-            $table->string("description", 255)->nullable();
+            $table->string("description", 1000)->nullable();
 
             $table->boolean('is_shop')->default(false);
             $table->boolean('is_pub')->default(false);
@@ -55,7 +55,7 @@ return new class extends Migration
             $table->id();
 
             $table->string("name", 100);
-            $table->string("description", 255)->nullable();
+            $table->string("description", 1000)->nullable();
             $table->bigInteger("zone_id")->unsigned();
 
             $table->timestamps();
@@ -77,11 +77,22 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('occupations', function (Blueprint $table) {
+            $table->id();
+
+            $table->string("name", 100);
+            $table->string("description", 1000)->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('npcs', function (Blueprint $table) {
             $table->id();
 
             $table->string("name", 100);
-            $table->string("description", 255)->nullable();
+            $table->string("description", 1000)->nullable();
+            $table->bigInteger("occupation_id")->unsigned()->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -117,7 +128,7 @@ return new class extends Migration
             $table->id();
 
             $table->string("name", 100);
-            $table->string("description", 255)->nullable();
+            $table->string("description", 1000)->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -127,7 +138,7 @@ return new class extends Migration
             $table->id();
 
             $table->string("name", 100);
-            $table->string("description", 255)->nullable();
+            $table->string("description", 1000)->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -167,6 +178,14 @@ return new class extends Migration
             $table->foreign("tile_id")->references("id")->on("tiles");
             $table->foreign("edge_id")->references("id")->on("edges");
         });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->bigInteger('x')->default(0);
+            $table->bigInteger('y')->default(0);
+            $table->bigInteger('building_id')->unsigned()->nullable();
+
+            $table->foreign('building_id')->references('id')->on('buildings');
+        });
     }
 
     /**
@@ -176,6 +195,12 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign('users_building_id_foreign');
+            $table->dropColumn('building_id');
+            $table->dropColumn('x');
+            $table->dropColumn('y');
+        });
         Schema::dropIfExists('edge_tile');
         Schema::dropIfExists('edge_terrain');
         Schema::dropIfExists('terrain_tile');
@@ -183,6 +208,7 @@ return new class extends Migration
         Schema::dropIfExists('edges');
         Schema::dropIfExists('npc_tile');
         Schema::dropIfExists('building_npc');
+        Schema::dropIfExists('occupations');
         Schema::dropIfExists('npcs');
         Schema::dropIfExists('building_tile');
         Schema::dropIfExists('buildings');
