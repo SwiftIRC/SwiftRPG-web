@@ -33,7 +33,7 @@ class TileTest extends TestCase
         $response->assertJson([
             'id' => $tile->id,
             'discovered_by' => $user->id,
-            'psuedo_id' => implode([$tile->x, '-', $tile->y]),
+            'psuedo_id' => implode([$tile->x, ',', $tile->y]),
             'x' => $tile->x,
             'y' => $tile->y,
             'max_trees' => $tile->max_trees,

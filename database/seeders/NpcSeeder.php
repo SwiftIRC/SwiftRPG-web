@@ -19,9 +19,9 @@ class NpcSeeder extends Seeder
      */
     public function run()
     {
-        $tile = Tile::where('psuedo_id', '0-0')->first();
-        $tile2 = Tile::where('psuedo_id', '1-0')->first();
-        $tile3 = Tile::where('psuedo_id', '0-1')->first();
+        $tile = Tile::where('psuedo_id', '0,0')->first();
+        $tile2 = Tile::where('psuedo_id', '1,0')->first();
+        $tile3 = Tile::where('psuedo_id', '0,1')->first();
 
         $zone = Zone::create([
             'name' => 'Farmhouse',

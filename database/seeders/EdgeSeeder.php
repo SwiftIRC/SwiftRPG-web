@@ -18,7 +18,7 @@ class EdgeSeeder extends Seeder
     public function run()
     {
         $grassy = Terrain::where('id', 1)->first();
-        $tile = Tile::where('psuedo_id', '0-0')->first();
+        $tile = Tile::where('psuedo_id', '0,0')->first();
 
         $edge = Edge::create([
             'name' => 'Grass',

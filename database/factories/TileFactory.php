@@ -19,7 +19,7 @@ class TileFactory extends Factory
         $x = $this->faker->randomDigit(1, 100);
         $y = $this->faker->randomDigit(1, 100);
         return [
-            'psuedo_id' => $x . '-' . $y,
+            'psuedo_id' => $x . ',' . $y,
             'x' => $x,
             'y' => $y,
 
