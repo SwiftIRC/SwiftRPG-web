@@ -24,4 +24,9 @@ class Building extends Model
     {
         return $this->belongsToMany(Npc::class)->withTimestamps();
     }
+
+    public function zones()
+    {
+        return $this->belongsTo(Zone::class)->withTimestamps();
+    }
 }

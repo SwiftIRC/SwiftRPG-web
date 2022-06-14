@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Effect;
 use App\Models\Inventory;
-
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 
 class Item extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, HasTimestamps, SoftDeletes;
 
     protected $fillable = [
         'user_id',

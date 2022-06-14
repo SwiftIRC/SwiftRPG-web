@@ -4,6 +4,7 @@ namespace Tests\Feature\Map;
 
 use App\Models\Npc;
 use Tests\TestCase;
+use App\Models\Edge;
 use App\Models\Tile;
 use App\Models\User;
 use App\Models\Building;
@@ -21,6 +22,7 @@ class TileTest extends TestCase
     public function test_tile_lookup()
     {
         $user = User::factory()->create();
+
         $tile = Tile::factory()->create([
             'discovered_by' => $user->id,
         ]);
@@ -37,10 +39,6 @@ class TileTest extends TestCase
             'max_trees' => $tile->max_trees,
             'available_trees' => $tile->available_trees,
             'last_disturbed' => $tile->last_disturbed->format('Y-m-d H:i:s'),
-            'north_edge' => $tile->north_edge,
-            'east_edge' => $tile->east_edge,
-            'south_edge' => $tile->south_edge,
-            'west_edge' => $tile->west_edge,
         ]);
     }
 }

@@ -26,11 +26,6 @@ class TileFactory extends Factory
             'max_trees' => $this->faker->randomDigit(50, 100),
             'available_trees' => $this->faker->randomDigit(0, 50),
 
-            'north_edge' => $this->faker->randomDigit(0, 100),
-            'east_edge' => $this->faker->randomDigit(0, 100),
-            'south_edge' => $this->faker->randomDigit(0, 100),
-            'west_edge' => $this->faker->randomDigit(0, 100),
-
             'last_disturbed' => $this->faker->dateTime(),
         ];
     }
