@@ -17,7 +17,7 @@ class NpcFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->word,
+            'name' => $this->faker->firstName() . ' ' . $this->faker->lastName(),
             'description' => $this->faker->sentence,
         ];
     }

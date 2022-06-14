@@ -19,29 +19,104 @@ class NpcSeeder extends Seeder
      */
     public function run()
     {
-        $tile = Tile::where('psuedo_id', '0,0')->first();
+        $tile1 = Tile::where('psuedo_id', '0,0')->first();
         $tile2 = Tile::where('psuedo_id', '1,0')->first();
         $tile3 = Tile::where('psuedo_id', '0,1')->first();
+        $tile4 = Tile::where('psuedo_id', '0,-1')->first();
+        $tile5 = Tile::where('psuedo_id', '-1,0')->first();
 
-        $zone = Zone::create([
+        $farmhouse = Building::create([
             'name' => 'Farmhouse',
-            'description' => 'A test zone',
+            'description' => 'An average sized farmhouse.',
+            'zone_id' => Zone::create([
+                'name' => 'Farmhouse',
+                'description' => 'Generic farmhouses.',
+                'is_shop' => false,
+                'is_pub' => false,
+                'is_house' => false,
+                'is_bed' => false,
+                'is_accessible' => true,
+                'is_locked' => false,
+                'is_pilferable' => false,
+            ])->id,
+        ]);
+
+        $church = Building::create([
+            'name' => 'Church',
+            'description' => 'A basic wooden church.',
+            'zone_id' => Zone::create([
+                'name' => 'Chuch',
+                'description' => 'Generic, basic churches.',
+                'is_shop' => false,
+                'is_pub' => false,
+                'is_house' => false,
+                'is_bed' => false,
+                'is_accessible' => true,
+                'is_locked' => false,
+                'is_pilferable' => false,
+            ])->id,
+        ]);
+
+        $shop = Building::create([
+            'name' => 'Shop',
+            'description' => 'A generic, basic shop.',
+            'zone_id' => Zone::create([
+                'name' => 'Shop',
+                'description' => 'Generic, basic shops.',
+                'is_shop' => true,
+                'is_pub' => false,
+                'is_house' => false,
+                'is_bed' => false,
+                'is_accessible' => true,
+                'is_locked' => false,
+                'is_pilferable' => false,
+            ])->id,
+        ]);
+
+        $house_zone = Zone::create([
+            'name' => 'House',
+            'description' => 'Generic, basic houses.',
             'is_shop' => false,
             'is_pub' => false,
-            'is_house' => false,
+            'is_house' => true,
             'is_bed' => false,
             'is_accessible' => true,
             'is_locked' => false,
             'is_pilferable' => false,
         ]);
 
-        $building = Building::create([
-            'name' => 'Farmhouse',
-            'description' => 'An average sized farmhouse.',
-            'zone_id' => $zone->id,
+        $house = Building::create([
+            'name' => 'House',
+            'description' => 'A standard wooden house.',
+            'zone_id' => $house_zone->id,
+        ]);
+        $rundown_house = Building::create([
+            'name' => 'Abandoned House',
+            'description' => 'A rundown wooden house.',
+            'zone_id' => $house_zone->id,
+        ]);
+        $bed_house = Building::create([
+            'name' => 'Empty House',
+            'description' => 'The bed appears to have been made recently.',
+            'zone_id' => Zone::create([
+                'name' => 'House with a Bed',
+                'description' => 'Resting is available in this house.',
+                'is_shop' => false,
+                'is_pub' => false,
+                'is_house' => true,
+                'is_bed' => true,
+                'is_accessible' => true,
+                'is_locked' => false,
+                'is_pilferable' => false,
+            ])->id,
         ]);
 
-        $tile->buildings()->attach($building);
+        $tile1->buildings()->attach($farmhouse);
+        $tile2->buildings()->attach($church);
+        $tile3->buildings()->attach($shop);
+        $tile4->buildings()->attach($house);
+        $tile4->buildings()->attach($rundown_house);
+        $tile5->buildings()->attach($bed_house);
 
         $npcs = [
             Npc::create([
@@ -102,7 +177,7 @@ class NpcSeeder extends Seeder
             ]),
         ];
 
-        $building->npcs()->create([
+        $farmhouse->npcs()->create([
             'name' => 'Gibb Wyon',
             'description' => 'An experienced farmer, born and raised. His clothing looks worn.',
             'occupation_id' => Occupation::create([
@@ -112,7 +187,7 @@ class NpcSeeder extends Seeder
         ]);
 
         foreach ($npcs as $npc) {
-            $tile->npcs()->attach($npc);
+            $tile1->npcs()->attach($npc);
         };
         Occupation::create([
             'name' => 'Clerk',
