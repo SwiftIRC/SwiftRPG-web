@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Npc;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 
-class Building extends Model
+class Occupation extends Model
 {
     use HasFactory, HasTimestamps, SoftDeletes;
 
@@ -16,23 +17,8 @@ class Building extends Model
         'description',
     ];
 
-    public function tiles()
-    {
-        return $this->hasMany(Tile::class);
-    }
-
     public function npcs()
     {
-        return $this->belongsToMany(Npc::class)->withTimestamps();
-    }
-
-    public function zones()
-    {
-        return $this->belongsTo(Zone::class)->withTimestamps();
-    }
-
-    public function user()
-    {
-        return $this->hasOne(User::class);
+        return $this->hasOne(Npc::class);
     }
 }

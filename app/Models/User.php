@@ -21,6 +21,9 @@ class User extends Authenticatable
         'password',
         'thieving',
         'woodcutting',
+        'x',
+        'y',
+        'building_id',
     ];
 
     /**
@@ -87,5 +90,10 @@ class User extends Authenticatable
         }
 
         return $inventory->gold;
+    }
+
+    public function building()
+    {
+        return $this->belongsTo(Building::class);
     }
 }
