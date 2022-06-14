@@ -21,8 +21,8 @@ class Edge extends Model
         return $this->hasMany(Tile::class);
     }
 
-    public function terrain()
+    public function terrains()
     {
-        return $this->belongsToMany(Terrain::class)->withTimestamps();
+        return $this->belongsToMany(Terrain::class)->withTimestamps()->withPivot('is_road');
     }
 }

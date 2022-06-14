@@ -93,6 +93,9 @@ return new class extends Migration
             $table->bigInteger("building_id")->unsigned();
             $table->bigInteger("npc_id")->unsigned();
 
+            $table->timestamps();
+            $table->softDeletes();
+
             $table->foreign("building_id")->references("id")->on("buildings");
             $table->foreign("npc_id")->references("id")->on("npcs");
         });
@@ -120,7 +123,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create("terrain", function (Blueprint $table) {
+        Schema::create("terrains", function (Blueprint $table) {
             $table->id();
 
             $table->string("name", 100);
@@ -156,6 +159,7 @@ return new class extends Migration
             $table->bigInteger("edge_id")->unsigned();
             $table->bigInteger("tile_id")->unsigned();
             $table->enum('direction', ['north', 'east', 'south', 'west'])->default('north');
+            $table->boolean("is_road")->default(false);
 
             $table->timestamps();
             $table->softDeletes();
@@ -175,7 +179,7 @@ return new class extends Migration
         Schema::dropIfExists('edge_tile');
         Schema::dropIfExists('edge_terrain');
         Schema::dropIfExists('terrain_tile');
-        Schema::dropIfExists('terrain');
+        Schema::dropIfExists('terrains');
         Schema::dropIfExists('edges');
         Schema::dropIfExists('npc_tile');
         Schema::dropIfExists('building_npc');

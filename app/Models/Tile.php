@@ -13,6 +13,7 @@ class Tile extends Model
 
     protected $fillable = [
         'discovered_by',
+        'psuedo_id',
         'x',
         'y',
         'max_trees',
@@ -39,8 +40,8 @@ class Tile extends Model
         return $this->belongsToMany(Edge::class)->withTimestamps()->withPivot('direction');
     }
 
-    public function terrain()
+    public function terrains()
     {
-        return $this->belongsTo(Terrain::class);
+        return $this->belongsToMany(Terrain::class)->withTimestamps();
     }
 }

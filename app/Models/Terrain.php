@@ -23,6 +23,6 @@ class Terrain extends Model
 
     public function tiles()
     {
-        return $this->hasOne(Tile::class);
+        return $this->hasMany(Tile::class);
     }
 }
