@@ -55,6 +55,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 return Tile::where('x', $x)->where('y', $y)->first()->edges()->get();
             });
         });
+        Route::name('user.')->prefix('user')->group(function () {
+            Route::get('/{user}', function ($user) {
+                return User::where('name', $user)->select(['x', 'y'])->first();
+            });
+        });
     });
     Route::name('npc.')->prefix('npc')->group(function () {
         Route::get('/{npc}', function ($npc) {
