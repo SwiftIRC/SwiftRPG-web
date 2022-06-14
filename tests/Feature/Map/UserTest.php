@@ -38,4 +38,103 @@ class UserTest extends TestCase
             'y' => $tile->y,
         ]);
     }
+
+    public function test_user_can_move()
+    {
+        $user = User::factory()->create();
+
+        $tile = Tile::factory()->create([
+            'discovered_by' => $user->id,
+            'x' => $user->x,
+            'y' => $user->y,
+            'psuedo_id' => implode([$user->x, ',', $user->y]),
+        ]);
+
+        $edges = [
+            Edge::create([
+                'name' => 'north',
+                'direction' => 'north',
+            ]),
+            Edge::create([
+                'name' => 'east',
+                'direction' => 'east',
+            ]),
+            Edge::create([
+                'name' => 'south',
+                'direction' => 'south',
+            ]),
+            Edge::create([
+                'name' => 'west',
+                'direction' => 'west',
+            ]),
+        ];
+
+        foreach ($edges as $edge) {
+            $tile->edges()->attach($edge, ['is_road' => true]);
+        }
+
+        $response = $this->actingAs($user)->post('/api/map/user/move', [
+            'direction' => 'north',
+        ]);
+
+        $response->assertStatus(201);
+
+        $response->assertJson([
+            'x' => $tile->x,
+            'y' => $tile->y + 1,
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'x' => $tile->x,
+            'y' => $tile->y + 1,
+        ]);
+    }
+
+    public function test_user_cannot_move()
+    {
+        $user = User::factory()->create();
+
+        $tile = Tile::factory()->create([
+            'discovered_by' => $user->id,
+            'x' => $user->x,
+            'y' => $user->y,
+            'psuedo_id' => implode([$user->x, ',', $user->y]),
+        ]);
+
+        $edges = [
+            Edge::create([
+                'name' => 'north',
+                'direction' => 'north',
+            ]),
+            Edge::create([
+                'name' => 'east',
+                'direction' => 'east',
+            ]),
+            Edge::create([
+                'name' => 'south',
+                'direction' => 'south',
+            ]),
+            Edge::create([
+                'name' => 'west',
+                'direction' => 'west',
+            ]),
+        ];
+
+        foreach ($edges as $edge) {
+            $tile->edges()->attach($edge, ['is_road' => false]);
+        }
+
+        $response = $this->actingAs($user)->post('/api/map/user/move', [
+            'direction' => 'north',
+        ]);
+
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'x' => $tile->x,
+            'y' => $tile->y,
+        ]);
+    }
 }

@@ -33,13 +33,13 @@ class EdgeSeeder extends Seeder
         $tile->edges()->attach($edge, ['direction' => 'west', 'is_road' => true]);
 
         Edge::create([
-            'name' => 'Grassy Field Road',
-            'description' => 'A grassy field with a road in the middle.',
+            'name' => 'Dirt',
+            'description' => 'A dusty, dirty patch of land.',
         ]);
 
         Edge::create([
-            'name' => 'Dirt',
-            'description' => 'A dusty, dirty patch of land.',
+            'name' => 'Sandy',
+            'description' => 'A dry, sandy area.',
         ]);
     }
 }

@@ -16,13 +16,13 @@ class Edge extends Model
         'description',
     ];
 
-    public function tiles()
+    public function tile()
     {
         return $this->hasMany(Tile::class);
     }
 
     public function terrains()
     {
-        return $this->belongsToMany(Terrain::class)->withTimestamps()->withPivot('is_road');
+        return $this->belongsToMany(Terrain::class)->withTimestamps();
     }
 }

@@ -18,10 +18,6 @@ class Tile extends Model
         'y',
         'max_trees',
         'available_trees',
-        'north_edge',
-        'east_edge',
-        'south_edge',
-        'west_edge',
         'last_disturbed',
     ];
 
@@ -37,7 +33,7 @@ class Tile extends Model
 
     public function edges()
     {
-        return $this->belongsToMany(Edge::class)->withTimestamps()->withPivot('direction');
+        return $this->belongsToMany(Edge::class)->withTimestamps()->withPivot('direction', 'is_road');
     }
 
     public function terrains()
