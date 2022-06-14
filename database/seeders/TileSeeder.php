@@ -19,16 +19,32 @@ class TileSeeder extends Seeder
     {
         $terrain = Terrain::where('id', 1)->first();
 
-        $tile = Tile::create([
-            'psuedo_id' => '0-0',
-            'x' => 0,
-            'y' => 0,
-            'max_trees' => 0,
-            'available_trees' => 0,
-        ]);
+        $tiles = [
+            Tile::create([
+                'psuedo_id' => '0-0',
+                'x' => 0,
+                'y' => 0,
+                'max_trees' => 15,
+                'available_trees' => 15,
+            ]),
+            Tile::create([
+                'psuedo_id' => '1-0',
+                'x' => 1,
+                'y' => 0,
+                'max_trees' => [0],
+                'available_trees' => 0,
+            ]),
+            Tile::create([
+                'psuedo_id' => '0-1',
+                'x' => 0,
+                'y' => 1,
+                'max_trees' => 0,
+                'available_trees' => 0,
+            ]),
+        ];
 
         $edge = Edge::where('id', '1')->first();
-        $tile->edges()->attach($edge);
-        $tile->terrains()->attach($terrain);
+        $tiles[0]->edges()->attach($edge);
+        $tiles[0]->terrains()->attach($terrain);
     }
 }

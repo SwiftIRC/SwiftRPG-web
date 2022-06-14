@@ -24,7 +24,9 @@ class EdgeSeeder extends Seeder
             'name' => 'Grass',
             'description' => 'A grassy field.',
         ]);
+
         $edge->terrains()->attach($grassy);
+
         $tile->edges()->attach($edge, ['direction' => 'north', 'is_road' => true]);
         $tile->edges()->attach($edge, ['direction' => 'east', 'is_road' => true]);
         $tile->edges()->attach($edge, ['direction' => 'south', 'is_road' => true]);
