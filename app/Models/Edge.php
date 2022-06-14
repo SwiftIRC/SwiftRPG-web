@@ -20,4 +20,9 @@ class Edge extends Model
     {
         return $this->hasMany(Tile::class);
     }
+
+    public function terrain()
+    {
+        return $this->belongsToMany(Terrain::class)->withTimestamps();
+    }
 }

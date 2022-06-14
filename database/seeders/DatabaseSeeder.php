@@ -23,9 +23,16 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        // $this->call([
+        //     UserSeeder::class,
+        //     ItemSeeder::class,
+        // ]);
         $this->call([
-            UserSeeder::class,
-            ItemSeeder::class,
+            TileSeeder::class,
+            EdgeSeeder::class,
+            TerrainSeeder::class,
+            BuildingSeeder::class,
+            NpcSeeder::class,
         ]);
     }
 }

@@ -25,11 +25,6 @@ return new class extends Migration
             $table->smallInteger("max_trees")->unsigned()->default(0);
             $table->smallInteger("available_trees")->unsigned()->default(0);
 
-            $table->smallInteger("north_edge")->unsigned();
-            $table->smallInteger("east_edge")->unsigned();
-            $table->smallInteger("south_edge")->unsigned();
-            $table->smallInteger("west_edge")->unsigned();
-
             $table->timestamp('last_disturbed')->nullable();
             $table->timestamps();
             $table->softDeletes();
@@ -50,7 +45,7 @@ return new class extends Migration
             $table->boolean('is_locked')->default(false);
             $table->boolean('is_bed')->default(false);
             $table->boolean('is_pilferable')->default(false);
-            $table->boolean('is_pilfered')->default(false);
+            $table->timestamp('last_pilfered')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -125,11 +120,42 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        Schema::create("terrain", function (Blueprint $table) {
+            $table->id();
+
+            $table->string("name", 100);
+            $table->string("description", 255)->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create("terrain_tile", function (Blueprint $table) {
+            $table->id();
+
+            $table->bigInteger("tile_id")->unsigned();
+            $table->bigInteger("terrain_id")->unsigned();
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create("edge_terrain", function (Blueprint $table) {
+            $table->id();
+
+            $table->bigInteger("edge_id")->unsigned();
+            $table->bigInteger("terrain_id")->unsigned();
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('edge_tile', function (Blueprint $table) {
             $table->id();
 
             $table->bigInteger("edge_id")->unsigned();
             $table->bigInteger("tile_id")->unsigned();
+            $table->enum('direction', ['north', 'east', 'south', 'west'])->default('north');
 
             $table->timestamps();
             $table->softDeletes();
@@ -147,6 +173,9 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('edge_tile');
+        Schema::dropIfExists('edge_terrain');
+        Schema::dropIfExists('terrain_tile');
+        Schema::dropIfExists('terrain');
         Schema::dropIfExists('edges');
         Schema::dropIfExists('npc_tile');
         Schema::dropIfExists('building_npc');

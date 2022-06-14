@@ -22,17 +22,13 @@ class EdgeTest extends TestCase
     public function test_edge_lookup()
     {
         $user = User::factory()->create();
+        $edge = Edge::factory()->create();
         $tile = Tile::factory()->create([
             'discovered_by' => $user->id,
         ]);
-        $edges = [
-            Edge::factory()->create(),
-            Edge::factory()->create(),
-            Edge::factory()->create(),
-            Edge::factory()->create(),
-        ];
-        foreach ($edges as $edge) {
-            $tile->edges()->attach($edge);
+        $directions = ['north', 'east', 'south', 'west'];
+        for ($x = 0; $x < count($directions); $x++) {
+            $tile->edges()->attach($edge, ['direction' => $directions[$x]]);
         }
 
         $response = $this->actingAs($user)->get(implode(['/api/map/tile/', $tile->x, '/', $tile->y, '/edges']));
@@ -41,23 +37,35 @@ class EdgeTest extends TestCase
         $response->assertJson([
             [
                 'id' => 1,
-                'name' => $edges[0]->name,
-                'description' => $edges[0]->description,
+                'name' => $edge->name,
+                'description' => $edge->description,
+                'pivot' => [
+                    'direction' => 'north',
+                ],
             ],
             [
-                'id' => 2,
-                'name' => $edges[1]->name,
-                'description' => $edges[1]->description,
+                'id' => 1,
+                'name' => $edge->name,
+                'description' => $edge->description,
+                'pivot' => [
+                    'direction' => 'east',
+                ],
             ],
             [
-                'id' => 3,
-                'name' => $edges[2]->name,
-                'description' => $edges[2]->description,
+                'id' => 1,
+                'name' => $edge->name,
+                'description' => $edge->description,
+                'pivot' => [
+                    'direction' => 'south',
+                ],
             ],
             [
-                'id' => 4,
-                'name' => $edges[3]->name,
-                'description' => $edges[3]->description,
+                'id' => 1,
+                'name' => $edge->name,
+                'description' => $edge->description,
+                'pivot' => [
+                    'direction' => 'west',
+                ],
             ]
         ]);
     }

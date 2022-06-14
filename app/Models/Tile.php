@@ -36,6 +36,11 @@ class Tile extends Model
 
     public function edges()
     {
-        return $this->belongsToMany(Edge::class)->withTimestamps();
+        return $this->belongsToMany(Edge::class)->withTimestamps()->withPivot('direction');
+    }
+
+    public function terrain()
+    {
+        return $this->belongsTo(Terrain::class);
     }
 }
