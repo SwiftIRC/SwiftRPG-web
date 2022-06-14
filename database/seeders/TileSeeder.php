@@ -41,6 +41,20 @@ class TileSeeder extends Seeder
                 'max_trees' => 0,
                 'available_trees' => 0,
             ]),
+            Tile::create([
+                'psuedo_id' => '0,-1',
+                'x' => 0,
+                'y' => -1,
+                'max_trees' => 0,
+                'available_trees' => 0,
+            ]),
+            Tile::create([
+                'psuedo_id' => '-1,0',
+                'x' => -1,
+                'y' => 0,
+                'max_trees' => 5,
+                'available_trees' => 5,
+            ]),
         ];
 
         $edge = Edge::where('id', '1')->first();
