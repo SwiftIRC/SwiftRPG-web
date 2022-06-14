@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Npc;
 use App\Models\Tile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -8,7 +9,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ThievingController;
 use App\Http\Controllers\WoodcuttingController;
-use App\Models\Edge;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +54,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('/{x}/{y}/edges', function ($x, $y) {
                 return Tile::where('x', $x)->where('y', $y)->first()->edges()->get();
             });
+        });
+    });
+    Route::name('npc.')->prefix('npc')->group(function () {
+        Route::get('/{npc}', function ($npc) {
+            return Npc::id($npc)->first();
         });
     });
 });
