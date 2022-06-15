@@ -16,6 +16,13 @@ class Terrain extends Model
         'description',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'pivot',
+    ];
+
     public function edges()
     {
         return $this->hasMany(Edge::class);

@@ -15,4 +15,10 @@ class TileEdge extends Model
         'direction',
         'is_road',
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
 }

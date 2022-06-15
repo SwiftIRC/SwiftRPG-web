@@ -16,6 +16,13 @@ class Edge extends Model
         'description',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'pivot',
+    ];
+
     public function tile()
     {
         return $this->hasMany(Tile::class);
