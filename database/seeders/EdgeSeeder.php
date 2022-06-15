@@ -20,17 +20,14 @@ class EdgeSeeder extends Seeder
         $grassy = Terrain::where('id', 1)->first();
         $tile = Tile::where('psuedo_id', '0,0')->first();
 
-        $edge = Edge::create([
-            'name' => 'Grass',
-            'description' => 'A grassy field.',
-        ]);
+        $edge = Edge::where('id', '1')->first();
 
-        $edge->terrains()->attach($grassy);
+        // $edge->terrains()->attach($grassy);
 
-        $tile->edges()->attach($edge, ['direction' => 'north', 'is_road' => true]);
-        $tile->edges()->attach($edge, ['direction' => 'east', 'is_road' => true]);
-        $tile->edges()->attach($edge, ['direction' => 'south', 'is_road' => true]);
-        $tile->edges()->attach($edge, ['direction' => 'west', 'is_road' => true]);
+        // $tile->edges()->attach($edge, ['direction' => 'north', 'is_road' => true]);
+        // $tile->edges()->attach($edge, ['direction' => 'east', 'is_road' => true]);
+        // $tile->edges()->attach($edge, ['direction' => 'south', 'is_road' => true]);
+        // $tile->edges()->attach($edge, ['direction' => 'west', 'is_road' => true]);
 
         Edge::create([
             'name' => 'Dirt',

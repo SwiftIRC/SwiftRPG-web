@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
         ]);
         $this->call([
             TerrainSeeder::class,
-            TileSeeder::class,
             EdgeSeeder::class,
+            TileSeeder::class,
             BuildingSeeder::class,
             NpcSeeder::class,
         ]);
