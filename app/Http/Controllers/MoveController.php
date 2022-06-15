@@ -13,8 +13,8 @@ class MoveController extends Controller
         return app(Move::class)->move(Auth::user(), $request->direction);
     }
 
-    public function lookaround(Request $request)
+    public function look(Request $request)
     {
-        return app(Move::class)->lookaround(Auth::user());
+        return app(Move::class)->look(Auth::user());
     }
 }
