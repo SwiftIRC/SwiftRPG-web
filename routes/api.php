@@ -58,11 +58,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
             });
         });
         Route::name('user.')->prefix('user')->group(function () {
-            Route::get('/look', [MoveController::class, 'look']);
+            Route::name('look.')->prefix('look')->group(function () {
+                Route::get('/', [MoveController::class, 'look']);
+                Route::get('/npcs', [MoveController::class, 'npcs']);
+                Route::get('/buildings', [MoveController::class, 'buildings']);
+            });
+            Route::post('/move', [MoveController::class, 'move']);
             Route::get('/{user}', function ($user) {
                 return User::where('name', $user)->select(['x', 'y'])->first();
             });
-            Route::post('/move', [MoveController::class, 'move']);
         });
     });
     Route::name('npc.')->prefix('npc')->group(function () {

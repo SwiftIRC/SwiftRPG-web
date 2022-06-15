@@ -109,7 +109,7 @@ class Move
 
             return $new_tile;
         }
-        return response()->json(['error' => 'You cannot move in that direction.'], 403);
+        return response()->json(['error' => 'There is no road in that direction.'], 403);
     }
 
     public function look(User $user)
@@ -119,7 +119,18 @@ class Move
         $tile->npcs = $tile->npcs()->get();
         $tile->buildings = $tile->buildings()->get();
         $tile->terrains = $tile->terrains()->get();
+        $tile->edges = $tile->edges()->get();
 
         return response()->json($tile);
+    }
+
+    public function npcs(User $user)
+    {
+        return response()->json(Tile::where('x', $user->x)->where('y', $user->y)->first()->npcs()->get());
+    }
+
+    public function buildings(User $user)
+    {
+        return response()->json(Tile::where('x', $user->x)->where('y', $user->y)->first()->buildings()->get());
     }
 }
