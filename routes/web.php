@@ -45,8 +45,15 @@ Route::get('/dashboard', function () {
     return view('dashboard', compact('inventory'));
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/tile/{x}/{y}', function ($x, $y) {
-    return Tile::where('x', $x)->where('y', $y)->first();
-});
+Route::get('/api/tiles', function () {
+    $tiles = Tile::all();
+    foreach ($tiles as $tile) {
+        $tile->edges = $tile->edges()->get();
+        foreach ($tile->edges as $edge) {
+            $edge->terrain = $edge->terrains()->get();
+        }
+    }
+    return $tiles;
+})->name('api.tiles');
 
 require __DIR__ . '/auth.php';

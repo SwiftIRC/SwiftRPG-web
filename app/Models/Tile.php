@@ -21,6 +21,12 @@ class Tile extends Model
         'last_disturbed',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public function buildings()
     {
         return $this->belongsToMany(Building::class)->withTimestamps();
