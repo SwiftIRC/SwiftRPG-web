@@ -48,6 +48,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/api/tiles', function () {
     $tiles = Tile::all();
+
     foreach ($tiles as $tile) {
         $tile->edges = $tile->edges()->get();
         foreach ($tile->edges as $edge) {
@@ -56,7 +57,20 @@ Route::get('/api/tiles', function () {
     }
     return $tiles;
 })->name('api.tiles');
+Route::get('/api/tiles/{tile}', function (Tile $tile) {
+    $tile->npcs = $tile->npcs()->get();
+    $tile->buildings = $tile->buildings()->get();
+    $tile->terrain = $tile->terrains()->get();
+    $tile->edges = $tile->edges()->get();
+    foreach ($tile->edges as $edge) {
+        $edge->terrain = $edge->terrains()->get();
+    }
+
+    return $tile;
+})->name('api.tiles');
 
 Route::get('/look', [MoveController::class, 'look']);
+Route::get('/look/npcs', [MoveController::class, 'npcs']);
+Route::get('/look/buildings', [MoveController::class, 'buildings']);
 
 require __DIR__ . '/auth.php';

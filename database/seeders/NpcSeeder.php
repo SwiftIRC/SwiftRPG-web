@@ -197,5 +197,7 @@ class NpcSeeder extends Seeder
             'name' => 'Cook',
             'description' => 'Cooks the food.',
         ]);
+
+        // Kimberley Haytere
     }
 }
