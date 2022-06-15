@@ -62,6 +62,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 return User::where('name', $user)->select(['x', 'y'])->first();
             });
             Route::post('/move', [MoveController::class, 'move']);
+            Route::get('/lookaround', [MoveController::class, 'lookaround']);
         });
     });
     Route::name('npc.')->prefix('npc')->group(function () {

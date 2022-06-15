@@ -88,37 +88,38 @@ class Move
 
             $new_tile = Tile::where('x', $x)->where('y', $y)->first();
             if (!$new_tile) {
-                $new_tile = Tile::create([
+                $discovered_tile = Tile::create([
+                    'discovered_by' => $user->id,
                     'x' => $x,
                     'y' => $y,
                     'psuedo_id' => $x . ',' . $y,
                 ]);
 
-                $edges = [
-                    Edge::create([
-                        'name' => 'north',
-                        'direction' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($new_tile, 'north'),
-                    ]),
-                    Edge::create([
-                        'name' => 'east',
-                        'direction' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($new_tile, 'east'),
-                    ]),
-                    Edge::create([
-                        'name' => 'south',
-                        'direction' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($new_tile, 'south'),
-                    ]),
-                    Edge::create([
-                        'name' => 'west',
-                        'direction' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($new_tile, 'west'),
-                    ]),
-                ];
-
-                foreach ($edges as $edge) {
-                    $new_tile->edges()->attach($edge);
+                foreach (array_keys($directions) as $direction) {
+                    $discovered_tile->edges()->attach(Edge::create([
+                        'name' => $direction,
+                    ]), [
+                        'is_road' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($discovered_tile, $direction),
+                        'direction' => $direction,
+                    ]);
                 }
+
+                $new_tile = Tile::where('x', $x)->where('y', $y)->first();
             }
+
             return $new_tile;
         }
         return response()->json(['error' => 'You cannot move in that direction.'], 403);
+    }
+
+    public function lookaround(User $user)
+    {
+        $tile = Tile::where('x', $user->x)->where('y', $user->y)->first();
+
+        $buildings = $tile->buildings()->get();
+        $npcs = $tile->npcs()->get();
+        $terrains = $tile->terrains()->get();
+
+        return response()->json(compact('buildings', 'npcs', 'terrains'));
     }
 }
