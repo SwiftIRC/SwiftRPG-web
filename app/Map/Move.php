@@ -112,14 +112,14 @@ class Move
         return response()->json(['error' => 'You cannot move in that direction.'], 403);
     }
 
-    public function lookaround(User $user)
+    public function look(User $user)
     {
         $tile = Tile::where('x', $user->x)->where('y', $user->y)->first();
 
-        $buildings = $tile->buildings()->get();
-        $npcs = $tile->npcs()->get();
-        $terrains = $tile->terrains()->get();
+        $tile->npcs = $tile->npcs()->get();
+        $tile->buildings = $tile->buildings()->get();
+        $tile->terrains = $tile->terrains()->get();
 
-        return response()->json(compact('buildings', 'npcs', 'terrains'));
+        return response()->json($tile);
     }
 }

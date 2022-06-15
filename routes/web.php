@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\MoveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,5 +56,7 @@ Route::get('/api/tiles', function () {
     }
     return $tiles;
 })->name('api.tiles');
+
+Route::get('/look', [MoveController::class, 'look']);
 
 require __DIR__ . '/auth.php';
