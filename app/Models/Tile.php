@@ -46,4 +46,9 @@ class Tile extends Model
     {
         return $this->belongsToMany(Terrain::class)->withTimestamps();
     }
+
+    public function users()
+    {
+        //
+    }
 }
