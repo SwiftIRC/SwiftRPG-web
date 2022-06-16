@@ -58,7 +58,7 @@ Route::get('/api/tiles', function () {
     return $tiles;
 })->name('api.tiles');
 Route::get('/api/tiles/{tile}', function (Tile $tile) {
-    $tile->npcs = $tile->npcs()->get();
+    $tile->npcs = $tile->npcs()->count();
     $tile->buildings = $tile->buildings()->get();
     $tile->terrain = $tile->terrains()->get();
     $tile->edges = $tile->edges()->get();
