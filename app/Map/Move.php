@@ -13,7 +13,8 @@ class Move
         return $tile->edges()->where('direction', $direction)->first()->pivot->is_road;
     }
 
-    public function check_if_adjacent_edge_is_road(Tile $tile, string $direction)
+
+    public function get_adjacent_edge(Tile $tile, string $direction)
     {
         $x = $tile->x;
         $y = $tile->y;
@@ -45,9 +46,16 @@ class Move
         if ($adjacent_tile) {
             $adjacent_edge = $adjacent_tile->edges()->where('direction', $inverted_direction)->first();
 
-            return $adjacent_edge->pivot->is_road;
+            return $adjacent_edge;
         }
         return false;
+    }
+
+    public function check_if_adjacent_edge_is_road(Tile $tile, string $direction)
+    {
+        $edge = $this->get_adjacent_edge($tile, $direction);
+
+        return $edge ? $edge->pivot->is_road : false;
     }
 
     public function move(User $user, string $direction)
@@ -82,30 +90,46 @@ class Move
                     break;
             }
 
-            $user->x = $x;
-            $user->y = $y;
-            $user->save();
-
             $new_tile = Tile::where('x', $x)->where('y', $y)->first();
             if (!$new_tile) {
+                $tree_count = rand(0, 100);
                 $discovered_tile = Tile::create([
                     'discovered_by' => $user->id,
                     'x' => $x,
                     'y' => $y,
                     'psuedo_id' => $x . ',' . $y,
+                    'max_trees' => $tree_count,
+                    'available_trees' => $tree_count,
                 ]);
 
                 foreach (array_keys($directions) as $direction) {
-                    $discovered_tile->edges()->attach(Edge::create([
-                        'name' => $direction,
-                    ]), [
-                        'is_road' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($discovered_tile, $direction),
-                        'direction' => $direction,
-                    ]);
+                    $adjacent_edge = $this->get_adjacent_edge($discovered_tile, $direction);
+
+                    if ($adjacent_edge) {
+                        $discovered_tile->edges()->attach(
+                            Edge::where('id', $adjacent_edge->id)->first(),
+                            [
+                                'is_road' => random_int(0, 1) == 1 ? true : $adjacent_edge->pivot->is_road,
+                                'direction' => $direction,
+                            ]
+                        );
+                    } else {
+                        $discovered_tile->edges()->attach(
+                            Edge::all()->random(),
+                            [
+                                'is_road' => random_int(0, 1) == 1 ? true : false,
+                                'direction' => $direction,
+                            ]
+                        );
+                    }
                 }
 
                 $new_tile = Tile::where('x', $x)->where('y', $y)->first();
             }
+
+            $user->x = $x;
+            $user->y = $y;
+            $user->save();
 
             return $new_tile;
         }
@@ -117,9 +141,9 @@ class Move
         $tile = Tile::where('x', $user->x)->where('y', $user->y)->first();
 
         $tile->npcs = $tile->npcs()->get();
-        $tile->buildings = $tile->buildings()->get();
-        $tile->terrains = $tile->terrains()->get();
         $tile->edges = $tile->edges()->get();
+        $tile->terrains = $tile->terrains()->get();
+        $tile->buildings = $tile->buildings()->get();
 
         return response()->json($tile);
     }
