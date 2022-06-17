@@ -26,6 +26,6 @@ class Zone extends Model
 
     public function buildings()
     {
-        return $this->hasOne(Building::class);
+        return $this->hasOne(Building::class, 'id', 'building_id');
     }
 }

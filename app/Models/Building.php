@@ -28,11 +28,11 @@ class Building extends Model
 
     public function zones()
     {
-        return $this->belongsTo(Zone::class)->withTimestamps();
+        return $this->belongsTo(Zone::class);
     }
 
     public function user()
     {
-        return $this->hasOne(User::class);
+        return $this->belongsToMany(User::class);
     }
 }
