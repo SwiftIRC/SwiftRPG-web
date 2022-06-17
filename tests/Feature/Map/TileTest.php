@@ -21,7 +21,9 @@ class TileTest extends TestCase
 
     public function test_tile_lookup()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'tile_id' => Tile::all()->first()->id,
+        ]);
 
         $tile = Tile::factory()->create([
             'discovered_by' => $user->id,

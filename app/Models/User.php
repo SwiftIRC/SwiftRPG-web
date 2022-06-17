@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Tile;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -21,8 +22,7 @@ class User extends Authenticatable
         'password',
         'thieving',
         'woodcutting',
-        'x',
-        'y',
+        'tile_id',
         'building_id',
     ];
 
@@ -95,5 +95,10 @@ class User extends Authenticatable
     public function building()
     {
         return $this->belongsTo(Building::class);
+    }
+
+    public function tile()
+    {
+        return $this->hasMany(Tile::class, 'id', 'tile_id')->first();
     }
 }

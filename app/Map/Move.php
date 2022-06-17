@@ -60,14 +60,14 @@ class Move
 
     public function move(User $user, string $direction)
     {
-        $current_tile = Tile::where('x', $user->x)->where('y', $user->y)->first();
+        $current_tile = Tile::where('id', $user->tile_id)->first();
 
         if (!$this->check_if_edge_is_road($current_tile, $direction)) {
             return response()->json(['error' => 'There is no road in that direction.'], 403);
         }
 
-        $x = $user->x;
-        $y = $user->y;
+        $x = $user->tile()->x;
+        $y = $user->tile()->y;
 
         $directions = [
             'north' => false,
@@ -112,7 +112,7 @@ class Move
                     $discovered_tile->edges()->attach(
                         Edge::where('id', $adjacent_edge->id)->first(),
                         [
-                            'is_road' => random_int(0, 1) == 1 ? true : $adjacent_edge->pivot->is_road,
+                            'is_road' => $adjacent_edge->pivot->is_road,
                             'direction' => $direction,
                         ]
                     );
@@ -130,8 +130,7 @@ class Move
             $new_tile = Tile::where('x', $x)->where('y', $y)->first();
         }
 
-        $user->x = $x;
-        $user->y = $y;
+        $user->tile_id = $new_tile->id;
         $user->save();
 
         return $new_tile;
@@ -139,7 +138,7 @@ class Move
 
     public function look(User $user)
     {
-        $tile = Tile::where('x', $user->x)->where('y', $user->y)->first();
+        $tile = Tile::where('id', $user->tile_id)->first();
 
         $tile->npcs = $tile->npcs()->get();
         $tile->edges = $tile->edges()->get();
@@ -151,11 +150,11 @@ class Move
 
     public function npcs(User $user)
     {
-        return response()->json(Tile::where('x', $user->x)->where('y', $user->y)->first()->npcs()->get());
+        return response()->json(Tile::where('id', $user->id)->first()->npcs()->get());
     }
 
     public function buildings(User $user)
     {
-        return response()->json(Tile::where('x', $user->x)->where('y', $user->y)->first()->buildings()->get());
+        return response()->json(Tile::where('id', $user->id)->first()->buildings()->get());
     }
 }

@@ -21,7 +21,9 @@ class EdgeTest extends TestCase
 
     public function test_edge_lookup()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'tile_id' => Tile::all()->first()->id,
+        ]);
         $edge = Edge::factory()->create();
         $tile = Tile::factory()->create([
             'discovered_by' => $user->id,
