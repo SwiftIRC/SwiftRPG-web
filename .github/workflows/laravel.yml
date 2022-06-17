@@ -43,10 +43,7 @@ jobs:
         SSH_KEY:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
     - name: Deploy
-      run: |
-        eval $(ssh-agent -s)
-        ssh-add ~/.ssh/id_ed25519
-        ssh -A $DEPLOY_USER@$DEPLOY_HOST
+      run: ssh $DEPLOY_USER@$DEPLOY_HOST
       env:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
         DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
