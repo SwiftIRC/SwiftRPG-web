@@ -37,10 +37,10 @@ jobs:
         mkdir ~/.ssh
         touch ~/.ssh/{known_hosts,id_ed25519}
         chmod 600 ~/.ssh/*
-        printf -- "$SSH_KEY" > ~/.ssh/id_ed25519
+        printf -- "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
         ssh-keyscan -H $DEPLOY_HOST > ~/.ssh/known_hosts
       env:
-        SSH_KEY: ${{ secrets.SSH_KEY }}
+        SSH_KEY:
         DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
     - name: Deploy
       run: ssh $DEPLOY_USER@$DEPLOY_HOST
