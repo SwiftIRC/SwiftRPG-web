@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  test:
+  test-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -32,14 +32,18 @@ jobs:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
       run: php artisan test
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
     - name: Create SSH needful
       run: |
         mkdir ~/.ssh
         touch ~/.ssh/{known_hosts,id_ed25519}
-        echo $SSH_KEY > ~/.ssh/id_ed25519
-        ssh-keyscan -H web1.ryanwohara.com
+        chmod 600 ~/.ssh/*
+        printf -- "$SSH_KEY" > ~/.ssh/id_ed25519
+        ssh-keyscan -H $DEPLOY_HOST > ~/.ssh/known_hosts
+      env:
+        SSH_KEY: ${{ secrets.SSH_KEY }}
+        DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
     - name: Deploy
-      run: ssh updater@web1.ryanwohara.com
+      run: ssh $DEPLOY_USER@$DEPLOY_HOST
+      env:
+        DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+        DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
