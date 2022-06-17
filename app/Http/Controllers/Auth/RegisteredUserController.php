@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Tile;
 use App\Models\User;
 use App\Models\Inventory;
 use Illuminate\Http\Request;
@@ -42,6 +43,7 @@ class RegisteredUserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'password' => Hash::make($request->password),
+            'tile_id' => Tile::all()->first()->id,
         ]);
 
         Inventory::create([

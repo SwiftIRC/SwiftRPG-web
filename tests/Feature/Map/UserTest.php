@@ -15,26 +15,19 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function test_user_location_lookup()
     {
-        $user = User::factory()->create();
+        $tile = Tile::all()->first();
 
-        $tile = Tile::factory()->create([
-            'discovered_by' => $user->id,
-            'x' => $user->x,
-            'y' => $user->y,
-            'psuedo_id' => implode([$user->x, ',', $user->y]),
+        $user = User::factory()->create([
+            'tile_id' => $tile->id,
         ]);
 
         $response = $this->actingAs($user)->get(implode(['/api/map/user/', $user->name]));
 
         $response->assertStatus(200);
         $response->assertJson([
+            'id' => $tile->id,
             'x' => $tile->x,
             'y' => $tile->y,
         ]);
@@ -42,13 +35,17 @@ class UserTest extends TestCase
 
     public function test_user_can_move()
     {
-        $user = User::factory()->create();
+        $tile = Tile::all()->first();
 
-        $tile = Tile::factory()->create([
+        $user = User::factory()->create([
+            'tile_id' => $tile->id,
+        ]);
+
+        $tile2 = Tile::factory()->create([
             'discovered_by' => $user->id,
-            'x' => $user->x,
-            'y' => $user->y,
-            'psuedo_id' => implode([$user->x, ',', $user->y]),
+            'x' => $tile->x,
+            'y' => $tile->y + 1,
+            'psuedo_id' => implode([$tile->x, ',', $tile->y + 1]),
         ]);
 
         $edges = [
@@ -85,6 +82,11 @@ class UserTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
+            'tile_id' => $tile2->id,
+        ]);
+
+        $this->assertDatabaseHas('tiles', [
+            'id' => $tile2->id,
             'x' => $tile->x,
             'y' => $tile->y + 1,
         ]);
@@ -92,13 +94,9 @@ class UserTest extends TestCase
 
     public function test_user_cannot_move()
     {
-        $user = User::factory()->create();
-
-        $tile = Tile::factory()->create([
-            'discovered_by' => $user->id,
-            'x' => $user->x,
-            'y' => $user->y,
-            'psuedo_id' => implode([$user->x, ',', $user->y]),
+        $tile = Tile::all()->first();
+        $user = User::factory()->create([
+            'tile_id' => $tile->id
         ]);
 
         $edges = [
@@ -132,22 +130,17 @@ class UserTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'x' => $tile->x,
-            'y' => $tile->y,
+            'tile_id' => $tile->id,
         ]);
     }
 
     public function test_user_can_look()
     {
-        $user = User::factory()->create();
-        $terrain = Terrain::factory()->create();
-
-        $tile = Tile::factory()->create([
-            'discovered_by' => $user->id,
-            'x' => $user->x,
-            'y' => $user->y,
-            'psuedo_id' => implode([$user->x, ',', $user->y]),
+        $tile = Tile::all()->first();
+        $user = User::factory()->create([
+            'tile_id' => $tile->id,
         ]);
+        $terrain = Terrain::factory()->create();
 
         $tile->terrains()->attach($terrain);
 
@@ -186,7 +179,7 @@ class UserTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson([
-            'discovered_by' => $user->id,
+            'id' => $tile->id,
         ]);
     }
 }

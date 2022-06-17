@@ -20,10 +20,6 @@ class NpcSeeder extends Seeder
     public function run()
     {
         $tile1 = Tile::where('psuedo_id', '0,0')->first();
-        $tile2 = Tile::where('psuedo_id', '1,0')->first();
-        $tile3 = Tile::where('psuedo_id', '0,1')->first();
-        $tile4 = Tile::where('psuedo_id', '0,-1')->first();
-        $tile5 = Tile::where('psuedo_id', '-1,0')->first();
 
         $farmhouse = Building::create([
             'name' => 'Farmhouse',
@@ -112,11 +108,11 @@ class NpcSeeder extends Seeder
         ]);
 
         $tile1->buildings()->attach($farmhouse);
-        $tile2->buildings()->attach($church);
-        $tile3->buildings()->attach($shop);
-        $tile4->buildings()->attach($house);
-        $tile4->buildings()->attach($rundown_house);
-        $tile5->buildings()->attach($bed_house);
+        $tile1->buildings()->attach($church);
+        $tile1->buildings()->attach($shop);
+        $tile1->buildings()->attach($house);
+        $tile1->buildings()->attach($rundown_house);
+        $tile1->buildings()->attach($bed_house);
 
         $npcs = [
             Npc::create([

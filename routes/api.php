@@ -65,7 +65,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             });
             Route::post('/move', [MoveController::class, 'move']);
             Route::get('/{user}', function ($user) {
-                return User::where('name', $user)->select(['x', 'y'])->first();
+                return response()->json(User::where('name', $user)->first()->tile());
             });
         });
     });

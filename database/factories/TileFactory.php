@@ -16,8 +16,8 @@ class TileFactory extends Factory
      */
     public function definition()
     {
-        $x = $this->faker->randomDigit(1, 100);
-        $y = $this->faker->randomDigit(1, 100);
+        $y = $this->faker->randomDigit(0, 100);
+        $x = $this->faker->randomDigit(0, 100);
         return [
             'psuedo_id' => $x . ',' . $y,
             'x' => $x,

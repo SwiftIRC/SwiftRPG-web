@@ -4,6 +4,7 @@ namespace Tests\Feature\Skills;
 
 use Tests\TestCase;
 use App\Models\Item;
+use App\Models\Tile;
 use App\Models\User;
 use App\Models\Inventory;
 use App\Providers\RouteServiceProvider;
@@ -22,7 +23,10 @@ class WoodcuttingTest extends TestCase
 
     public function test_user_can_chop()
     {
-        $user = User::factory()->create();
+        $tile = Tile::all()->first();
+        $user = User::factory()->create([
+            'tile_id' => $tile->id,
+        ]);
         $inventory = Inventory::factory()->create([
             'user_id' => $user->id,
         ]);
@@ -52,7 +56,10 @@ class WoodcuttingTest extends TestCase
 
     public function test_user_cannot_chop()
     {
-        $user = User::factory()->create();
+        $tile = Tile::all()->first();
+        $user = User::factory()->create([
+            'tile_id' => $tile->id,
+        ]);
         $inventory = Inventory::factory()->create([
             'user_id' => $user->id,
         ]);

@@ -36,6 +36,10 @@ Route::get('/hiscores', function () {
     return view('hiscores', compact('users'));
 })->name('hiscores');
 
+Route::get('/map', function () {
+    return view('hiscores', compact('users'));
+})->name('hiscores');
+
 Route::get('/admin', function () {
     return view('admin');
 })->middleware(['admin']);

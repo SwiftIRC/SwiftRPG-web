@@ -4,6 +4,7 @@ namespace Tests\Feature\Skills;
 
 use Tests\TestCase;
 use App\Models\Item;
+use App\Models\Tile;
 use App\Models\User;
 use App\Models\Inventory;
 use App\Providers\RouteServiceProvider;
@@ -22,7 +23,9 @@ class ThievingTest extends TestCase
 
     public function test_user_can_pickpocket()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'tile_id' => Tile::all()->first()->id,
+        ]);
         $inventory = Inventory::factory()->create([
             'user_id' => $user->id,
         ]);
@@ -50,6 +53,7 @@ class ThievingTest extends TestCase
     public function test_user_can_steal()
     {
         $user = User::factory()->create([
+            'tile_id' => Tile::all()->first()->id,
             'thieving' => level_to_xp(10),
         ]);
         $inventory = Inventory::factory()->create([
@@ -78,7 +82,9 @@ class ThievingTest extends TestCase
 
     public function test_user_cannot_steal()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'tile_id' => Tile::all()->first()->id,
+        ]);
         $inventory = Inventory::factory()->create([
             'user_id' => $user->id,
         ]);
@@ -91,6 +97,7 @@ class ThievingTest extends TestCase
     public function test_user_can_pilfer()
     {
         $user = User::factory()->create([
+            'tile_id' => Tile::all()->first()->id,
             'thieving' => level_to_xp(20),
         ]);
         $inventory = Inventory::factory()->create([
@@ -119,7 +126,9 @@ class ThievingTest extends TestCase
 
     public function test_user_cannot_pilfer()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'tile_id' => Tile::all()->first()->id,
+        ]);
         $inventory = Inventory::factory()->create([
             'user_id' => $user->id,
         ]);
@@ -132,6 +141,7 @@ class ThievingTest extends TestCase
     public function test_user_can_plunder()
     {
         $user = User::factory()->create([
+            'tile_id' => Tile::all()->first()->id,
             'thieving' => level_to_xp(30),
         ]);
         $inventory = Inventory::factory()->create([
@@ -160,7 +170,9 @@ class ThievingTest extends TestCase
 
     public function test_user_cannot_plunder()
     {
-        $user = User::factory()->create();
+        $user = User::factory()->create([
+            'tile_id' => Tile::all()->first()->id,
+        ]);
         $inventory = Inventory::factory()->create([
             'user_id' => $user->id,
         ]);

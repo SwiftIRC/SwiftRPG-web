@@ -24,15 +24,14 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
-            UserSeeder::class,
-            ItemSeeder::class,
-        ]);
-        $this->call([
             TerrainSeeder::class,
             EdgeSeeder::class,
             TileSeeder::class,
-            BuildingSeeder::class,
             NpcSeeder::class,
+        ]);
+        $this->call([
+            UserSeeder::class,
+            ItemSeeder::class,
         ]);
     }
 }
