@@ -13,6 +13,28 @@ class Move
         return $tile->edges()->where('direction', $direction)->first()->pivot->is_road;
     }
 
+    public function get_adjacent_tile(Tile $tile, string $direction)
+    {
+        $x = $tile->x;
+        $y = $tile->y;
+
+        switch ($direction) {
+            case 'north':
+                $y++;
+                break;
+            case 'east':
+                $x++;
+                break;
+            case 'south':
+                $y--;
+                break;
+            case 'west':
+                $x--;
+                break;
+        }
+
+        return Tile::where('x', $x)->where('y', $y)->first();
+    }
 
     public function get_adjacent_edge(Tile $tile, string $direction)
     {
@@ -56,6 +78,98 @@ class Move
         $edge = $this->get_adjacent_edge($tile, $direction);
 
         return $edge ? $edge->pivot->is_road : false;
+    }
+
+    public function fill_in_isolated_tiles(Tile $tile)
+    {
+        $missing_tiles = $this->find_missing_tiles_from_border($tile);
+
+        foreach ($missing_tiles as $missing_tile) {
+            $this->fill_in_missing_tile_if_isolated($tile, $missing_tile);
+        }
+    }
+
+    public function fill_in_missing_tile_if_isolated(Tile $tile, string $missing_direction)
+    {
+        $missing_x = $tile->x;
+        $missing_y = $tile->y;
+
+        switch ($missing_direction) {
+            case 'north':
+                $missing_y++;
+                break;
+            case 'east':
+                $missing_x++;
+                break;
+            case 'south':
+                $missing_y--;
+                break;
+            case 'west':
+                $missing_x--;
+                break;
+        }
+
+        $directions = ['north', 'east', 'south', 'west'];
+
+        $inverted_directions = [
+            'north' => 'south',
+            'east' => 'west',
+            'south' => 'north',
+            'west' => 'east',
+        ];
+
+        foreach ($directions as $direction) {
+            $inverted_direction = $inverted_directions[$direction];
+            $x = $missing_x;
+            $y = $missing_y;
+
+            switch ($direction) {
+                case 'north':
+                    $y++;
+                    break;
+                case 'east':
+                    $x++;
+                    break;
+                case 'south':
+                    $y--;
+                    break;
+                case 'west':
+                    $x--;
+                    break;
+            }
+
+            $adjacent_tile = Tile::where('x', $x)->where('y', $y)->first();
+
+            if (!$adjacent_tile) {
+                return;
+            }
+            $adjacent_edge = $adjacent_tile->edges()->where('direction', $inverted_direction)->first();
+
+            if ($adjacent_edge->pivot->is_road) {
+                return;
+            }
+        }
+
+        Tile::create([
+            'x' => $missing_x,
+            'y' => $missing_y,
+            'psuedo_id' => $missing_x . ',' . $missing_y,
+        ]);
+    }
+
+    public function find_missing_tiles_from_border(Tile $tile)
+    {
+        $missing_directions = [];
+        $directions = ['north', 'east', 'south', 'west'];
+
+        foreach ($directions as $direction) {
+            $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
+            if (!$adjacent_tile) {
+                $missing_directions[] = $direction;
+            }
+        }
+
+        return $missing_directions;
     }
 
     public function move(User $user, string $direction)
@@ -132,6 +246,8 @@ class Move
 
         $user->tile_id = $new_tile->id;
         $user->save();
+
+        $this->fill_in_isolated_tiles($new_tile);
 
         return $new_tile;
     }
