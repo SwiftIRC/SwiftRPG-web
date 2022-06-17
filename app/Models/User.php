@@ -94,7 +94,7 @@ class User extends Authenticatable
 
     public function building()
     {
-        return $this->belongsTo(Building::class);
+        return $this->hasMany(Building::class, 'id', 'building_id')->first();
     }
 
     public function tile()
