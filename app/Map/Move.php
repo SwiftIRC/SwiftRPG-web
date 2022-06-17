@@ -266,11 +266,11 @@ class Move
 
     public function npcs(User $user)
     {
-        return response()->json(Tile::where('id', $user->id)->first()->npcs()->get());
+        return response()->json(Tile::where('id', $user->tile_id)->first()->npcs()->get());
     }
 
     public function buildings(User $user)
     {
-        return response()->json(Tile::where('id', $user->id)->first()->buildings()->get());
+        return response()->json(Tile::where('id', $user->tile_id)->first()->buildings()->get());
     }
 }
