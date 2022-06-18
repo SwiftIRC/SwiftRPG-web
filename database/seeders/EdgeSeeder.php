@@ -38,5 +38,10 @@ class EdgeSeeder extends Seeder
             'name' => 'Sandy',
             'description' => 'A dry, sandy area.',
         ]);
+
+        Edge::create([
+            'name' => 'Water',
+            'Description' => 'A watery area.',
+        ]);
     }
 }

@@ -19,5 +19,10 @@ class TerrainSeeder extends Seeder
             'name' => 'Grassy',
             'description' => 'A grassy field.',
         ]);
+
+        Terrain::create([
+            'name' => 'Water',
+            'description' => 'A watery area.',
+        ]);
     }
 }

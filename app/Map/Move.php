@@ -5,12 +5,22 @@ namespace App\Map;
 use App\Models\Edge;
 use App\Models\Tile;
 use App\Models\User;
+use App\Models\Terrain;
 
 class Move
 {
     public function check_if_edge_is_road(Tile $tile, string $direction)
     {
-        return $tile->edges()->where('direction', $direction)->first()->pivot->is_road;
+        $edge = $tile->edges()->where('direction', $direction)->first();
+
+        return $edge ? $edge->pivot->is_road : false;
+    }
+
+    public function check_if_adjacent_edge_is_road(Tile $tile, string $direction)
+    {
+        $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
+
+        return $adjacent_tile ? $this->check_if_edge_is_road($adjacent_tile, $this->invert_direction($direction)) : false;
     }
 
     public function get_adjacent_tile(Tile $tile, string $direction)
@@ -66,6 +76,20 @@ class Move
         return $adjacent_tile;
     }
 
+    public function invert_direction($direction)
+    {
+        switch ($direction) {
+            case 'north':
+                return 'south';
+            case 'east':
+                return 'west';
+            case 'south':
+                return 'north';
+            case 'west':
+                return 'east';
+        }
+    }
+
     public function get_adjacent_edge(Tile $tile, string $direction)
     {
         $x = $tile->x;
@@ -86,13 +110,7 @@ class Move
                 break;
         }
 
-        $inverted_directions = [
-            'north' => 'south',
-            'east' => 'west',
-            'south' => 'north',
-            'west' => 'east',
-        ];
-        $inverted_direction = $inverted_directions[$direction];
+        $inverted_direction = $this->invert_direction($direction);
 
         $adjacent_tile = Tile::where('x', $x)->where('y', $y)->first();
         if ($adjacent_tile) {
@@ -103,18 +121,12 @@ class Move
         return false;
     }
 
-    public function check_if_adjacent_edge_is_road(Tile $tile, string $direction)
-    {
-        $edge = $this->get_adjacent_edge($tile, $direction);
-
-        return $edge ? $edge->pivot->is_road : $edge;
-    }
-
     public function fill_in_missing_tiles_if_isolated()
     {
         $tiles = Tile::all();
         $tile_coords = [];
         $invalid_coords = [];
+        $directions = ['north', 'east', 'south', 'west'];
         $max_x = 0;
         $min_x = 0;
         $max_y = 0;
@@ -154,7 +166,49 @@ class Move
         $external_empty_tiles = $this->find_all_connected_empty_tiles($empty_tiles, $tile_coords);
         $internal_tiles = array_diff($empty_tiles, $external_empty_tiles);
 
-        info("Internal tiles: " . count($internal_tiles));
+        $processed_tiles = [];
+        foreach ($internal_tiles as $internal_tile) {
+            if (in_array($internal_tile, $processed_tiles)) {
+                continue;
+            }
+            $connected_tiles = $this->iterate_over_all_connected_empty_tiles($internal_tile, $internal_tiles, []);
+            $processed_tiles = array_merge($processed_tiles, $connected_tiles);
+
+            $found_road = false;
+            foreach ($connected_tiles as $connected_tile) {
+                foreach ($directions as $direction) {
+                    if ($this->check_if_adjacent_edge_is_road($connected_tile, $direction)) {
+                        $found_road = true;
+                        break 2;
+                    }
+                }
+            }
+            if (!$found_road) {
+                foreach ($connected_tiles as $connected_tile) {
+                    $this->fill_in_with_water($connected_tile);
+                }
+            }
+        }
+    }
+
+    public function fill_in_with_water(Tile $tile)
+    {
+        $tile->psuedo_id = $tile->x . ',' . $tile->y;
+        $tile->save();
+
+        $directions = ['north', 'east', 'south', 'west'];
+
+
+        $water = Terrain::where('name', 'Water')->first();
+        $tile->terrains()->attach($water);
+
+        foreach ($directions as $direction) {
+            $edge = Edge::where('name', 'Water')->first();
+            $adjacent_edge = $this->get_adjacent_edge($tile, $direction);
+
+            $edge->terrains()->attach($water);
+            $tile->edges()->attach($edge);
+        }
     }
 
     public function find_all_empty_tiles(int $max_x, int $max_y, int $min_x, int $min_y, array $tile_coords)
@@ -178,7 +232,7 @@ class Move
     {
         $connected_tiles = [];
 
-        $search_tile = $empty_tiles[count($empty_tiles) - 1];
+        $search_tile = $empty_tiles[0];
 
         return $this->iterate_over_all_connected_empty_tiles($search_tile, $empty_tiles, $connected_tiles);
     }
