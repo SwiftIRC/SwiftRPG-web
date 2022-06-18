@@ -77,4 +77,19 @@ Route::get('/look', [MoveController::class, 'look']);
 Route::get('/look/npcs', [MoveController::class, 'npcs']);
 Route::get('/look/buildings', [MoveController::class, 'buildings']);
 
+Route::name('stats.')->prefix('stats')->group(function () {
+    Route::get('/{user}', function ($user) {
+        return User::where('name', $user)->first();
+    });
+});
+
+Route::get('test', function () {
+    $tile1 = new Tile();
+    $tile1->x = 100;
+    $tile1->y = 100;
+    $tile1->psuedo_id = '100,100';
+
+    return $tile1;
+});
+
 require __DIR__ . '/auth.php';
