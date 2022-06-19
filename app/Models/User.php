@@ -42,7 +42,7 @@ class User extends Authenticatable
 
     public function inventories()
     {
-        return $this->hasMany(Inventory::class);
+        return $this->belongsToMany(Inventory::class);
     }
 
     public function inventory()

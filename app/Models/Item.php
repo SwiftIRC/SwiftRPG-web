@@ -27,11 +27,6 @@ class Item extends Model
         'durability',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function effects()
     {
         return $this->belongsToMany(Effect::class)->withTimestamps();
