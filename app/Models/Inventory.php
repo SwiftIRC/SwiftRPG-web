@@ -21,6 +21,11 @@ class Inventory extends Model
         'size',
     ];
 
+    public function user()
+    {
+        return $this->hasMany(User::class);
+    }
+
     public function items()
     {
         return $this->belongsToMany(Item::class)->withTimestamps()->groupBy('item_id')->selectRaw('items.*, count(item_id) as quantity');

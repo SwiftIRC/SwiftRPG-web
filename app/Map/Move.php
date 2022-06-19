@@ -5,6 +5,7 @@ namespace App\Map;
 use App\Models\Edge;
 use App\Models\Tile;
 use App\Models\User;
+use App\Models\MoveLog;
 use App\Models\Terrain;
 
 class Move
@@ -346,6 +347,12 @@ class Move
         $user->save();
 
         $this->fill_in_missing_tiles_if_isolated();
+
+        MoveLog::create([
+            'user_id' => $user->id,
+            'old_tile_id' => $current_tile->id,
+            'new_tile_id' => $new_tile->id,
+        ]);
 
         return $new_tile;
     }
