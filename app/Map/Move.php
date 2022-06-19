@@ -241,6 +241,7 @@ class Move
 
     public function iterate_over_all_connected_empty_tiles(Tile $search_tile, array $empty_tiles, array $connected_tiles): array
     {
+        $connected_tiles[] = $search_tile;
         $tiles = $this->get_adjacent_missing_tiles($search_tile, $empty_tiles, $connected_tiles);
         if (!empty($tiles)) {
             $connected_tiles = array_merge($connected_tiles, $tiles);
