@@ -1,64 +1,132 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# SwiftRPG
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Setting up a Development Environment (in WSL/Ubuntu)
 
-## About Laravel
+### Dependencies
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+#### git
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+First, clone the other required services:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+https://github.com/SwiftIRC/SwiftRPG
+https://github.com/SwiftIRC/SwiftRPG-map
 
-## Learning Laravel
+#### packages
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Second, add the PHP repository to your apt sources:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+NOTE: This command is for Ubuntu 20.04
 
-## Laravel Sponsors
+```
+echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ondrej-ubuntu-php-focal.list
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4F4EA0AAE5267A6C
+apt update
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Third, install the following packages:
 
-### Premium Partners
+```
+apt install php8.1-mysql php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-zip mysql-server mysql-client nginx
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+This will install PHP 8.1, MySQL 8.0, and nginx 1.18.0.
 
-## Contributing
+NOTE: You may need to install openssl here if it's not already installed
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### mysql
 
-## Code of Conduct
+Now we're going to configure MySQL to create a user and a database:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+sudo mysql
+create user 'rpg'@'localhost' identified by 'password';
+create database rpg;
+grant all on rpg.* to 'rpg'@'localhost';
+flush privileges;
+```
 
-## Security Vulnerabilities
+#### nginx
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Getting nginx configured can be tricky.
+First, we will become root for all this work.
 
-## License
+```
+sudo -i
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Now we can `rm` the default host and touch the new one.
+
+```
+rm /etc/nginx/sites-enabled/default
+touch /etc/nginx/sites-enabled/rpg.swiftirc.dev
+```
+
+Let's edit that new file with your favorite editor to contain the following:
+
+```
+server {
+    server_name rpg.swiftirc.dev _;
+    root /home/rohara/Workspace/personal/SwiftRPG-web/public;
+    listen 80;
+    server_tokens off;
+
+    client_max_body_size 50m;
+
+    location ~ ^/dist/.* {
+       root /home/rohara/Workspace/personal/SwiftRPG-map;
+       index index.html;
+    }
+
+    location ~ ^/map {
+       root /home/rohara/Workspace/personal/SwiftRPG-map;
+       rewrite ^/map/?(.*) /dist/$1 break;
+    }
+
+    index  index.php index.html index.htm;
+    location ~ \.php {
+        include         fastcgi_params;
+        fastcgi_index   index.php;
+        fastcgi_pass    unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_param   SCRIPT_FILENAME    $document_root$fastcgi_script_name;
+        fastcgi_param   SCRIPT_NAME        $fastcgi_script_name;
+        fastcgi_intercept_errors on;
+    }
+
+    location / {
+        index index.php;
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+}
+```
+
+#### /etc/hosts
+
+Add `127.0.0.1 rpg.swiftrpg.dev` to your /etc/hosts file.
+In Windows this requires running Notepad as an administrator and
+editing `C:\Windows\System32\drivers\etc\hosts`. If you do not
+see that file in the list, be sure to select `All Files` from the
+dropdown at the bottom right of the Open menu.
+
+#### .env
+
+Next, copy the .env file, generate a key, and fill it out:
+
+```
+cp .env.example .env
+php artisan key:generate
+```
+
+### Run Migrations
+
+```
+php artisan migrate --seed
+```
+
+### Load it in Your Browser
+
+Open up your new development environment!
+
+```
+http://rpg.swiftirc.dev/
+http://rpg.swiftirc.dev/map
+```
