@@ -15,9 +15,9 @@ class Thieving extends Skill
     {
         $tile = $user->tile();
         $npcs = $tile->npcs();
-        $buildings = $tile->buildings();
 
         if (!$npcs->count()) {
+            $buildings = $tile->buildings();
             throw new RangeException('There are no NPCs on this tile to pickpocket! ' . ($buildings->count() ? 'Check a building?' : ''));
         }
 
