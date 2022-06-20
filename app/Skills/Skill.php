@@ -7,7 +7,7 @@ use App\Models\CommandLog;
 
 class Skill
 {
-    public function __call($methodName, $parameters)
+    public function __call(string $methodName, $parameters)
     {
         $class = explode("\\", get_class($this));
         $action = strtolower(end($class)) . "." . $methodName;
