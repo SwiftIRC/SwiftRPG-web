@@ -1,5 +1,6 @@
 <?php
 
+use App\Map\Regenerate;
 use App\Models\Item;
 use App\Models\Tile;
 use App\Models\User;
@@ -85,12 +86,7 @@ Route::name('stats.')->prefix('stats')->group(function () {
 });
 
 Route::get('test', function () {
-    $tile1 = new Tile();
-    $tile1->x = 100;
-    $tile1->y = 100;
-    $tile1->psuedo_id = '100,100';
-
-    return $tile1;
+    return response()->json(['response' => app(Regenerate::class)->map()]);
 });
 
 require __DIR__ . '/auth.php';
