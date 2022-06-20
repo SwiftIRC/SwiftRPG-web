@@ -109,7 +109,7 @@ dropdown at the bottom right of the Open menu.
 
 #### .env
 
-Next, copy the .env file, generate a key, and fill it out:
+Next, copy the .env file, generate a key, and make any modifications you may need:
 
 ```
 cp .env.example .env
