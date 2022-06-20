@@ -21,7 +21,7 @@ class Thieving extends Skill
             throw new RangeException('There are no NPCs on this tile to pickpocket! ' . ($buildings->count() ? 'Check a building?' : ''));
         }
 
-        $chance_to_fail = random_int(0, $user->thieving);
+        $chance_to_fail = random_int(0, xp_to_level($user->thieving));
         if (!$chance_to_fail) {
             throw new MathException('You failed to pickpocket the NPC!');
         }
