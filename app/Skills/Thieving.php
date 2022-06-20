@@ -28,8 +28,10 @@ class Thieving extends Skill
             throw new MathException('You failed to pickpocket, ' . $npc->name . '!');
         }
 
-        $user->thieving += 5;
-        $user->addGold(5);
+        $increment = 5;
+
+        $user->thieving += $increment;
+        $user->addGold($increment);
         $user->save();
 
         return ['thieving' => $user->thieving, 'gold' => $user->getGold()];
