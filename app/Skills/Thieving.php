@@ -17,7 +17,7 @@ class Thieving extends Skill
         $user->addGold(5);
         $user->save();
 
-        return ['thieving' => $user->thieving, 'gold' => $user->getGold()];
+        return response()->json(['thieving' => $user->thieving, 'gold' => $user->getGold()]);
     }
 
     protected function steal()
@@ -27,7 +27,7 @@ class Thieving extends Skill
         $user->addGold(10);
         $user->save();
 
-        return ['thieving' => $user->thieving, 'gold' => $user->getGold()];
+        return response()->json(['thieving' => $user->thieving, 'gold' => $user->getGold()]);
     }
 
     protected function pilfer()
@@ -37,7 +37,7 @@ class Thieving extends Skill
         $user->addGold(50);
         $user->save();
 
-        return ['thieving' => $user->thieving, 'gold' => $user->getGold()];
+        return response()->json(['thieving' => $user->thieving, 'gold' => $user->getGold()]);
     }
 
     protected function plunder()
@@ -47,6 +47,6 @@ class Thieving extends Skill
         $user->addGold(100);
         $user->save();
 
-        return ['thieving' => $user->thieving, 'gold' => $user->getGold()];
+        return response()->json(['thieving' => $user->thieving, 'gold' => $user->getGold()]);
     }
 }
