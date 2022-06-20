@@ -180,8 +180,11 @@ return new class extends Migration
         });
 
         Schema::table('users', function (Blueprint $table) {
-            $table->bigInteger('tile_id')->unsigned()->default(1);
-            $table->bigInteger('building_id')->unsigned()->nullable();
+            $table->unsignedMediumInteger('hitpoints')->before('thieving')->default(1);
+            $table->unsignedMediumInteger('mana')->before('thieving')->default(1);
+
+            $table->unsignedBigInteger('tile_id')->unsigned()->default(1);
+            $table->unsignedBigInteger('building_id')->unsigned()->nullable();
 
             $table->foreign('tile_id')->references('id')->on('tiles');
             $table->foreign('building_id')->references('id')->on('buildings');
@@ -197,9 +200,11 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign('users_building_id_foreign');
-            $table->dropForeign(['tile_id']);
+            $table->dropForeign('users_tile_id_foreign');
             $table->dropColumn('building_id');
             $table->dropColumn('tile_id');
+            $table->dropColumn('mana');
+            $table->dropColumn('hitpoints');
         });
         Schema::dropIfExists('edge_tile');
         Schema::dropIfExists('edge_terrain');

@@ -5,20 +5,25 @@ namespace App\Skills;
 use App\Models\Item;
 use App\Models\Inventory;
 use App\Models\CommandLog;
+use Brick\Math\Exception\MathException;
 use Illuminate\Support\Facades\Auth;
 use RangeException;
 
 class Thieving extends Skill
 {
-    protected function pickpocket()
+    protected function pickpocket($user)
     {
-        $user = Auth::user();
         $tile = $user->tile();
         $npcs = $tile->npcs();
         $buildings = $tile->buildings();
 
         if (!$npcs->count()) {
             throw new RangeException('There are no NPCs on this tile to pickpocket! ' . ($buildings->count() ? 'Check a building?' : ''));
+        }
+
+        $chance_to_fail = random_int(0, $user->thieving);
+        if (!$chance_to_fail) {
+            throw new MathException('You failed to pickpocket the NPC!');
         }
 
         $user->thieving += 5;
