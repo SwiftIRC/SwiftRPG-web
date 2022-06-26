@@ -2,17 +2,19 @@
 
 namespace App\Skills;
 
+use RangeException;
 use App\Models\Item;
+use App\Models\User;
 use App\Models\Inventory;
 use App\Models\CommandLog;
-use Brick\Math\Exception\MathException;
 use Illuminate\Support\Facades\Auth;
-use RangeException;
+use Brick\Math\Exception\MathException;
 
 class Thieving extends Skill
 {
-    protected function pickpocket($user)
+    protected function pickpocket(array $parameters)
     {
+        $user = $parameters[0];
         $tile = $user->tile();
         $npcs = $tile->npcs();
 
@@ -21,9 +23,9 @@ class Thieving extends Skill
             throw new RangeException('There are no NPCs on this tile to pickpocket! ' . ($buildings->count() ? 'Check a building?' : ''));
         }
 
-        $npc = $npcs->random();
+        $npc = $npcs->get()->random();
 
-        $chance_to_fail = random_int(0, xp_to_level($user->thieving));
+        $chance_to_fail = random_int(0, xp_to_level($user->thieving) + 1);
         if (!$chance_to_fail) {
             throw new MathException('You failed to pickpocket, ' . $npc->name . '!');
         }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoveController;
+use App\Http\Controllers\ThievingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,10 @@ Route::name('stats.')->prefix('stats')->group(function () {
     Route::get('/{user}', function ($user) {
         return User::where('name', $user)->first();
     });
+});
+
+Route::name('thieving.')->prefix('thieving')->group(function () {
+    Route::get('/pickpocket', [ThievingController::class, 'pickpocket']);
 });
 
 Route::get('test', function () {
