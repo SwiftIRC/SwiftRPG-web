@@ -199,7 +199,6 @@ class Move
 
         $directions = ['north', 'east', 'south', 'west'];
 
-
         $water = Terrain::where('name', 'Water')->first();
         $edge = Edge::where('name', 'Water')->first();
         $edge->terrains()->attach($water);
@@ -207,6 +206,7 @@ class Move
 
         foreach ($directions as $direction) {
             $adjacent_edge = $this->get_adjacent_edge($tile, $direction);
+            $adjacent_edge->terrains()->attach($water);
 
             $tile->edges()->attach($edge, [
                 'direction' => $direction,
