@@ -11,6 +11,13 @@ First, clone the other required services:
 https://github.com/SwiftIRC/SwiftRPG
 https://github.com/SwiftIRC/SwiftRPG-map
 
+We will become root for the rest of this work.
+
+```
+sudo -i
+```
+
+
 #### packages
 
 Second, add the PHP repository to your apt sources:
@@ -26,7 +33,7 @@ apt update
 Third, install the following packages:
 
 ```
-apt install php8.1-mysql php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-zip mysql-server mysql-client nginx
+sudo apt install php8.1-mysql php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-zip mysql-server mysql-client nginx
 ```
 
 This will install PHP 8.1, MySQL 8.0, and nginx 1.18.0.
@@ -38,7 +45,7 @@ NOTE: You may need to install openssl here if it's not already installed
 Now we're going to configure MySQL to create a user and a database:
 
 ```
-sudo mysql
+mysql
 create user 'rpg'@'localhost' identified by 'password';
 create database rpg;
 grant all on rpg.* to 'rpg'@'localhost';
@@ -48,13 +55,8 @@ flush privileges;
 #### nginx
 
 Getting nginx configured can be tricky.
-First, we will become root for all this work.
 
-```
-sudo -i
-```
-
-Now we can `rm` the default host and touch the new one.
+First, we can `rm` the default host configuration and touch the new one.
 
 ```
 rm /etc/nginx/sites-enabled/default
