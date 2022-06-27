@@ -30,6 +30,6 @@ class Edge extends Model
 
     public function terrain()
     {
-        return $this->belongsTo(Terrain::class)->withTimestamps();
+        return $this->belongsTo(Terrain::class);
     }
 }

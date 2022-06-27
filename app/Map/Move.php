@@ -317,6 +317,7 @@ class Move
                 'psuedo_id' => $x . ',' . $y,
                 'max_trees' => $tree_count,
                 'available_trees' => $tree_count,
+                'terrain_id' => Terrain::where('name', 'Grass')->first()->id, # TODO: make this random
             ]);
 
             foreach (array_keys($directions) as $direction) {
