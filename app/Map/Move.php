@@ -12,18 +12,13 @@ class Move
 {
     public function check_if_edge_is_road(Tile $tile, string $direction)
     {
-<<<<<<< HEAD
         $edge = $tile->edges()->where('direction', $direction)->first();
 
         return $edge ? $edge->pivot->is_road : false;
-=======
-        return $tile->edges()->where('direction', $direction)->first()->pivot->is_road;
->>>>>>> Adjacent tiles are verified when constructing a new one
     }
 
     public function check_if_adjacent_edge_is_road(Tile $tile, string $direction)
     {
-<<<<<<< HEAD
         $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
 
         return $adjacent_tile ? $this->check_if_edge_is_road($adjacent_tile, $this->invert_direction($direction)) : false;
@@ -31,16 +26,10 @@ class Move
 
     public function get_adjacent_tile(Tile $tile, string $direction)
     {
-=======
->>>>>>> Adjacent tiles are verified when constructing a new one
         $x = $tile->x;
         $y = $tile->y;
 
         switch ($direction) {
-<<<<<<< HEAD
-
-=======
->>>>>>> Adjacent tiles are verified when constructing a new one
             case 'north':
                 $y++;
                 break;
@@ -55,7 +44,6 @@ class Move
                 break;
         }
 
-<<<<<<< HEAD
         return Tile::where('x', $x)->where('y', $y)->first();
     }
 
@@ -63,15 +51,11 @@ class Move
     public function invert_direction($direction)
     {
         $directions = [
-=======
-        $inverted_directions = [
->>>>>>> Adjacent tiles are verified when constructing a new one
             'north' => 'south',
             'east' => 'west',
             'south' => 'north',
             'west' => 'east',
         ];
-<<<<<<< HEAD
 
         return $directions[$direction];
     }
@@ -97,24 +81,16 @@ class Move
         }
 
         $inverted_direction = $this->invert_direction($direction);
-=======
-        $inverted_direction = $inverted_directions[$direction];
->>>>>>> Adjacent tiles are verified when constructing a new one
 
         $adjacent_tile = Tile::where('x', $x)->where('y', $y)->first();
         if ($adjacent_tile) {
             $adjacent_edge = $adjacent_tile->edges()->where('direction', $inverted_direction)->first();
 
-<<<<<<< HEAD
             return $adjacent_edge;
-=======
-            return $adjacent_edge->pivot->is_road;
->>>>>>> Adjacent tiles are verified when constructing a new one
         }
         return false;
     }
 
-<<<<<<< HEAD
 
     public function move(User $user, string $direction)
     {
@@ -123,44 +99,10 @@ class Move
         if (!$this->check_if_edge_is_road($current_tile, $direction)) {
             return response()->json(['error' => 'There is no road in that direction.'], 403);
         }
-=======
-    public function move(User $user, string $direction)
-    {
-        $current_tile = Tile::where('x', $user->x)->where('y', $user->y)->first();
-
-        if ($this->check_if_edge_is_road($current_tile, $direction)) {
-            $x = $user->x;
-            $y = $user->y;
-
-            $directions = [
-                'north' => false,
-                'east' => false,
-                'south' => false,
-                'west' => false,
-            ];
-
-            $directions[$direction] = true;
-
-            switch ($direction) {
-                case 'north':
-                    $y++;
-                    break;
-                case 'east':
-                    $x++;
-                    break;
-                case 'south':
-                    $y--;
-                    break;
-                case 'west':
-                    $x--;
-                    break;
-            }
->>>>>>> Adjacent tiles are verified when constructing a new one
 
         $x = $user->tile()->x;
         $y = $user->tile()->y;
 
-<<<<<<< HEAD
         $directions = [
             'north' => false,
             'east' => false,
@@ -217,37 +159,6 @@ class Move
                     ];
 
                     // $new_terrain = Terrain::all()->random();
-=======
-            $new_tile = Tile::where('x', $x)->where('y', $y)->first();
-            if (!$new_tile) {
-                $new_tile = Tile::create([
-                    'x' => $x,
-                    'y' => $y,
-                    'psuedo_id' => $x . ',' . $y,
-                ]);
-
-                $edges = [
-                    Edge::create([
-                        'name' => 'north',
-                        'direction' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($new_tile, 'north'),
-                    ]),
-                    Edge::create([
-                        'name' => 'east',
-                        'direction' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($new_tile, 'east'),
-                    ]),
-                    Edge::create([
-                        'name' => 'south',
-                        'direction' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($new_tile, 'south'),
-                    ]),
-                    Edge::create([
-                        'name' => 'west',
-                        'direction' => random_int(0, 1) == 1 ? true : $this->check_if_adjacent_edge_is_road($new_tile, 'west'),
-                    ]),
-                ];
-
-                foreach ($edges as $edge) {
-                    $new_tile->edges()->attach($edge);
->>>>>>> Adjacent tiles are verified when constructing a new one
                 }
 
                 $discovered_tile->edges()->attach($new_edge, $new_edge_data);
