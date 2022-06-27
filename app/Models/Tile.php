@@ -19,6 +19,7 @@ class Tile extends Model
         'max_trees',
         'available_trees',
         'last_disturbed',
+        'terrain_id',
     ];
 
     protected $hidden = [
@@ -42,9 +43,9 @@ class Tile extends Model
         return $this->belongsToMany(Edge::class)->withTimestamps()->withPivot('direction', 'is_road');
     }
 
-    public function terrains()
+    public function terrain()
     {
-        return $this->belongsToMany(Terrain::class)->withTimestamps();
+        return $this->belongsTo(Terrain::class);
     }
 
     public function users()

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Tile;
+use App\Models\Inventory;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'password',
+        'gold',
         'thieving',
         'woodcutting',
         'tile_id',
@@ -40,23 +42,19 @@ class User extends Authenticatable
         'deleted_at',
     ];
 
-    public function inventories()
-    {
-        return $this->belongsToMany(Inventory::class);
-    }
-
     public function inventory()
     {
-        return $this->inventories()->first();
+        return $this->hasOne(Inventory::class);
     }
 
     public function addToInventory(Item $item)
     {
-        $inventory = $this->inventory();
+        $inventory = $this->inventory()->first();
 
         if (!$inventory) {
-            $inventory = $this->inventories()->create([
+            $inventory = $this->inventory()->create([
                 'user_id' => $this->id,
+                'size' => 5,
             ]);
         }
 
@@ -67,38 +65,24 @@ class User extends Authenticatable
 
     public function addGold(int $amount)
     {
-        $inventory = $this->inventory();
+        $this->gold += $amount;
+        $this->save();
 
-        if (!$inventory) {
-            $inventory = $this->inventories()->create([
-                'user_id' => $this->id,
-            ]);
-        }
-
-        $inventory->gold += $amount;
-        $inventory->save();
-
-        return $inventory->gold;
+        return $this->gold;
     }
 
     public function getGold()
     {
-        $inventory = $this->inventories()->selectRaw('SUM(gold) as gold')->first();
-
-        if (!$inventory) {
-            return 0;
-        }
-
-        return $inventory->gold;
+        return $this->gold;
     }
 
     public function building()
     {
-        return $this->hasMany(Building::class, 'id', 'building_id')->first();
+        return $this->hasOne(Building::class, 'id', 'building_id')->first();
     }
 
     public function tile()
     {
-        return $this->hasMany(Tile::class, 'id', 'tile_id')->first();
+        return $this->hasOne(Tile::class, 'id', 'tile_id')->first();
     }
 }

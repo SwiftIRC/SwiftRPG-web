@@ -27,9 +27,12 @@ class WoodcuttingTest extends TestCase
         $user = User::factory()->create([
             'tile_id' => $tile->id,
         ]);
+
         $inventory = Inventory::factory()->create([
             'user_id' => $user->id,
+            'size' => 5,
         ]);
+
         $item = Item::factory()->create([
             'name' => 'Logs',
         ]);

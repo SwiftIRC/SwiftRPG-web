@@ -25,11 +25,11 @@ class Terrain extends Model
 
     public function edges()
     {
-        return $this->hasMany(Edge::class);
+        return $this->hasOne(Edge::class);
     }
 
-    public function tiles()
+    public function tile()
     {
-        return $this->hasMany(Tile::class);
+        return $this->hasOne(Tile::class);
     }
 }
