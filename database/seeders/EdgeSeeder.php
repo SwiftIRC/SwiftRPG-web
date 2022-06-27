@@ -17,31 +17,33 @@ class EdgeSeeder extends Seeder
      */
     public function run()
     {
-        $grassy = Terrain::where('id', 1)->first();
-        $tile = Tile::where('psuedo_id', '0,0')->first();
+        $grass = Terrain::where('id', 1)->first();
+        $dirt = Terrain::where('id', 2)->first();
+        $sand = Terrain::where('id', 3)->first();
+        $water = Terrain::where('id', 4)->first();
 
-        $edge = Edge::where('id', '1')->first();
-
-        // $edge->terrains()->attach($grassy);
-
-        // $tile->edges()->attach($edge, ['direction' => 'north', 'is_road' => true]);
-        // $tile->edges()->attach($edge, ['direction' => 'east', 'is_road' => true]);
-        // $tile->edges()->attach($edge, ['direction' => 'south', 'is_road' => true]);
-        // $tile->edges()->attach($edge, ['direction' => 'west', 'is_road' => true]);
+        Edge::create([
+            'name' => 'Grass',
+            'description' => 'A grassy area. It feels comfortable here.',
+            'terrain_id' => $grass->id,
+        ]);
 
         Edge::create([
             'name' => 'Dirt',
             'description' => 'A dusty, dirty patch of land.',
+            'terrain_id' => $dirt->id,
         ]);
 
         Edge::create([
-            'name' => 'Sandy',
+            'name' => 'Sand',
             'description' => 'A dry, sandy area.',
+            'terrain_id' => $sand->id,
         ]);
 
         Edge::create([
             'name' => 'Water',
-            'Description' => 'A watery area.',
+            'description' => 'A watery area.',
+            'terrain_id' => $water->id,
         ]);
     }
 }

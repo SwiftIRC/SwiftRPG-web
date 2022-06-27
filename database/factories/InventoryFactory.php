@@ -18,7 +18,6 @@ class InventoryFactory extends Factory
     {
         return [
             'size' => 5,
-            'gold' => 0,
         ];
     }
 }

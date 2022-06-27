@@ -7,6 +7,7 @@ use Tests\TestCase;
 use App\Models\Edge;
 use App\Models\Tile;
 use App\Models\User;
+use App\Models\Terrain;
 use App\Models\Building;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -21,12 +22,16 @@ class EdgeTest extends TestCase
 
     public function test_edge_lookup()
     {
+        $terrain = Terrain::all()->first();
         $user = User::factory()->create([
             'tile_id' => Tile::all()->first()->id,
         ]);
-        $edge = Edge::factory()->create();
+        $edge = Edge::factory()->create([
+            'terrain_id' => $terrain->id,
+        ]);
         $tile = Tile::factory()->create([
             'discovered_by' => $user->id,
+            'terrain_id' => $terrain->id,
         ]);
         $directions = ['north', 'east', 'south', 'west'];
         for ($x = 0; $x < count($directions); $x++) {
@@ -38,7 +43,7 @@ class EdgeTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson([
             [
-                'id' => 1,
+                'id' => $edge->id,
                 'name' => $edge->name,
                 'description' => $edge->description,
                 'pivot' => [
@@ -46,7 +51,7 @@ class EdgeTest extends TestCase
                 ],
             ],
             [
-                'id' => 1,
+                'id' => $edge->id,
                 'name' => $edge->name,
                 'description' => $edge->description,
                 'pivot' => [
@@ -54,7 +59,7 @@ class EdgeTest extends TestCase
                 ],
             ],
             [
-                'id' => 1,
+                'id' => $edge->id,
                 'name' => $edge->name,
                 'description' => $edge->description,
                 'pivot' => [
@@ -62,7 +67,7 @@ class EdgeTest extends TestCase
                 ],
             ],
             [
-                'id' => 1,
+                'id' => $edge->id,
                 'name' => $edge->name,
                 'description' => $edge->description,
                 'pivot' => [

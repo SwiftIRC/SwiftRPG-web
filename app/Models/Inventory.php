@@ -13,17 +13,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inventory extends Model
 {
-    use HasFactory, HasTimestamps, SoftDeletes, HasTenancy;
+    use HasFactory, HasTimestamps, SoftDeletes;
 
     protected $fillable = [
+        'id',
         'user_id',
-        'gold',
         'size',
     ];
 
     public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function items()

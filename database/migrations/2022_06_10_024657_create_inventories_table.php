@@ -18,7 +18,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->bigInteger("user_id")->unsigned();
-            $table->bigInteger("gold")->unsigned();
             $table->smallInteger("size")->unsigned();
 
             $table->foreign("user_id")->references("id")->on("users");

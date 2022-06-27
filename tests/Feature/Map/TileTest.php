@@ -7,6 +7,7 @@ use Tests\TestCase;
 use App\Models\Edge;
 use App\Models\Tile;
 use App\Models\User;
+use App\Models\Terrain;
 use App\Models\Building;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -25,8 +26,11 @@ class TileTest extends TestCase
             'tile_id' => Tile::all()->first()->id,
         ]);
 
+        $terrain = Terrain::all()->first();
+
         $tile = Tile::factory()->create([
             'discovered_by' => $user->id,
+            'terrain_id' => $terrain->id,
         ]);
 
         $response = $this->actingAs($user)->get(implode(['/api/map/tile/', $tile->x, '/', $tile->y]));

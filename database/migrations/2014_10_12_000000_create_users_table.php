@@ -20,18 +20,20 @@ return new class extends Migration
             $table->boolean('is_admin')->default(false);
             $table->rememberToken();
 
-            $table->mediumInteger("thieving")->unsigned()->default(0);
-            $table->mediumInteger("fishing")->unsigned()->default(0);
-            $table->mediumInteger("mining")->unsigned()->default(0);
-            $table->mediumInteger("woodcutting")->unsigned()->default(0);
-            $table->mediumInteger("cooking")->unsigned()->default(0);
-            $table->mediumInteger("smithing")->unsigned()->default(0);
-            $table->mediumInteger("fletching")->unsigned()->default(0);
-            $table->mediumInteger("crafting")->unsigned()->default(0);
-            $table->mediumInteger("herblore")->unsigned()->default(0);
-            $table->mediumInteger("agility")->unsigned()->default(0);
-            $table->mediumInteger("farming")->unsigned()->default(0);
-            $table->mediumInteger("hunter")->unsigned()->default(0);
+            $table->unsignedBigInteger("gold")->default(0);
+
+            $table->unsignedMediumInteger("thieving")->default(0);
+            $table->unsignedMediumInteger("fishing")->default(0);
+            $table->unsignedMediumInteger("mining")->default(0);
+            $table->unsignedMediumInteger("woodcutting")->default(0);
+            $table->unsignedMediumInteger("cooking")->default(0);
+            $table->unsignedMediumInteger("smithing")->default(0);
+            $table->unsignedMediumInteger("fletching")->default(0);
+            $table->unsignedMediumInteger("crafting")->default(0);
+            $table->unsignedMediumInteger("herblore")->default(0);
+            $table->unsignedMediumInteger("agility")->default(0);
+            $table->unsignedMediumInteger("farming")->default(0);
+            $table->unsignedMediumInteger("hunter")->default(0);
 
             $table->timestamps();
             $table->softDeletes();

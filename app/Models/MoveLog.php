@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Sbine\Tenancy\HasTenancy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,6 +20,6 @@ class MoveLog extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 }
