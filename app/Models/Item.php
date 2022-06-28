@@ -27,6 +27,12 @@ class Item extends Model
         'durability',
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+    ];
+
     public function effects()
     {
         return $this->belongsToMany(Effect::class)->withTimestamps();
