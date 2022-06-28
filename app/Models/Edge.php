@@ -14,6 +14,7 @@ class Edge extends Model
     protected $fillable = [
         'name',
         'description',
+        'terrain_id',
     ];
 
     protected $hidden = [
@@ -27,8 +28,8 @@ class Edge extends Model
         return $this->hasMany(Tile::class);
     }
 
-    public function terrains()
+    public function terrain()
     {
-        return $this->belongsToMany(Terrain::class)->withTimestamps();
+        return $this->belongsTo(Terrain::class);
     }
 }

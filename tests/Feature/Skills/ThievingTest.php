@@ -26,9 +26,6 @@ class ThievingTest extends TestCase
         $user = User::factory()->create([
             'tile_id' => Tile::all()->first()->id,
         ]);
-        $inventory = Inventory::factory()->create([
-            'user_id' => $user->id,
-        ]);
 
         $response = $this->actingAs($user)->post('/api/thieving/pickpocket', [], ['X-Bot-Token' => config('app.token')]);
 
@@ -41,12 +38,8 @@ class ThievingTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'thieving' => 5,
-        ]);
-
-        $this->assertDatabaseHas('inventories', [
-            'id' => $inventory->id,
             'gold' => 5,
+            'thieving' => 5,
         ]);
     }
 
@@ -55,9 +48,6 @@ class ThievingTest extends TestCase
         $user = User::factory()->create([
             'tile_id' => Tile::all()->first()->id,
             'thieving' => level_to_xp(10),
-        ]);
-        $inventory = Inventory::factory()->create([
-            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)->post('/api/thieving/steal', [], ['X-Bot-Token' => config('app.token')]);
@@ -71,12 +61,8 @@ class ThievingTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'thieving' => 10 + level_to_xp(10),
-        ]);
-
-        $this->assertDatabaseHas('inventories', [
-            'id' => $inventory->id,
             'gold' => 10,
+            'thieving' => 10 + level_to_xp(10),
         ]);
     }
 
@@ -84,9 +70,6 @@ class ThievingTest extends TestCase
     {
         $user = User::factory()->create([
             'tile_id' => Tile::all()->first()->id,
-        ]);
-        $inventory = Inventory::factory()->create([
-            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)->post('/api/thieving/steal', [], ['X-Bot-Token' => config('app.token')]);
@@ -100,9 +83,6 @@ class ThievingTest extends TestCase
             'tile_id' => Tile::all()->first()->id,
             'thieving' => level_to_xp(20),
         ]);
-        $inventory = Inventory::factory()->create([
-            'user_id' => $user->id,
-        ]);
 
         $response = $this->actingAs($user)->post('/api/thieving/pilfer', [], ['X-Bot-Token' => config('app.token')]);
 
@@ -115,12 +95,8 @@ class ThievingTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'thieving' => 50 + level_to_xp(20),
-        ]);
-
-        $this->assertDatabaseHas('inventories', [
-            'id' => $inventory->id,
             'gold' => 50,
+            'thieving' => 50 + level_to_xp(20),
         ]);
     }
 
@@ -128,9 +104,6 @@ class ThievingTest extends TestCase
     {
         $user = User::factory()->create([
             'tile_id' => Tile::all()->first()->id,
-        ]);
-        $inventory = Inventory::factory()->create([
-            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)->post('/api/thieving/pilfer', [], ['X-Bot-Token' => config('app.token')]);
@@ -144,9 +117,6 @@ class ThievingTest extends TestCase
             'tile_id' => Tile::all()->first()->id,
             'thieving' => level_to_xp(30),
         ]);
-        $inventory = Inventory::factory()->create([
-            'user_id' => $user->id,
-        ]);
 
         $response = $this->actingAs($user)->post('/api/thieving/plunder', [], ['X-Bot-Token' => config('app.token')]);
 
@@ -159,12 +129,8 @@ class ThievingTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'thieving' => 100 + level_to_xp(30),
-        ]);
-
-        $this->assertDatabaseHas('inventories', [
-            'id' => $inventory->id,
             'gold' => 100,
+            'thieving' => 100 + level_to_xp(30),
         ]);
     }
 
@@ -172,9 +138,6 @@ class ThievingTest extends TestCase
     {
         $user = User::factory()->create([
             'tile_id' => Tile::all()->first()->id,
-        ]);
-        $inventory = Inventory::factory()->create([
-            'user_id' => $user->id,
         ]);
 
         $response = $this->actingAs($user)->post('/api/thieving/plunder', [], ['X-Bot-Token' => config('app.token')]);

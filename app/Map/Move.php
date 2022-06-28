@@ -194,19 +194,20 @@ class Move
 
     public function fill_in_with_water(Tile $tile)
     {
+        $water = Terrain::where('name', 'Water')->first();
+
         $tile->psuedo_id = $tile->x . ',' . $tile->y;
+        $tile->terrain_id = $water->id;
         $tile->save();
 
         $directions = ['north', 'east', 'south', 'west'];
 
-
-        $water = Terrain::where('name', 'Water')->first();
-        $edge = Edge::where('name', 'Water')->first();
-        $edge->terrains()->attach($water);
-        $tile->terrains()->attach($water);
+        $edge = Edge::where('terrain_id', $water->id)->first();
 
         foreach ($directions as $direction) {
             $adjacent_edge = $this->get_adjacent_edge($tile, $direction);
+            $adjacent_edge->terrain_id = $water->id;
+            $adjacent_edge->save();
 
             $tile->edges()->attach($edge, [
                 'direction' => $direction,
@@ -316,28 +317,31 @@ class Move
                 'psuedo_id' => $x . ',' . $y,
                 'max_trees' => $tree_count,
                 'available_trees' => $tree_count,
+                'terrain_id' => Terrain::where('name', 'Grass')->first()->id, # TODO: make this random
             ]);
 
             foreach (array_keys($directions) as $direction) {
                 $adjacent_edge = $this->get_adjacent_edge($discovered_tile, $direction);
 
                 if ($adjacent_edge) {
-                    $discovered_tile->edges()->attach(
-                        Edge::where('id', $adjacent_edge->id)->first(),
-                        [
-                            'is_road' => $adjacent_edge->pivot->is_road,
-                            'direction' => $direction,
-                        ]
-                    );
+                    $new_edge = Edge::where('id', $adjacent_edge->id)->first();
+                    $new_edge_data = [
+                        'is_road' => $adjacent_edge->pivot->is_road,
+                        'direction' => $direction,
+                    ];
+
+                    // $new_terrain = $new_edge->terrains()->get();
                 } else {
-                    $discovered_tile->edges()->attach(
-                        Edge::all()->random(),
-                        [
-                            'is_road' => random_int(0, 1) == 1 ? true : false,
-                            'direction' => $direction,
-                        ]
-                    );
+                    $new_edge = Edge::all()->random();
+                    $new_edge_data = [
+                        'is_road' => random_int(0, 1) == 1 ? true : false,
+                        'direction' => $direction,
+                    ];
+
+                    // $new_terrain = Terrain::all()->random();
                 }
+
+                $discovered_tile->edges()->attach($new_edge, $new_edge_data);
             }
 
             $new_tile = Tile::where('x', $x)->where('y', $y)->first();
@@ -363,7 +367,7 @@ class Move
 
         $tile->npcs = $tile->npcs()->get();
         $tile->edges = $tile->edges()->get();
-        $tile->terrains = $tile->terrains()->get();
+        $tile->terrain = $tile->terrain()->get();
         $tile->buildings = $tile->buildings()->get();
 
         return response()->json($tile);

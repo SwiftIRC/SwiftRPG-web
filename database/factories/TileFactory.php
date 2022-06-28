@@ -27,6 +27,8 @@ class TileFactory extends Factory
             'available_trees' => $this->faker->randomDigit(0, 50),
 
             'last_disturbed' => $this->faker->dateTime(),
+
+            'terrain_id' => 1,
         ];
     }
 }

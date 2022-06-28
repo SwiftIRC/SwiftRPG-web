@@ -16,8 +16,18 @@ class TerrainSeeder extends Seeder
     public function run()
     {
         Terrain::create([
-            'name' => 'Grassy',
+            'name' => 'Grass',
             'description' => 'A grassy field.',
+        ]);
+
+        Terrain::create([
+            'name' => 'Dirt',
+            'description' => 'A dusty, dirty patch of land.',
+        ]);
+
+        Terrain::create([
+            'name' => 'Sand',
+            'description' => 'A dry, sandy area.',
         ]);
 
         Terrain::create([

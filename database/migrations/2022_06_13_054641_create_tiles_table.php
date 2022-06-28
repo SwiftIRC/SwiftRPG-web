@@ -13,23 +13,35 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::create("terrains", function (Blueprint $table) {
+            $table->id();
+
+            $table->string("name", 100);
+            $table->string("description", 1000)->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('tiles', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger("discovered_by")->unsigned()->nullable();
+            $table->unsignedBigInteger("discovered_by")->nullable();
+            $table->unsignedBigInteger("terrain_id");
 
             $table->string("psuedo_id", 100)->unique();
             $table->bigInteger("x");
             $table->bigInteger("y");
 
-            $table->smallInteger("max_trees")->unsigned()->default(0);
-            $table->smallInteger("available_trees")->unsigned()->default(0);
+            $table->unsignedSmallInteger("max_trees")->default(0);
+            $table->unsignedSmallInteger("available_trees")->default(0);
 
             $table->timestamp('last_disturbed')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign("discovered_by")->references("id")->on("users");
+            $table->foreign("terrain_id")->references("id")->on("terrains");
         });
 
         Schema::create('zones', function (Blueprint $table) {
@@ -129,39 +141,12 @@ return new class extends Migration
 
             $table->string("name", 100);
             $table->string("description", 1000)->nullable();
+            $table->unsignedBigInteger("terrain_id");
 
             $table->timestamps();
             $table->softDeletes();
-        });
 
-        Schema::create("terrains", function (Blueprint $table) {
-            $table->id();
-
-            $table->string("name", 100);
-            $table->string("description", 1000)->nullable();
-
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create("terrain_tile", function (Blueprint $table) {
-            $table->id();
-
-            $table->bigInteger("tile_id")->unsigned();
-            $table->bigInteger("terrain_id")->unsigned();
-
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create("edge_terrain", function (Blueprint $table) {
-            $table->id();
-
-            $table->bigInteger("edge_id")->unsigned();
-            $table->bigInteger("terrain_id")->unsigned();
-
-            $table->timestamps();
-            $table->softDeletes();
+            $table->foreign("terrain_id")->references("id")->on("terrains");
         });
 
         Schema::create('edge_tile', function (Blueprint $table) {
@@ -207,9 +192,6 @@ return new class extends Migration
             $table->dropColumn('hitpoints');
         });
         Schema::dropIfExists('edge_tile');
-        Schema::dropIfExists('edge_terrain');
-        Schema::dropIfExists('terrain_tile');
-        Schema::dropIfExists('terrains');
         Schema::dropIfExists('edges');
         Schema::dropIfExists('npc_tile');
         Schema::dropIfExists('building_npc');
@@ -219,5 +201,6 @@ return new class extends Migration
         Schema::dropIfExists('buildings');
         Schema::dropIfExists('zones');
         Schema::dropIfExists('tiles');
+        Schema::dropIfExists('terrains');
     }
 };
