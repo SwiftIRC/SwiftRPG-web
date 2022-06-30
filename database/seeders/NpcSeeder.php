@@ -194,6 +194,13 @@ class NpcSeeder extends Seeder
             'description' => 'Cooks the food.',
         ]);
 
-        // Kimberley Haytere
+        $church->npcs()->create([
+            'name' => 'Kimberley Haytere',
+            'description' => 'A bishop of the church.',
+            'occupation_id' => Occupation::create([
+                'name' => 'Bishop',
+                'description' => 'Lives and works in the church. Rarely seen without their hat on.',
+            ])->id,
+        ]);
     }
 }
