@@ -185,9 +185,13 @@ class NpcSeeder extends Seeder
         foreach ($npcs as $npc) {
             $tile1->npcs()->attach($npc);
         };
-        Occupation::create([
-            'name' => 'Clerk',
-            'description' => 'Works the cash register.',
+        $shop->npcs()->create([
+            'name' => 'Rovena Burnhame',
+            'description' => '',
+            'occupation_id' => Occupation::create([
+                'name' => 'Clerk',
+                'description' => 'Works the cash register.',
+            ])->id,
         ]);
         Occupation::create([
             'name' => 'Cook',
@@ -200,6 +204,16 @@ class NpcSeeder extends Seeder
             'occupation_id' => Occupation::create([
                 'name' => 'Bishop',
                 'description' => 'Lives and works in the church. Rarely seen without their hat on.',
+            ])->id,
+        ]);
+
+        $shop->npcs()->create([
+            'name' => 'Goldie Yonge',
+            'description' => 'A shopkeeper with golden hair. She smells of elderberries for some reason.',
+            'occupation_id' => Occupation::create([
+                'name' => 'Shopkeeper',
+                'description' => 'Sells goods.',
+                'is_tradeable' => true,
             ])->id,
         ]);
     }

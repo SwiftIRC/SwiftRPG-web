@@ -89,11 +89,38 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('classes', function (Blueprint $table) {
+            $table->id();
+
+            $table->string("name", 100);
+            $table->string("description", 1000)->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('class_occupation', function (Blueprint $table) {
+            $table->id();
+
+            $table->bigInteger("class_id")->unsigned();
+            $table->bigInteger("occupation_id")->unsigned();
+
+            $table->foreign("class_id")->references("id")->on("classes");
+            $table->foreign("occupation_id")->references("id")->on("occupations");
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('occupations', function (Blueprint $table) {
             $table->id();
 
             $table->string("name", 100);
             $table->string("description", 1000)->nullable();
+
+            $table->boolean("is_tradeable")->default(false);
+
+            $table->unsignedBigInteger("class_id");
 
             $table->timestamps();
             $table->softDeletes();

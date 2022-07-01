@@ -19,7 +19,8 @@ return new class extends Migration
             $table->softDeletes();
             $table->string("name", 100)->unique();
             $table->string("description", 255)->nullable();
-            $table->bigInteger("weight")->unsigned();
+            $table->unsignedBigInteger("weight");
+            $table->unsignedBigInteger("value")->default(0);
             $table->boolean("interactive")->default(false);
             $table->boolean("wieldable")->default(false);
             $table->boolean("throwable")->default(false);
