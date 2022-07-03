@@ -112,6 +112,8 @@ dropdown at the bottom right of the Open menu.
 
 #### .env
 
+You may now exit the root shell with `exit` or `ctrl+d`.
+
 Next, copy the .env file, generate a key, and make any modifications you may need:
 
 ```
