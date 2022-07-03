@@ -17,7 +17,6 @@ We will become root for the rest of this work.
 sudo -i
 ```
 
-
 #### packages
 
 Second, add the PHP repository to your apt sources:
@@ -116,6 +115,31 @@ Next, copy the .env file, generate a key, and make any modifications you may nee
 ```
 cp .env.example .env
 php artisan key:generate
+```
+
+#### php
+
+Now we can install our PHP dependencies:
+
+```
+composer install
+```
+
+NOTE: If you do not have `composer` installed, please make the utility available in your $PATH as `composer` after referencing their docs here: https://getcomposer.org/download/
+
+#### npm
+
+Run the following to install npm resources and to build JS & CSS resources:
+
+```
+npm install
+npm run build
+```
+
+To enable hot reloading, run the development server:
+
+```
+npm run dev
 ```
 
 ### Run Migrations
