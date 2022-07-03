@@ -18,6 +18,7 @@ class Regenerate
         }
         return $toggled;
     }
+
     public function tile(Tile $tile)
     {
         $players = $tile->users();
