@@ -31,8 +31,10 @@ apt update
 
 Third, install the following packages:
 
+NOTE: php8.1-fpm and nginx are optional (more information below)
+
 ```
-sudo apt install php8.1-mysql php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-zip mysql-server mysql-client nginx
+sudo apt install php8.1-fpm php8.1-mysql php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-zip mysql-server mysql-client nginx
 ```
 
 This will install PHP 8.1, MySQL 8.0, and nginx 1.18.0.
@@ -51,7 +53,7 @@ grant all on rpg.* to 'rpg'@'localhost';
 flush privileges;
 ```
 
-#### nginx
+#### nginx (optional)
 
 Getting nginx configured can be tricky.
 
@@ -100,7 +102,7 @@ server {
 }
 ```
 
-#### /etc/hosts
+#### /etc/hosts (optional)
 
 Add `127.0.0.1 rpg.swiftrpg.dev` to your /etc/hosts file.
 In Windows this requires running Notepad as an administrator and
@@ -150,9 +152,23 @@ php artisan migrate --seed
 
 ### Load it in Your Browser
 
+#### Option 1: nginx
+
 Open up your new development environment!
 
 ```
 http://rpg.swiftirc.dev/
 http://rpg.swiftirc.dev/map
 ```
+
+#### Option 2: Development Servers
+
+Run the following commands:
+```
+npm run dev &
+php artisan serve
+```
+
+Open up `http://127.0.0.1:8000` in your browser
+
+NOTE: This will enable hot-reloading. Modifying JavaScript or CSS will automatically refresh the page.
