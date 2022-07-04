@@ -2,7 +2,7 @@
 
 namespace App\Map;
 
-use Move;
+use App\Map\Move;
 use App\Models\Edge;
 use App\Models\Tile;
 use App\Models\Terrain;
@@ -167,7 +167,6 @@ class Generate
             }
         }
 
-
         return $tiles;
     }
 
@@ -194,10 +193,78 @@ class Generate
         if ($tile = Tile::where('x', $x)->where('y', $y)->first()) {
             return;
         }
+
         $adjacent_tile = new Tile();
         $adjacent_tile->x = $x;
         $adjacent_tile->y = $y;
 
         return $adjacent_tile;
+    }
+
+    public function follow_roads(Tile $starting_tile, array $processed_tiles = [])
+    {
+        $directions = ['north', 'east', 'south', 'west'];
+        $processed_tiles[$starting_tile->x][$starting_tile->y] = $starting_tile;
+
+        foreach ($directions as $direction) {
+            if (app(Move::class)->check_if_edge_is_road($starting_tile, $direction)) {
+                $adjacent_tile = $this->get_adjacent_missing_tile($starting_tile, $direction);
+                $terrain_id = $starting_tile->edges()->where('direction', $direction)->first()->terrain_id;
+
+                if ($adjacent_tile && !in_array($adjacent_tile, $processed_tiles)) {
+                    $adjacent_tile->terrain_id = $terrain_id;
+                    $this->generate_tile($adjacent_tile);
+
+                    $processed_tiles = $this->follow_roads($adjacent_tile, $processed_tiles);
+                }
+            }
+        }
+
+        return $processed_tiles;
+    }
+
+    public function generate_tile(Tile $tile)
+    {
+        $tile->psuedo_id = $tile->x . ',' . $tile->y;
+        if (!$tile->terrain_id) {
+            $tile->terrain_id = 1;
+        }
+
+        $trees = random_int(0, 100);
+        $tile->max_trees = $trees;
+        $tile->available_trees = $trees;
+
+        $tile->save();
+
+        $directions = ['north', 'east', 'south', 'west'];
+
+        foreach ($directions as $direction) {
+            $adjacent_edge = app(Move::class)->get_adjacent_edge($tile, $direction);
+
+            $is_road = false;
+            if ($adjacent_edge) {
+                $edge = $adjacent_edge;
+                $is_road = $adjacent_edge->pivot->is_road;
+            } else {
+                $edge = Edge::all()->random();
+                $is_road = random_int(0, 1);
+            }
+
+            $edge->terrain_id = $tile->terrain_id;
+
+            $tile->edges()->attach($edge, [
+                'direction' => $direction,
+                'is_road' => $is_road,
+            ]);
+        }
+    }
+
+    public function map()
+    {
+        $this->follow_roads(Tile::where('id', 1)->first());
+
+        $this->fill_in_missing_tiles_if_isolated();
+
+        return 0;
     }
 }

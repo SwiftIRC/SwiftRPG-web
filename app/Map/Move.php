@@ -21,10 +21,10 @@ class Move
     {
         $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
 
-        return $adjacent_tile ? $this->check_if_edge_is_road($adjacent_tile, $this->invert_direction($direction)) : false;
+        return $adjacent_tile ? $this->check_if_edge_is_road($adjacent_tile, $this->invert_direction($direction)) : $adjacent_tile;
     }
 
-    public function get_adjacent_tile(Tile $tile, string $direction)
+    public function get_adjacent_tile(Tile $tile, string $direction): Tile
     {
         $x = $tile->x;
         $y = $tile->y;
@@ -90,7 +90,6 @@ class Move
         }
         return false;
     }
-
 
     public function move(User $user, string $direction)
     {
