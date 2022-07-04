@@ -30,12 +30,12 @@ class Tile extends Model
 
     public function buildings()
     {
-        return $this->belongsToMany(Building::class)->withTimestamps();
+        return $this->belongsToMany(Building::class);
     }
 
     public function npcs()
     {
-        return $this->belongsToMany(Npc::class)->withTimestamps();
+        return $this->belongsToMany(Npc::class);
     }
 
     public function edges()

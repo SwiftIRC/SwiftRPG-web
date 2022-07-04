@@ -2,11 +2,9 @@
 
 namespace App\Map;
 
-use App\Models\Edge;
 use App\Models\Tile;
 use App\Models\User;
 use App\Models\MoveLog;
-use App\Models\Terrain;
 
 class Move
 {
@@ -127,44 +125,6 @@ class Move
         }
 
         $new_tile = Tile::where('x', $x)->where('y', $y)->first();
-        if (!$new_tile) {
-            $tree_count = rand(0, 100);
-            $discovered_tile = Tile::create([
-                'discovered_by' => $user->id,
-                'x' => $x,
-                'y' => $y,
-                'psuedo_id' => $x . ',' . $y,
-                'max_trees' => $tree_count,
-                'available_trees' => $tree_count,
-                'terrain_id' => Terrain::where('name', 'Grass')->first()->id, # TODO: make this random
-            ]);
-
-            foreach (array_keys($directions) as $direction) {
-                $adjacent_edge = $this->get_adjacent_edge($discovered_tile, $direction);
-
-                if ($adjacent_edge) {
-                    $new_edge = Edge::where('id', $adjacent_edge->id)->first();
-                    $new_edge_data = [
-                        'is_road' => $adjacent_edge->pivot->is_road,
-                        'direction' => $direction,
-                    ];
-
-                    // $new_terrain = $new_edge->terrains()->get();
-                } else {
-                    $new_edge = Edge::all()->random();
-                    $new_edge_data = [
-                        'is_road' => random_int(0, 1) == 1 ? true : false,
-                        'direction' => $direction,
-                    ];
-
-                    // $new_terrain = Terrain::all()->random();
-                }
-
-                $discovered_tile->edges()->attach($new_edge, $new_edge_data);
-            }
-
-            $new_tile = Tile::where('x', $x)->where('y', $y)->first();
-        }
 
         $user->tile_id = $new_tile->id;
         $user->save();
