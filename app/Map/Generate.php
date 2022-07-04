@@ -67,6 +67,7 @@ class Generate
         $internal_tiles = array_diff($empty_tiles, $external_empty_tiles);
 
         $processed_tiles = [];
+
         foreach ($internal_tiles as $internal_tile) {
             if (in_array($internal_tile, $processed_tiles)) {
                 continue;
@@ -83,7 +84,10 @@ class Generate
                     }
                 }
             }
+
             if (!$found_road) {
+                $this->fill_in_with_water($internal_tile);
+
                 foreach ($connected_tiles as $connected_tile) {
                     $this->fill_in_with_water($connected_tile);
                 }
@@ -93,6 +97,10 @@ class Generate
 
     public function fill_in_with_water(Tile $tile)
     {
+        if (Tile::where('x', $tile->x)->where('y', $tile->y)->count() > 0) {
+            return;
+        }
+
         $water = Terrain::where('name', 'Water')->first();
 
         $tile->psuedo_id = $tile->x . ',' . $tile->y;
@@ -105,13 +113,18 @@ class Generate
 
         foreach ($directions as $direction) {
             $adjacent_edge = app(Move::class)->get_adjacent_edge($tile, $direction);
-            $adjacent_edge->terrain_id = $water->id;
-            $adjacent_edge->save();
+
+            if ($adjacent_edge) {
+                $adjacent_edge->terrain_id = $water->id;
+                $adjacent_edge->save();
+            }
 
             $tile->edges()->attach($edge, [
                 'direction' => $direction,
             ]);
         }
+
+        return $tile;
     }
 
     public function find_all_empty_tiles(int $max_x, int $max_y, int $min_x, int $min_y, array $tile_coords)
@@ -247,7 +260,7 @@ class Generate
                 $is_road = $adjacent_edge->pivot->is_road;
             } else {
                 $edge = Edge::all()->random();
-                $is_road = random_int(0, 1);
+                $is_road = random_int(0, 100) <= 45;
             }
 
             $edge->terrain_id = $tile->terrain_id;
