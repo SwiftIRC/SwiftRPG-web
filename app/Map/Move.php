@@ -2,20 +2,22 @@
 
 namespace App\Map;
 
+use App\Models\Edge;
 use App\Models\Tile;
 use App\Models\User;
 use App\Models\MoveLog;
+use Illuminate\Http\JsonResponse;
 
 class Move
 {
-    public function check_if_edge_is_road(Tile $tile, string $direction)
+    public function check_if_edge_is_road(Tile $tile, string $direction): ?Edge
     {
         $edge = $tile->edges()->where('direction', $direction)->first();
 
-        return $edge ? $edge->pivot->is_road : false;
+        return $edge ? $edge->pivot->is_road : $edge;
     }
 
-    public function check_if_adjacent_edge_is_road(Tile $tile, string $direction)
+    public function check_if_adjacent_edge_is_road(Tile $tile, string $direction): ?Tile
     {
         $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
 
@@ -140,7 +142,7 @@ class Move
         return $new_tile;
     }
 
-    public function look(User $user)
+    public function look(User $user): ?JsonResponse
     {
         $tile = Tile::where('id', $user->tile_id)->first();
 
@@ -152,12 +154,12 @@ class Move
         return response()->json($tile);
     }
 
-    public function npcs(User $user)
+    public function npcs(User $user): ?JsonResponse
     {
         return response()->json(Tile::where('id', $user->tile_id)->first()->npcs()->get());
     }
 
-    public function buildings(User $user)
+    public function buildings(User $user): ?JsonResponse
     {
         return response()->json(Tile::where('id', $user->tile_id)->first()->buildings()->get());
     }
