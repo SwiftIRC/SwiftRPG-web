@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Tile extends Model
 {
@@ -28,27 +30,27 @@ class Tile extends Model
         'deleted_at',
     ];
 
-    public function buildings()
+    public function buildings(): ?BelongsToMany
     {
         return $this->belongsToMany(Building::class);
     }
 
-    public function npcs()
+    public function npcs(): ?BelongsToMany
     {
         return $this->belongsToMany(Npc::class);
     }
 
-    public function edges()
+    public function edges(): ?BelongsToMany
     {
         return $this->belongsToMany(Edge::class)->withPivot('direction', 'is_road');
     }
 
-    public function terrain()
+    public function terrain(): ?BelongsTo
     {
         return $this->belongsTo(Terrain::class);
     }
 
-    public function users()
+    public function users(): ?BelongsToMany
     {
         return $this->belongsToMany(User::class);
     }
