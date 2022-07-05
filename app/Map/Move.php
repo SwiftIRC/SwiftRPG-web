@@ -131,8 +131,6 @@ class Move
         $user->tile_id = $new_tile->id;
         $user->save();
 
-        app(Move::class)->fill_in_missing_tiles_if_isolated();
-
         MoveLog::create([
             'user_id' => $user->id,
             'old_tile_id' => $current_tile->id,
