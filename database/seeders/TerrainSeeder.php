@@ -21,8 +21,8 @@ class TerrainSeeder extends Seeder
         ]);
 
         Terrain::create([
-            'name' => 'Dirt',
-            'description' => 'A dusty, dirty patch of land.',
+            'name' => 'Forest',
+            'description' => 'A piece of land with many trees.',
         ]);
 
         Terrain::create([
@@ -33,6 +33,11 @@ class TerrainSeeder extends Seeder
         Terrain::create([
             'name' => 'Water',
             'description' => 'A watery area.',
+        ]);
+
+        Terrain::create([
+            'name' => 'Mountains',
+            'description' => 'A mountainous area.',
         ]);
     }
 }

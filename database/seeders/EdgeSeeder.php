@@ -18,9 +18,10 @@ class EdgeSeeder extends Seeder
     public function run()
     {
         $grass = Terrain::where('id', 1)->first();
-        $dirt = Terrain::where('id', 2)->first();
+        $forest = Terrain::where('id', 2)->first();
         $sand = Terrain::where('id', 3)->first();
         $water = Terrain::where('id', 4)->first();
+        $mountains = Terrain::where('id', 5)->first();
 
         Edge::create([
             'name' => 'Grass',
@@ -29,9 +30,9 @@ class EdgeSeeder extends Seeder
         ]);
 
         Edge::create([
-            'name' => 'Dirt',
-            'description' => 'A dusty, dirty patch of land.',
-            'terrain_id' => $dirt->id,
+            'name' => 'Forest',
+            'description' => 'An area with a lot of trees available.',
+            'terrain_id' => $forest->id,
         ]);
 
         Edge::create([
@@ -44,6 +45,12 @@ class EdgeSeeder extends Seeder
             'name' => 'Water',
             'description' => 'A watery area.',
             'terrain_id' => $water->id,
+        ]);
+
+        Edge::create([
+            'name' => 'Mountains',
+            'description' => 'A mountainous area.',
+            'terrain_id' => $mountains->id,
         ]);
     }
 }

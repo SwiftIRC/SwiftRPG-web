@@ -9,7 +9,7 @@ use App\Models\Terrain;
 
 class Generate
 {
-    public function invert_direction($direction)
+    public function invert_direction($direction): string
     {
         $directions = [
             'north' => 'south',
@@ -95,10 +95,11 @@ class Generate
         }
     }
 
-    public function fill_in_with_water(Tile $tile)
+    public function fill_in_with_water(Tile $tile): ?Tile
     {
-        if (Tile::where('x', $tile->x)->where('y', $tile->y)->count() > 0) {
-            return;
+        $tile_check = Tile::where('x', $tile->x)->where('y', $tile->y);
+        if ($tile_check->count() > 0) {
+            return $tile_check->first();
         }
 
         $water = Terrain::where('name', 'Water')->first();
@@ -127,7 +128,7 @@ class Generate
         return $tile;
     }
 
-    public function find_all_empty_tiles(int $max_x, int $max_y, int $min_x, int $min_y, array $tile_coords)
+    public function find_all_empty_tiles(int $max_x, int $max_y, int $min_x, int $min_y, array $tile_coords): array
     {
         $empty_tiles = [];
         for ($x = $min_x; $x <= $max_x; $x++) {
@@ -214,36 +215,59 @@ class Generate
         return $adjacent_tile;
     }
 
-    public function follow_roads(Tile $starting_tile, array $processed_tiles = [])
+    public function follow_roads(Tile $starting_tile, array $processed_tiles = [], array $terrain = []): array
     {
         $directions = ['north', 'east', 'south', 'west'];
         $processed_tiles[$starting_tile->x][$starting_tile->y] = $starting_tile;
 
+        if (count($terrain) == 0) {
+            $terrain = $this->terrain();
+        }
+
         foreach ($directions as $direction) {
             if (app(Move::class)->check_if_edge_is_road($starting_tile, $direction)) {
                 $adjacent_tile = $this->get_adjacent_missing_tile($starting_tile, $direction);
-                $terrain_id = $starting_tile->edges()->where('direction', $direction)->first()->terrain_id;
 
                 if ($adjacent_tile && !in_array($adjacent_tile, $processed_tiles)) {
-                    $adjacent_tile->terrain_id = $terrain_id;
-                    $this->generate_tile($adjacent_tile);
+                    $adjacent_tile->terrain_id = $terrain['terrain_id'];
+                    $this->tile($adjacent_tile);
+                    $terrain['count']--;
+                    if ($terrain['count'] == 0) {
+                        $terrain = $this->terrain();
+                    }
 
-                    $processed_tiles = $this->follow_roads($adjacent_tile, $processed_tiles);
+                    $returned = $this->follow_roads($adjacent_tile, $processed_tiles, $terrain);
+                    $processed_tiles = $returned['processed_tiles'];
+                    $terrain = $returned['terrain'];
                 }
             }
         }
 
-        return $processed_tiles;
+        return [
+            'processed_tiles' => $processed_tiles,
+            'terrain' => $terrain,
+        ];
     }
 
-    public function generate_tile(Tile $tile)
+    public function terrain(): array
+    {
+        $terrain = [
+            'count' => random_int(2, 7),
+            'terrain_id' => Terrain::where('name', '!=', 'Water')->inRandomOrder()->first()->id,
+        ];
+
+        return $terrain;
+    }
+
+    public function tile(Tile $tile): Tile
     {
         $tile->psuedo_id = $tile->x . ',' . $tile->y;
         if (!$tile->terrain_id) {
             $tile->terrain_id = 1;
         }
 
-        $trees = random_int(0, 100);
+        $trees = $tile->terrain_id == 1 ? random_int(0, 100) : 0;
+
         $tile->max_trees = $trees;
         $tile->available_trees = $trees;
 
@@ -259,7 +283,7 @@ class Generate
                 $edge = $adjacent_edge;
                 $is_road = $adjacent_edge->pivot->is_road;
             } else {
-                $edge = Edge::all()->random();
+                $edge = Edge::where('name', '!=', 'Water')->get()->random();
                 $is_road = random_int(0, 100) <= 45;
             }
 
@@ -270,9 +294,11 @@ class Generate
                 'is_road' => $is_road,
             ]);
         }
+
+        return $tile;
     }
 
-    public function map()
+    public function map(): int
     {
         $this->follow_roads(Tile::where('id', 1)->first());
 

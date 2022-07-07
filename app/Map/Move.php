@@ -10,18 +10,18 @@ use Illuminate\Http\JsonResponse;
 
 class Move
 {
-    public function check_if_edge_is_road(Tile $tile, string $direction): ?Edge
+    public function check_if_edge_is_road(Tile $tile, string $direction): int
     {
         $edge = $tile->edges()->where('direction', $direction)->first();
 
-        return $edge ? $edge->pivot->is_road : $edge;
+        return $edge ? $edge->pivot->is_road : 0;
     }
 
-    public function check_if_adjacent_edge_is_road(Tile $tile, string $direction): ?Tile
+    public function check_if_adjacent_edge_is_road(Tile $tile, string $direction): int
     {
         $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
 
-        return $adjacent_tile ? $this->check_if_edge_is_road($adjacent_tile, $this->invert_direction($direction)) : $adjacent_tile;
+        return $adjacent_tile ? $this->check_if_edge_is_road($adjacent_tile, $this->invert_direction($direction)) : 0;
     }
 
     public function get_adjacent_tile(Tile $tile, string $direction): ?Tile
