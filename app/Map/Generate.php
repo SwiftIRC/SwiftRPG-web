@@ -266,7 +266,15 @@ class Generate
             $tile->terrain_id = 1;
         }
 
-        $trees = $tile->terrain_id == 1 ? random_int(0, 100) : 0;
+        if ($tile->terrain_id == 1) { // Grass
+            $trees = random_int(0, 100);
+        } elseif ($tile->terrain_id == 2) { // Forest
+            $trees = random_int(50, 200);
+        } elseif ($tile->terrain_id == 5) { // Mountain
+            $trees = random_int(0, 15);
+        } else {
+            $trees = 0;
+        }
 
         $tile->max_trees = $trees;
         $tile->available_trees = $trees;
