@@ -26,6 +26,7 @@ return new class extends Migration
             $table->unsignedMediumInteger("fishing")->default(0);
             $table->unsignedMediumInteger("mining")->default(0);
             $table->unsignedMediumInteger("woodcutting")->default(0);
+            $table->unsignedMediumInteger("firemaking")->default(0);
             $table->unsignedMediumInteger("cooking")->default(0);
             $table->unsignedMediumInteger("smithing")->default(0);
             $table->unsignedMediumInteger("fletching")->default(0);
