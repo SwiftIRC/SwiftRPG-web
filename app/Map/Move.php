@@ -47,7 +47,6 @@ class Move
         return Tile::where('x', $x)->where('y', $y)->first();
     }
 
-
     public function invert_direction($direction)
     {
         $directions = [
