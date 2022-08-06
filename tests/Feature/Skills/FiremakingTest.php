@@ -73,6 +73,6 @@ class FiremakingTest extends TestCase
 
         $response = $this->actingAs($user)->post('/api/firemaking/burn', [], ['X-Bot-Token' => config('app.token')]);
 
-        $response->assertStatus(500);
+        $response->assertStatus(403);
     }
 }

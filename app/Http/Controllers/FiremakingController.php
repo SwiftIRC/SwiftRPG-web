@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use RangeException;
 use App\Skills\Firemaking;
 use Illuminate\Http\Request;
 

@@ -14,9 +14,11 @@ class Firemaking extends Skill
     {
         $user = Auth::user();
         $inventory = $user->inventory()->first();
-        $log = $inventory->items()->where('name', 'Logs')->first();
+        if ($inventory) {
+            $log = $inventory->items()->where('name', 'Logs')->first();
+        }
 
-        if (!$log) {
+        if (!isset($log)) {
             throw new RangeException('There are no logs in your inventory to chop!');
         }
 
