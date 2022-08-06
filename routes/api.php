@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoveController;
 use App\Http\Controllers\ThievingController;
+use App\Http\Controllers\FiremakingController;
 use App\Http\Controllers\WoodcuttingController;
 
 /*
@@ -39,6 +40,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::name('woodcutting.')->prefix('woodcutting')->group(function () {
         Route::get('/', [WoodcuttingController::class, 'index']);
         Route::post('/chop', [WoodcuttingController::class, 'chop']);
+    });
+    Route::name('firemaking.')->prefix('firemaking')->group(function () {
+        Route::get('/', [FiremakingController::class, 'index']);
+        Route::post('/burn', [FiremakingController::class, 'burn']);
     });
     Route::name('stats.')->prefix('stats')->group(function () {
         Route::get('/', function () {
