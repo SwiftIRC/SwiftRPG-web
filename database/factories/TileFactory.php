@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Tile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,11 @@ class TileFactory extends Factory
      */
     public function definition()
     {
-        $y = $this->faker->randomDigit(0, 100);
-        $x = $this->faker->randomDigit(0, 100);
+        do {
+            $x = random_int(0, 100);
+            $y = random_int(0, 100);
+        } while (Tile::where('x', $x)->where('y', $y)->exists());
+
         return [
             'psuedo_id' => $x . ',' . $y,
             'x' => $x,
