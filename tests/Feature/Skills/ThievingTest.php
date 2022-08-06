@@ -8,7 +8,9 @@ use App\Models\Tile;
 use App\Models\User;
 use App\Models\Inventory;
 use App\Providers\RouteServiceProvider;
+use Database\Factories\TileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\Building;
 
 class ThievingTest extends TestCase
 {
@@ -25,28 +27,56 @@ class ThievingTest extends TestCase
     {
         $user = User::factory()->create([
             'tile_id' => Tile::all()->first()->id,
+            'thieving' => level_to_xp(50),
         ]);
 
         $response = $this->actingAs($user)->post('/api/thieving/pickpocket', [], ['X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(200);
 
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'gold' => 5,
+            'thieving' => level_to_xp(50) + 5,
+        ]);
+
         $this->assertDatabaseHas('command_logs', [
             'user_id' => $user->id,
             'command' => 'thieving.pickpocket',
         ]);
+    }
+
+
+    public function test_user_cannot_pickpocket()
+    {
+        $tile = Tile::all()->first();
+        $user = User::factory()->create([
+            'tile_id' => $tile->id,
+        ]);
+
+        $npcs = $tile->npcs()->get();
+        for ($i = 0; $i < $npcs->count(); $i++) {
+            $tile->npcs()->detach($npcs[$i]);
+        }
+
+        $response = $this->actingAs($user)->post('/api/thieving/pickpocket', [], ['X-Bot-Token' => config('app.token')]);
+
+        $response->assertStatus(403);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'gold' => 5,
-            'thieving' => 5,
+            'gold' => 0,
+            'thieving' => 0,
         ]);
     }
 
     public function test_user_can_steal()
     {
+        $tile = Tile::all()->first();
+        $building = Building::all()->first();
         $user = User::factory()->create([
-            'tile_id' => Tile::all()->first()->id,
+            'tile_id' => $tile->id,
+            'building_id' => $building->id,
             'thieving' => level_to_xp(10),
         ]);
 
