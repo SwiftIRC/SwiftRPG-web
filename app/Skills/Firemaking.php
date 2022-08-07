@@ -19,7 +19,7 @@ class Firemaking extends Skill
         }
 
         if (!isset($log)) {
-            throw new RangeException('There are no logs in your inventory to chop!');
+            throw new RangeException('There are no logs in your inventory to burn!');
         }
 
         $log->delete();
