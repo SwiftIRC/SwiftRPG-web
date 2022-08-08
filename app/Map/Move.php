@@ -127,6 +127,9 @@ class Move
 
         $new_tile = Tile::where('x', $x)->where('y', $y)->first();
 
+        $current_tile->last_disturbed = now();
+        $current_tile->save();
+
         $user->tile_id = $new_tile->id;
         $user->save();
 

@@ -19,11 +19,7 @@ class ThievingController extends Controller
         try {
             return response()->json(app(Thieving::class)->pickpocket());
         } catch (MathException $e) {
-            $user = Auth::user();
-            $user->hitpoints -= 1;
-            $user->save();
-
-            return response()->json(['error' => $e->getMessage(), 'hitpoints' => $user->hitpoints], 200);
+            return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(1)], 200);
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         }

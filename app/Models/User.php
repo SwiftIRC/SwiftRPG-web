@@ -60,6 +60,15 @@ class User extends Authenticatable
         ItemUser::where('id', $retrievedItem->pivot->id)->update(['deleted_at' => now()]);
     }
 
+    public function damage(int $damage): int
+    {
+        $user = Auth::user();
+        $user->hitpoints -= $damage;
+        $user->save();
+
+        return $user->hitpoints;
+    }
+
     public function addGold(int $amount)
     {
         $this->gold += $amount;
