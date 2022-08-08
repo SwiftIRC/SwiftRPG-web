@@ -56,8 +56,8 @@ class User extends Authenticatable
     public function removeFromInventory(Item $item)
     {
         $user = Auth::user();
-        $retrievedItem = $user->items()->where('name', $item->name)->withPivot('deleted_at')->first();
-        ItemUser::where('id', $retrievedItem->id)->update(['deleted_at' => now()]);
+        $retrievedItem = $user->items()->where('items.name', $item->name)->withPivot('id')->first();
+        ItemUser::where('id', $retrievedItem->pivot->id)->update(['deleted_at' => now()]);
     }
 
     public function addGold(int $amount)
@@ -80,6 +80,6 @@ class User extends Authenticatable
 
     public function items()
     {
-        return $this->belongsToMany(Item::class)->withTimestamps()->groupBy('item_id')->selectRaw('items.*, count(item_id) as quantity');
+        return $this->belongsToMany(Item::class)->withTimestamps()->wherePivot('item_user.deleted_at', null)->groupBy('item_id')->selectRaw('items.*, count(item_id) as quantity');
     }
 }

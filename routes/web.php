@@ -87,6 +87,10 @@ Route::name('thieving.')->prefix('thieving')->group(function () {
 });
 
 Route::get('test', function () {
+    $user = Auth::user();
+    $retrievedItem = $user->items()->where('items.name', "Logs")->withPivot('id')->first();
+    dd($retrievedItem->pivot->id);
+
     return response()->json(['response' => app(Regenerate::class)->map()]);
 });
 
