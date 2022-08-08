@@ -80,6 +80,6 @@ class User extends Authenticatable
 
     public function items()
     {
-        return $this->belongsToMany(Item::class)->withTimestamps();
+        return $this->belongsToMany(Item::class)->withTimestamps()->groupBy('item_id')->selectRaw('items.*, count(item_id) as quantity');
     }
 }
