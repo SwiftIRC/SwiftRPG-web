@@ -18,10 +18,6 @@ class Firemaking extends Skill
         }
 
         $user->removeFromInventory($log);
-        // $user->items()->detach($log->id, ['deleted_at' => now()]);
-        // ItemUser::where('id', $log->id)->update(['deleted_at' => now()]);
-        // $log->pivot->deleted_at = now();
-        // $log->pivot->save();
 
         $user->firemaking += 5;
         $user->save();
