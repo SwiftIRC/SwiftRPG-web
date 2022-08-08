@@ -8,9 +8,9 @@ use Brick\Math\Exception\MathException;
 
 class Thieving extends Skill
 {
-    protected function pickpocket(array $parameters)
+    protected function pickpocket()
     {
-        $user = $parameters[0];
+        $user = Auth::user();
         $tile = $user->tile();
         $npcs = $tile->npcs();
 
