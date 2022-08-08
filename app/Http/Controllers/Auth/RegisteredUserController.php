@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\Tile;
 use App\Models\User;
-use App\Models\Inventory;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
@@ -44,12 +43,6 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'password' => Hash::make($request->password),
             'tile_id' => Tile::all()->first()->id,
-        ]);
-
-        Inventory::create([
-            'user_id' => $user->id,
-            'size' => 5,
-            'gold' => 0,
         ]);
 
         event(new Registered($user));

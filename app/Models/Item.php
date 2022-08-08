@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Effect;
-use App\Models\Inventory;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
-use Sbine\Tenancy\HasTenancy;
 
 class Item extends Model
 {
@@ -38,8 +37,8 @@ class Item extends Model
         return $this->belongsToMany(Effect::class)->withTimestamps();
     }
 
-    public function inventory()
+    public function user()
     {
-        return $this->hasMany(Inventory::class)->distinct('name');
+        return $this->hasMany(User::class)->withTimestamps();
     }
 }

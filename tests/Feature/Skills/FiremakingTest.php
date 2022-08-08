@@ -6,8 +6,6 @@ use Tests\TestCase;
 use App\Models\Item;
 use App\Models\Tile;
 use App\Models\User;
-use App\Models\Inventory;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class FiremakingTest extends TestCase
@@ -17,27 +15,21 @@ class FiremakingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        Inventory::flushEventListeners();
     }
 
-    public function test_user_can_burn()
+    public function test_user_can_burn_one_log()
     {
         $tile = Tile::all()->first();
         $user = User::factory()->create([
             'tile_id' => $tile->id,
         ]);
 
-        $inventory = Inventory::factory()->create([
-            'user_id' => $user->id,
-            'size' => 5,
-        ]);
-
         $item = Item::factory()->create([
             'name' => 'Logs',
         ]);
 
-        $inventory->items()->attach($item);
+        $user->items()->attach($item);
+        $user->items()->attach($item);
 
         $response = $this->actingAs($user)->post('/api/firemaking/burn', [], ['X-Bot-Token' => config('app.token')]);
 
@@ -53,10 +45,16 @@ class FiremakingTest extends TestCase
             'firemaking' => 5,
         ]);
 
-        $this->assertDatabaseHas('inventory_item', [
-            'inventory_id' => $inventory->id,
+        $this->assertDatabaseHas('item_user', [
+            'user_id' => $user->id,
             'item_id' => $item->id,
-            'deleted_at' => $item->deleted_at,
+            'deleted_at' => now(),
+        ]);
+
+        $this->assertDatabaseHas('item_user', [
+            'user_id' => $user->id,
+            'item_id' => $item->id,
+            'deleted_at' => null,
         ]);
     }
 

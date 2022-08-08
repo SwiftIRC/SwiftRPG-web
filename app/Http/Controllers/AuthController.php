@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Inventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -38,12 +37,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'password' => Hash::make($request->password),
-        ]);
 
-        Inventory::create([
-            'user_id' => $user->id,
-            'size' => 5,
-            'gold' => 0,
         ]);
 
         event(new Registered($user));

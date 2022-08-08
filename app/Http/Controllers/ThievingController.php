@@ -3,11 +3,7 @@
 namespace App\Http\Controllers;
 
 use RangeException;
-use App\Models\User;
 use App\Skills\Thieving;
-use App\Models\Inventory;
-use App\Models\CommandLog;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Brick\Math\Exception\MathException;
 

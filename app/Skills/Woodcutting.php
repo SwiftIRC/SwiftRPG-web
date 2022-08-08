@@ -3,8 +3,6 @@
 namespace App\Skills;
 
 use App\Models\Item;
-use App\Models\Inventory;
-use App\Models\CommandLog;
 use Illuminate\Support\Facades\Auth;
 use RangeException;
 

@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Models\Tile;
-use App\Models\Inventory;
+use App\Models\ItemUser;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -44,25 +45,19 @@ class User extends Authenticatable
         'deleted_at',
     ];
 
-    public function inventory()
-    {
-        return $this->hasOne(Inventory::class);
-    }
-
     public function addToInventory(Item $item)
     {
-        $inventory = $this->inventory()->first();
+        $user = Auth::user();
+        $user->items()->attach($item);
 
-        if (!$inventory) {
-            $inventory = $this->inventory()->create([
-                'user_id' => $this->id,
-                'size' => 5,
-            ]);
-        }
+        return $user->items()->where('name', $item->name)->count();
+    }
 
-        $inventory->items()->attach($item);
-
-        return $inventory->items()->where('name', $item->name)->count();
+    public function removeFromInventory(Item $item)
+    {
+        $user = Auth::user();
+        $retrievedItem = $user->items()->where('name', $item->name)->withPivot('deleted_at')->first();
+        ItemUser::where('id', $retrievedItem->id)->update(['deleted_at' => now()]);
     }
 
     public function addGold(int $amount)
@@ -70,11 +65,6 @@ class User extends Authenticatable
         $this->gold += $amount;
         $this->save();
 
-        return $this->gold;
-    }
-
-    public function getGold()
-    {
         return $this->gold;
     }
 
@@ -86,5 +76,10 @@ class User extends Authenticatable
     public function tile()
     {
         return $this->hasOne(Tile::class, 'id', 'tile_id')->first();
+    }
+
+    public function items()
+    {
+        return $this->belongsToMany(Item::class)->withTimestamps();
     }
 }

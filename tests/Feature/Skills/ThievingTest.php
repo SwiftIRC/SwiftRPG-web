@@ -3,12 +3,8 @@
 namespace Tests\Feature\Skills;
 
 use Tests\TestCase;
-use App\Models\Item;
 use App\Models\Tile;
 use App\Models\User;
-use App\Models\Inventory;
-use App\Providers\RouteServiceProvider;
-use Database\Factories\TileFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Building;
 
@@ -19,8 +15,6 @@ class ThievingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        Inventory::flushEventListeners();
     }
 
     public function test_user_can_pickpocket()

@@ -21,6 +21,9 @@ return new class extends Migration
             $table->rememberToken();
 
             $table->unsignedBigInteger("gold")->default(0);
+            $table->unsignedMediumInteger("hitpoints")->default(100);
+            $table->unsignedMediumInteger("mana")->default(100);
+            $table->unsignedMediumInteger("inventory_size")->default(5);
 
             $table->unsignedMediumInteger("thieving")->default(0);
             $table->unsignedMediumInteger("fishing")->default(0);

@@ -3,12 +3,7 @@
 namespace App\Http\Controllers;
 
 use RangeException;
-use App\Models\Item;
-use App\Models\Inventory;
-use App\Models\CommandLog;
 use App\Skills\Woodcutting;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class WoodcuttingController extends Controller
 {

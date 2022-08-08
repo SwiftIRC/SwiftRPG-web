@@ -3,10 +3,6 @@
 namespace App\Skills;
 
 use RangeException;
-use App\Models\Item;
-use App\Models\User;
-use App\Models\Inventory;
-use App\Models\CommandLog;
 use Illuminate\Support\Facades\Auth;
 use Brick\Math\Exception\MathException;
 
@@ -36,7 +32,7 @@ class Thieving extends Skill
         $user->addGold($increment);
         $user->save();
 
-        return response()->json(['thieving' => $user->thieving, 'gold' => $user->getGold()]);
+        return response()->json(['thieving' => $user->thieving, 'gold' => $user->gold]);
     }
 
     protected function steal()
@@ -52,7 +48,7 @@ class Thieving extends Skill
         $user->addGold(10);
         $user->save();
 
-        return response()->json(['thieving' => $user->thieving, 'gold' => $user->getGold()]);
+        return response()->json(['thieving' => $user->thieving, 'gold' => $user->gold]);
     }
 
     protected function pilfer()
@@ -62,7 +58,7 @@ class Thieving extends Skill
         $user->addGold(50);
         $user->save();
 
-        return response()->json(['thieving' => $user->thieving, 'gold' => $user->getGold()]);
+        return response()->json(['thieving' => $user->thieving, 'gold' => $user->gold]);
     }
 
     protected function plunder()
@@ -72,6 +68,6 @@ class Thieving extends Skill
         $user->addGold(100);
         $user->save();
 
-        return response()->json(['thieving' => $user->thieving, 'gold' => $user->getGold()]);
+        return response()->json(['thieving' => $user->thieving, 'gold' => $user->gold]);
     }
 }
