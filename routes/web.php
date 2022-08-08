@@ -1,15 +1,10 @@
 <?php
 
-use App\Map\Regenerate;
-use App\Models\Item;
 use App\Models\Tile;
 use App\Models\User;
-use App\Models\Inventory;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Map\Regenerate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MoveController;
 use App\Http\Controllers\ThievingController;
 
@@ -47,9 +42,10 @@ Route::get('/admin', function () {
 })->middleware(['admin']);
 
 Route::get('/dashboard', function () {
-    $inventory = Inventory::first();
+    $user = Auth::user();
+    $user->items = $user->items()->get();
 
-    return view('dashboard', compact('inventory'));
+    return view('dashboard', compact('user'));
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/api/tiles', function () {

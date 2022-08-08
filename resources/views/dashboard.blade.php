@@ -9,10 +9,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    Items: {{ $inventory->items->count() }}/{{ $inventory->size }}
+                    Items: {{ $user->items->count() }}/{{ $user->inventory_size }}
 
                     <ol class="list-decimal">
-                        @foreach ($inventory->items as $item)
+                        @foreach ($user->items as $item)
                             <li>{{ $item->name }}
                                 @if ($item->quantity > 1)
                                     x{{ $item->quantity }}
@@ -34,13 +34,18 @@
                     <ol class="list-decimal">
                         <li>
                             Thieving:
-                            {{ xp_to_level(Auth::user()->thieving) }}
-                            ({{ Auth::user()->thieving }}xp)
+                            {{ xp_to_level($user->thieving) }}
+                            ({{ $user->thieving }}xp)
                         </li>
                         <li>
                             Woodcutting:
-                            {{ xp_to_level(Auth::user()->woodcutting) }}
-                            ({{ Auth::user()->woodcutting }}xp)
+                            {{ xp_to_level($user->woodcutting) }}
+                            ({{ $user->woodcutting }}xp)
+                        </li>
+                        <li>
+                            Firemaking:
+                            {{ xp_to_level($user->firemaking) }}
+                            ({{ $user->firemaking }}xp)
                         </li>
                     </ol>
                 </div>

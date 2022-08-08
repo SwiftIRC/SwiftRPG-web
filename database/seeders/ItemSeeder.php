@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Item;
+use App\Models\User;
+use App\Models\Effect;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use App\Models\Item;
-use App\Models\Inventory;
-use App\Models\Effect;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class ItemSeeder extends Seeder
 {
@@ -18,23 +18,6 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
-        $inventory = Inventory::create([
-            'user_id' => 1,
-            'size' => 5,
-        ]);
-        Inventory::create([
-            'user_id' => 2,
-            'size' => 5,
-        ]);
-        Inventory::create([
-            'user_id' => 3,
-            'size' => 5,
-        ]);
-        Inventory::create([
-            'user_id' => 4,
-            'size' => 5,
-        ]);
-
         $items = [
             Item::create([
                 'name' => 'Rusty Sword',
@@ -72,8 +55,10 @@ class ItemSeeder extends Seeder
             ])
         ];
 
+        $user = User::first();
+
         foreach ($items as $item) {
-            $inventory->items()->attach($item);
+            $user->items()->attach($item);
         }
 
         $effect = Effect::create([
