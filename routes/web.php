@@ -34,8 +34,8 @@ Route::get('/hiscores', function () {
 })->name('hiscores');
 
 Route::get('/map', function () {
-    return view('hiscores', compact('users'));
-})->name('hiscores');
+    return view('map', compact('users'));
+})->name('map');
 
 Route::get('/admin', function () {
     return view('admin');
