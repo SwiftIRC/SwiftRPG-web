@@ -10,9 +10,10 @@ class Regenerate
 {
     public function map()
     {
-        $tiles = Tile::where('max_trees', '>', 0)->where('max_trees', '>', 'available_trees')->where('last_disturbed', '<', DB::raw('NOW() - 300'))->get();
+        $tiles = Tile::where('available_trees', '<', 'max_trees')->where('last_disturbed', '<', DB::raw('NOW() - 300'))->get();
 
         $toggled = false;
+
         foreach ($tiles as $tile) {
             if ($this->tile($tile)) {
                 $toggled = true;
