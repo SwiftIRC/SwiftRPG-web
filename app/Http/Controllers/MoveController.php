@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Map\Move;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class MoveController extends Controller
 {
