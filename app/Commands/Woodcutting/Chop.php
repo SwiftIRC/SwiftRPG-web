@@ -5,6 +5,7 @@ namespace App\Commands\Woodcutting;
 use App\Commands\Command;
 use App\Models\Item;
 use Illuminate\Support\Facades\Auth;
+use RangeException;
 
 class Chop extends Command
 {

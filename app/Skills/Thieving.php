@@ -5,17 +5,31 @@ namespace App\Skills;
 use App\Commands\Thieving\Pickpocket;
 use App\Commands\Thieving\Steal;
 use Illuminate\Support\Facades\Auth;
+use OverflowException;
+use RangeException;
 
 class Thieving extends Skill
 {
     protected function pickpocket(): \Illuminate\Http\JsonResponse
     {
-        return app(Pickpocket::class)->execute();
+        try {
+            return app(Pickpocket::class)->execute();
+        } catch (RangeException $e) {
+            return response()->json(['error' => $e->getMessage()], 403);
+        } catch (OverflowException $e) {
+            return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(1)], 200);
+        }
     }
 
     protected function steal(): \Illuminate\Http\JsonResponse
     {
-        return app(Steal::class)->execute();
+        try {
+            return app(Steal::class)->execute();
+        } catch (OverflowException $e) {
+            return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(1)], 200);
+        } catch (RangeException $e) {
+            return response()->json(['error' => $e->getMessage()], 403);
+        }
     }
 
     protected function pilfer()

@@ -4,6 +4,7 @@ namespace App\Commands\Thieving;
 
 use App\Commands\Command;
 use Illuminate\Support\Facades\Auth;
+use RangeException;
 
 class Steal extends Command
 {

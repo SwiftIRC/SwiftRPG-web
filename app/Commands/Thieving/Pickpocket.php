@@ -4,6 +4,8 @@ namespace App\Commands\Thieving;
 
 use App\Commands\Command;
 use Illuminate\Support\Facades\Auth;
+use OverflowException;
+use RangeException;
 
 class Pickpocket extends Command
 {
@@ -24,7 +26,7 @@ class Pickpocket extends Command
 
         $chance_to_fail = random_int(0, xp_to_level($user->thieving) + 1);
         if (!$chance_to_fail) {
-            throw new MathException('You failed to pickpocket, ' . $npc->name . '!');
+            throw new OverflowException('You failed to pickpocket, ' . $npc->name . '!');
         }
 
         $increment = $this->quantity;

@@ -26,5 +26,11 @@ class CommandSeeder extends Seeder
             'ticks' => 1,
         ]);
 
+        Command::create([
+            'class' => 'firemaking',
+            'method' => 'burn',
+            'ticks' => 1,
+        ]);
+
     }
 }

@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use RangeException;
 use App\Skills\Firemaking;
-use Illuminate\Http\Request;
+use RangeException;
 
 class FiremakingController extends Controller
 {
     public function burn()
     {
         try {
-            return response()->json(app(Firemaking::class)->burn());
+            return app(Firemaking::class)->burn();
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         }

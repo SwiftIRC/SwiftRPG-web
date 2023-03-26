@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Skills\Thieving;
 use Illuminate\Support\Facades\Auth;
-use MathException;
 use RangeException;
 
 class ThievingController extends Controller
@@ -18,8 +17,6 @@ class ThievingController extends Controller
     {
         try {
             return app(Thieving::class)->pickpocket();
-        } catch (MathException $e) {
-            return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(1)], 200);
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         }
@@ -33,8 +30,6 @@ class ThievingController extends Controller
 
         try {
             return app(Thieving::class)->steal();
-        } catch (MathException $e) {
-            return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(2)], 200);
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         }
