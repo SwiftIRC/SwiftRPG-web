@@ -23,7 +23,7 @@ class Skill
         if ($last_run) {
             $last_run->command = $last_run->command()->first();
 
-            throw new RangeException($command->ticks . ' tick' . ($command->ticks > 1 ? 's' : '') . ' remaining until you are done with ' . $last_run->command->verb . ".");
+            throw new RangeException($last_run->ticks . ' tick' . ($command->ticks > 1 ? 's' : '') . ' remaining until you are done with ' . $last_run->command->verb . ".");
         }
 
         $output = $this->$methodName($parameters);

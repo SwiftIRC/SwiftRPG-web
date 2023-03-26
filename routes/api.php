@@ -67,7 +67,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::get('/buildings', [AgilityController::class, 'buildings']);
                 Route::get('/{direction}', [AgilityController::class, 'lookInDirection']);
             });
-            Route::post('/move', [AgilityController::class, 'move']);
+            Route::post('/explore', [AgilityController::class, 'explore']);
             Route::get('/{user}', function ($user) {
                 return response()->json(User::where('name', $user)->first()->tile());
             });

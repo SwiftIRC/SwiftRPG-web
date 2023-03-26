@@ -29,7 +29,7 @@ return new class extends Migration
 
             $table->bigInteger("user_id")->unsigned();
             $table->bigInteger('command_id')->unsigned();
-            $table->string('message');
+            $table->string('message', 450);
             $table->smallInteger('ticks')->default(1);
 
             $table->timestamps();

@@ -1,12 +1,12 @@
 <?php
 
+use App\Http\Controllers\AgilityController;
+use App\Http\Controllers\ThievingController;
+use App\Map\Regenerate;
 use App\Models\Tile;
 use App\Models\User;
-use App\Map\Regenerate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MoveController;
-use App\Http\Controllers\ThievingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +17,7 @@ use App\Http\Controllers\ThievingController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('welcome');
@@ -72,9 +72,9 @@ Route::get('/api/tiles/{tile}', function (Tile $tile) {
     return $tile;
 })->name('api.tiles');
 
-Route::get('/look', [MoveController::class, 'look']);
-Route::get('/look/npcs', [MoveController::class, 'npcs']);
-Route::get('/look/buildings', [MoveController::class, 'buildings']);
+Route::get('/look', [AgilityController::class, 'look']);
+Route::get('/look/npcs', [AgilityController::class, 'npcs']);
+Route::get('/look/buildings', [AgilityController::class, 'buildings']);
 
 Route::name('stats.')->prefix('stats')->group(function () {
     Route::get('/{user}', function ($user) {

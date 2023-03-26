@@ -4,15 +4,14 @@ namespace App\Skills;
 
 use App\Commands\Agility\Explore;
 use App\Commands\Agility\Look;
-use Illuminate\Http\Request;
 use RangeException;
 
 class Agility extends Skill
 {
-    protected function explore(Request $request)
+    protected function explore(array $direction)
     {
         try {
-            return app(Explore::class)->log($request->direction);
+            return app(Explore::class)->log($direction);
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         }

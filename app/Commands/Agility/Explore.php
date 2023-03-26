@@ -5,6 +5,7 @@ namespace App\Commands\Agility;
 use App\Commands\Command;
 use App\Map\Move;
 use Illuminate\Support\Facades\Auth;
+use RangeException;
 
 class Explore extends Command
 {
@@ -14,7 +15,7 @@ class Explore extends Command
     {
         $user = $input->user()->first();
 
-        app(Move::class)->move($input->user(), $input->direction);
+        $response = app(Move::class)->move($input->user()->first(), json_decode($input->message)->meta->direction);
 
         $user->agility += $this->quantity;
         $user->save();
@@ -25,6 +26,7 @@ class Explore extends Command
             'reward' => $this->generateReward(),
             'meta' => [
                 'direction' => $input->direction,
+                'response' => $response->original,
             ],
             'execute' => true,
         ]);
@@ -36,17 +38,16 @@ class Explore extends Command
 
         $direction = array_pop($input);
 
-        if ($direction === null) {
-            throw new
-        } else {
-            $response = Move::look_at($user, $direction);
+        if (empty($direction) || !in_array($direction, ['north', 'south', 'east', 'west'])) {
+            throw new RangeException('Direction not found.');
         }
+        $response = app(Move::class)->look_at($user, $direction)->original;
 
         return response()->json([
             'skill' => 'agility',
             'experience' => $user->agility,
             'reward' => $this->generateReward(),
-            'meta' => compact('direction'),
+            'meta' => compact('direction', 'response'),
             'execute' => false,
         ]);
     }
