@@ -4,6 +4,7 @@ namespace App\Skills;
 
 use App\Models\Command;
 use App\Models\CommandLog;
+use Illuminate\Support\Facades\Log;
 use RangeException;
 
 class Skill
@@ -16,6 +17,7 @@ class Skill
         $command = Command::where('class', $class)->where('method', $methodName)->first();
 
         if (empty($command)) {
+            Log::error("Command not found: " . $class . "." . $methodName);
             throw new RangeException('Command not found.');
         }
 
