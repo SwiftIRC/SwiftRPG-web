@@ -26,6 +26,8 @@ class User extends Authenticatable
         'gold',
         'thieving',
         'woodcutting',
+        'firemaking',
+        'agility',
         'tile_id',
         'building_id',
     ];

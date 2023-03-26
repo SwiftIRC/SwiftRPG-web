@@ -13,6 +13,7 @@ class Command extends Model
         'class',
         'method',
         'ticks',
+        'log',
     ];
 
     protected $hidden = [

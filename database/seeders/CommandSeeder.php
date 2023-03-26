@@ -35,5 +35,19 @@ class CommandSeeder extends Seeder
             'ticks' => 1,
         ]);
 
+        Command::create([
+            'class' => 'agility',
+            'method' => 'look',
+            'verb' => 'looking',
+            'ticks' => 0,
+            'log' => false,
+        ]);
+
+        Command::create([
+            'class' => 'agility',
+            'method' => 'explore',
+            'verb' => 'exploring',
+            'ticks' => 5,
+        ]);
     }
 }

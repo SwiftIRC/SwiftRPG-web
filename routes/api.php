@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\AgilityController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FiremakingController;
-use App\Http\Controllers\MoveController;
 use App\Http\Controllers\ThievingController;
 use App\Http\Controllers\WoodcuttingController;
 use App\Models\Npc;
@@ -62,12 +62,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
         Route::name('user.')->prefix('user')->group(function () {
             Route::name('look.')->prefix('look')->group(function () {
-                Route::get('/', [MoveController::class, 'look']);
-                Route::get('/npcs', [MoveController::class, 'npcs']);
-                Route::get('/buildings', [MoveController::class, 'buildings']);
-                Route::get('/{direction}', [MoveController::class, 'lookindirection']);
+                Route::get('/', [AgilityController::class, 'look']);
+                Route::get('/npcs', [AgilityController::class, 'npcs']);
+                Route::get('/buildings', [AgilityController::class, 'buildings']);
+                Route::get('/{direction}', [AgilityController::class, 'lookInDirection']);
             });
-            Route::post('/move', [MoveController::class, 'move']);
+            Route::post('/move', [AgilityController::class, 'move']);
             Route::get('/{user}', function ($user) {
                 return response()->json(User::where('name', $user)->first()->tile());
             });

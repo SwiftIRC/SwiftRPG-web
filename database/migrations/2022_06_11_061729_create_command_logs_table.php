@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('method');
             $table->string('verb');
             $table->smallInteger('ticks')->default(1);
+            $table->boolean('log')->default(true);
 
             $table->timestamps();
         });

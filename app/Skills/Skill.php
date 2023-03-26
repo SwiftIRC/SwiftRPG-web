@@ -28,11 +28,13 @@ class Skill
 
         $output = $this->$methodName($parameters);
 
-        CommandLog::create([
-            'command_id' => $command->id,
-            'message' => json_encode($output->original),
-            'ticks' => $command->ticks,
-        ]);
+        if ($command->log) {
+            CommandLog::create([
+                'command_id' => $command->id,
+                'message' => json_encode($output->original),
+                'ticks' => $command->ticks,
+            ]);
+        }
 
         return $output;
     }
