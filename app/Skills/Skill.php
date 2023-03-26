@@ -2,17 +2,26 @@
 
 namespace App\Skills;
 
-use RangeException;
+use App\Models\Command;
 use App\Models\CommandLog;
+use RangeException;
 
 class Skill
 {
     public function __call(string $methodName, array $parameters)
     {
-        $class = explode("\\", get_class($this));
-        $action = strtolower(end($class)) . "." . $methodName;
+        $exploded = explode("\\", get_class($this));
+        $class = strtolower(end($exploded));
 
-        $last_run = CommandLog::where('command', $action)->latest()->first();
+        $command = Command::where('class', $class)->where('method', $methodName)->first();
+
+        if (empty($command)) {
+            throw new RangeException('Command not found.');
+        }
+
+        $command_id = $command->id;
+
+        $last_run = CommandLog::where('command_id', $command_id)->latest()->first();
         if ($last_run && $last_run->created_at >= now()->subMinutes(1)) {
             throw new RangeException('You can only run this command once every one (1) minute. Remaining seconds: ' . now()->diffInSeconds($last_run->created_at->addMinutes(1)));
         }
@@ -20,7 +29,7 @@ class Skill
         $output = $this->$methodName($parameters);
 
         CommandLog::create([
-            'command' => $action,
+            'command_id' => $command_id,
             'message' => json_encode($output),
         ]);
 

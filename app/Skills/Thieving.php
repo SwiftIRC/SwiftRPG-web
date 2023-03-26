@@ -2,37 +2,15 @@
 
 namespace App\Skills;
 
-use RangeException;
+use App\Commands\Thieving\Pickpocket;
 use Illuminate\Support\Facades\Auth;
-use Brick\Math\Exception\MathException;
+use RangeException;
 
 class Thieving extends Skill
 {
-    protected function pickpocket()
+    protected function pickpocket(): \Illuminate\Http\JsonResponse
     {
-        $user = Auth::user();
-        $tile = $user->tile();
-        $npcs = $tile->npcs();
-
-        if (!$npcs->count()) {
-            $buildings = $tile->buildings()->get();
-            throw new RangeException('There are no NPCs on this tile to pickpocket! ' . ($buildings->count() ? 'Check a building?' : ''));
-        }
-
-        $npc = $npcs->get()->random();
-
-        $chance_to_fail = random_int(0, xp_to_level($user->thieving) + 1);
-        if (!$chance_to_fail) {
-            throw new MathException('You failed to pickpocket, ' . $npc->name . '!');
-        }
-
-        $increment = 5;
-
-        $user->thieving += $increment;
-        $user->addGold($increment);
-        $user->save();
-
-        return response()->json(['thieving' => $user->thieving, 'gold' => $user->gold]);
+        return app(Pickpocket::class)->execute();
     }
 
     protected function steal()

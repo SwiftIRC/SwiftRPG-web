@@ -2,11 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Database\Seeders\UserSeeder;
-use Database\Seeders\ItemSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,6 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            CommandSeeder::class,
             TerrainSeeder::class,
             EdgeSeeder::class,
             TileSeeder::class,

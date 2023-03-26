@@ -28,4 +28,9 @@ class Woodcutting extends Skill
 
         return response()->json(['woodcutting' => $user->woodcutting, 'logs' => $logs]);
     }
+
+    protected function complete()
+    {
+        $this->chop();
+    }
 }
