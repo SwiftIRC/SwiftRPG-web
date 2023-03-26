@@ -30,7 +30,7 @@ class Skill
 
         CommandLog::create([
             'command_id' => $command_id,
-            'message' => json_encode($output),
+            'message' => json_encode($output->original),
         ]);
 
         return $output;
