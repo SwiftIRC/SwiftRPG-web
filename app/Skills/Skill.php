@@ -19,18 +19,19 @@ class Skill
             throw new RangeException('Command not found.');
         }
 
-        $command_id = $command->id;
+        $last_run = CommandLog::where('ticks', '>', 0)->latest()->first();
+        if ($last_run) {
+            $last_run->command = $last_run->command()->first();
 
-        $last_run = CommandLog::where('command_id', $command_id)->latest()->first();
-        if ($last_run && $last_run->ticks > 0) {
-            throw new RangeException('You can only run this command once every ' . $command->ticks . ' tick(s).');
+            throw new RangeException($command->ticks . ' tick' . ($command->ticks > 1 ? 's' : '') . ' remaining until you are done with ' . $last_run->command->method . ".");
         }
 
         $output = $this->$methodName($parameters);
 
         CommandLog::create([
-            'command_id' => $command_id,
+            'command_id' => $command->id,
             'message' => json_encode($output->original),
+            'ticks' => $command->ticks,
         ]);
 
         return $output;
