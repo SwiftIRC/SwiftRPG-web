@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Skills;
 
-use Tests\TestCase;
+use App\Models\Command;
 use App\Models\Item;
 use App\Models\Tile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class WoodcuttingTest extends TestCase
 {
@@ -24,9 +25,14 @@ class WoodcuttingTest extends TestCase
             'tile_id' => $tile->id,
         ]);
 
-
         $item = Item::factory()->create([
             'name' => 'Logs',
+        ]);
+
+        $command = Command::create([
+            'class' => 'woodcutting',
+            'method' => 'chop',
+            'ticks' => 1,
         ]);
 
         $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Bot-Token' => config('app.token')]);
@@ -35,7 +41,7 @@ class WoodcuttingTest extends TestCase
 
         $this->assertDatabaseHas('command_logs', [
             'user_id' => $user->id,
-            'command' => 'woodcutting.chop',
+            'command_id' => $command->id,
         ]);
 
         $this->assertDatabaseHas('users', [
@@ -57,6 +63,12 @@ class WoodcuttingTest extends TestCase
         ]);
         $item = Item::factory()->create([
             'name' => 'Logs',
+        ]);
+
+        $command = Command::create([
+            'class' => 'woodcutting',
+            'method' => 'chop',
+            'ticks' => 1,
         ]);
 
         $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Bot-Token' => config('app.token')]);
