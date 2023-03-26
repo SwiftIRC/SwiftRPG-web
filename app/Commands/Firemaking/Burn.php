@@ -10,9 +10,9 @@ class Burn extends Command
 {
     protected $quantity = 0;
 
-    public function execute(): \Illuminate\Http\JsonResponse
+    public function execute(object $input): \Illuminate\Http\JsonResponse
     {
-        $user = Auth::user();
+        $user = $input->user()->first();
         $log = $user->items()->where('name', 'Logs')->withPivot('deleted_at')->first();
 
         if (!isset($log)) {
@@ -25,6 +25,24 @@ class Burn extends Command
         $user->save();
 
         $logs = $user->items()->where('name', 'Logs')->count();
+
+        return response()->json([
+            'skill' => 'firemaking',
+            'experience' => $user->firemaking,
+            'reward' => $this->generateReward($logs),
+        ]);
+    }
+
+    public function log(array $input = []): \Illuminate\Http\JsonResponse
+    {
+        $user = Auth::user();
+        $log = $user->items()->where('name', 'Logs')->withPivot('deleted_at')->first();
+
+        if (!isset($log)) {
+            throw new RangeException('There are no logs in your inventory to burn!');
+        }
+
+        $logs = $user->numberInInventory($log);
 
         return response()->json([
             'skill' => 'firemaking',

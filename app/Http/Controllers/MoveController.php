@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Map\Move;
+use App\Skills\Moving;
 use Illuminate\Http\Request;
+use RangeException;
 
 class MoveController extends Controller
 {
     public function move(Request $request)
     {
+        try {
+            return app(Moving::class)->move();
+        } catch (RangeException $e) {
+            return response()->json(['error' => $e->getMessage()], 403);
+        }
         return app(Move::class)->move($request->user(), $request->direction);
     }
 

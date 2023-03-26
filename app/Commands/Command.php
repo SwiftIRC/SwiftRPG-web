@@ -9,7 +9,12 @@ abstract class Command
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    abstract protected function execute(): \Illuminate\Http\JsonResponse;
+    abstract protected function execute(object $input): \Illuminate\Http\JsonResponse;
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    abstract protected function log(array $input = []): \Illuminate\Http\JsonResponse;
 
     /**
      * Returns an object with the following properties:

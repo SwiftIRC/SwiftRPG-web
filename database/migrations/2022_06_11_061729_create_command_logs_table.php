@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('class');
             $table->string('method');
+            $table->string('verb');
             $table->smallInteger('ticks')->default(1);
 
             $table->timestamps();
@@ -27,7 +28,7 @@ return new class extends Migration
 
             $table->bigInteger("user_id")->unsigned();
             $table->bigInteger('command_id')->unsigned();
-            $table->string('message', 255);
+            $table->string('message');
             $table->smallInteger('ticks')->default(1);
 
             $table->timestamps();

@@ -11,7 +11,26 @@ class Chop extends Command
 {
     protected $quantity = 5;
 
-    public function execute(): \Illuminate\Http\JsonResponse
+    public function execute(object $input): \Illuminate\Http\JsonResponse
+    {
+        $user = $input->user()->first();
+        $tile = $user->tile();
+
+        $user->woodcutting += $this->quantity;
+        $user->save();
+
+        $item = Item::where('name', 'Logs')->first();
+        $logs = $user->addToInventory($item);
+
+        return response()->json([
+            'skill' => 'woodcutting',
+            'experience' => $user->woodcutting,
+            'reward' => $this->generateReward($logs),
+            'execute' => true,
+        ]);
+    }
+
+    public function log(array $input = []): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         $tile = $user->tile();
@@ -23,16 +42,14 @@ class Chop extends Command
         $tile->available_trees--;
         $tile->save();
 
-        $user->woodcutting += 5;
-        $user->save();
-
         $item = Item::where('name', 'Logs')->first();
-        $logs = $user->addToInventory($item);
+        $logs = $user->numberInInventory($item);
 
         return response()->json([
             'skill' => 'woodcutting',
             'experience' => $user->woodcutting,
             'reward' => $this->generateReward($logs),
+            'execute' => false,
         ]);
     }
 

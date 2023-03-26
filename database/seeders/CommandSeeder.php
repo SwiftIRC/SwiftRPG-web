@@ -17,18 +17,21 @@ class CommandSeeder extends Seeder
         Command::create([
             'class' => 'thieving',
             'method' => 'pickpocket',
+            'verb' => 'pickpocketing',
             'ticks' => 1,
         ]);
 
         Command::create([
             'class' => 'woodcutting',
             'method' => 'chop',
+            'verb' => 'chopping wood',
             'ticks' => 1,
         ]);
 
         Command::create([
             'class' => 'firemaking',
             'method' => 'burn',
+            'verb' => 'burning logs',
             'ticks' => 1,
         ]);
 

@@ -3,6 +3,7 @@
 namespace App\Commands\Thieving;
 
 use App\Commands\Command;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use OverflowException;
 use RangeException;
@@ -11,7 +12,26 @@ class Pickpocket extends Command
 {
     protected $quantity = 5;
 
-    public function execute(): \Illuminate\Http\JsonResponse
+    public function execute(object $input): \Illuminate\Http\JsonResponse
+    {
+        $user = $input->user()->first();
+
+        $increment = $this->quantity;
+
+        $user->thieving += $increment;
+        $user->addGold($increment);
+        $user->save();
+
+        return response()->json([
+            'skill' => 'thieving',
+            'method' => 'pickpocket',
+            'experience' => $user->thieving,
+            'reward' => $this->generateReward($user->gold),
+            'execute' => true,
+        ]);
+    }
+
+    public function log(array $input = []): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         $tile = $user->tile();
@@ -29,16 +49,12 @@ class Pickpocket extends Command
             throw new OverflowException('You failed to pickpocket, ' . $npc->name . '!');
         }
 
-        $increment = $this->quantity;
-
-        $user->thieving += $increment;
-        $user->addGold($increment);
-        $user->save();
-
         return response()->json([
             'skill' => 'thieving',
+            'method' => 'pickpocket',
             'experience' => $user->thieving,
             'reward' => $this->generateReward($user->gold),
+            'execute' => false,
         ]);
     }
 

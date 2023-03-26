@@ -10,7 +10,7 @@ class Steal extends Command
 {
     protected $quantity = 10;
 
-    public function execute(): \Illuminate\Http\JsonResponse
+    public function execute(mixed $input = []): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         $building = $user->building();

@@ -10,9 +10,9 @@ class Firemaking extends Skill
     protected function burn()
     {
         try {
-            return app(Burn::class)->execute();
+            return app(Burn::class)->log();
         } catch (RangeException $e) {
-            throw new RangeException($e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 403);
         }
     }
 }

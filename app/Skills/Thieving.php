@@ -13,7 +13,7 @@ class Thieving extends Skill
     protected function pickpocket(): \Illuminate\Http\JsonResponse
     {
         try {
-            return app(Pickpocket::class)->execute();
+            return app(Pickpocket::class)->log();
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         } catch (OverflowException $e) {
@@ -24,11 +24,11 @@ class Thieving extends Skill
     protected function steal(): \Illuminate\Http\JsonResponse
     {
         try {
-            return app(Steal::class)->execute();
-        } catch (OverflowException $e) {
-            return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(1)], 200);
+            return app(Steal::class)->log();
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
+        } catch (OverflowException $e) {
+            return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(2)], 200);
         }
     }
 

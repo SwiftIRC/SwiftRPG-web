@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Tile;
 use App\Models\ItemUser;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Notifications\Notifiable;
+use App\Models\Tile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -47,26 +46,35 @@ class User extends Authenticatable
 
     public function addToInventory(Item $item)
     {
-        $user = Auth::user();
-        $user->items()->attach($item);
+        $this->items()->attach($item);
 
-        return $user->items()->where('name', $item->name)->count();
+        return $this->items()->where('name', $item->name)->count();
     }
 
     public function removeFromInventory(Item $item)
     {
-        $user = Auth::user();
-        $retrievedItem = $user->items()->where('items.name', $item->name)->withPivot('id')->first();
+        $retrievedItem = $this->items()->where('items.name', $item->name)->withPivot('id')->first();
         ItemUser::where('id', $retrievedItem->pivot->id)->update(['deleted_at' => now()]);
+    }
+
+    public function numberInInventory(Item $item)
+    {
+        return $this->items()->where('name', $item->name)->count();
+    }
+
+    public function inInventory(Item $item)
+    {
+        $retrievedItem = $this->items()->where('name', $item->name)->count();
+
+        return ($retrievedItem > 0);
     }
 
     public function damage(int $damage): int
     {
-        $user = Auth::user();
-        $user->hitpoints -= $damage;
-        $user->save();
+        $this->hitpoints -= $damage;
+        $this->save();
 
-        return $user->hitpoints;
+        return $this->hitpoints;
     }
 
     public function addGold(int $amount)
