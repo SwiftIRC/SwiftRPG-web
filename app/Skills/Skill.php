@@ -22,8 +22,8 @@ class Skill
         $command_id = $command->id;
 
         $last_run = CommandLog::where('command_id', $command_id)->latest()->first();
-        if ($last_run && $last_run->created_at >= now()->subMinutes(1)) {
-            throw new RangeException('You can only run this command once every one (1) minute. Remaining seconds: ' . now()->diffInSeconds($last_run->created_at->addMinutes(1)));
+        if ($last_run && $last_run->ticks > 0) {
+            throw new RangeException('You can only run this command once every ' . $command->ticks . ' tick(s).');
         }
 
         $output = $this->$methodName($parameters);

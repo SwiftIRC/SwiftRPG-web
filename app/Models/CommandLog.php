@@ -15,6 +15,7 @@ class CommandLog extends Model
         'user_id',
         'command_id',
         'message',
+        'ticks',
     ];
 
     protected $hidden = [
