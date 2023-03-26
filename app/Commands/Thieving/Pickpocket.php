@@ -19,7 +19,7 @@ class Pickpocket extends Command
 
         if (!$npcs->count()) {
             $buildings = $tile->buildings()->get();
-            throw new RangeException('There are no NPCs on this tile to pickpocket! ' . ($buildings->count() ? 'Check a building?' : ''));
+            throw new RangeException('You failed to pickpocket because there was nobody around! ' . ($buildings->count() ? 'Check a building?' : ''));
         }
 
         $npc = $npcs->get()->random();
