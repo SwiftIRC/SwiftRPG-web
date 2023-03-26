@@ -1,17 +1,15 @@
 <?php
 
-use App\Models\Npc;
-use App\Models\Edge;
-use App\Models\Tile;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FiremakingController;
 use App\Http\Controllers\MoveController;
 use App\Http\Controllers\ThievingController;
-use App\Http\Controllers\FiremakingController;
 use App\Http\Controllers\WoodcuttingController;
+use App\Models\Npc;
+use App\Models\Tile;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +20,7 @@ use App\Http\Controllers\WoodcuttingController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
 Route::middleware(['app'])->name('auth.')->prefix('auth')->group(function () {
     Route::post('/', [AuthController::class, 'check']);
@@ -67,6 +65,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::get('/', [MoveController::class, 'look']);
                 Route::get('/npcs', [MoveController::class, 'npcs']);
                 Route::get('/buildings', [MoveController::class, 'buildings']);
+                Route::get('/{direction}', [MoveController::class, 'lookindirection']);
             });
             Route::post('/move', [MoveController::class, 'move']);
             Route::get('/{user}', function ($user) {

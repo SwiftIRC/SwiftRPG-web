@@ -26,4 +26,13 @@ class MoveController extends Controller
     {
         return app(Move::class)->buildings($request->user());
     }
+
+    public function lookindirection(Request $request, string $direction)
+    {
+        if (!in_array($direction, ['north', 'east', 'south', 'west'])) {
+            return response()->json(['error' => 'Invalid direction.'], 400);
+        }
+
+        return app(Move::class)->look_at($request->user(), $direction);
+    }
 }

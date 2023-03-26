@@ -2,10 +2,9 @@
 
 namespace App\Map;
 
-use App\Models\Edge;
+use App\Models\MoveLog;
 use App\Models\Tile;
 use App\Models\User;
-use App\Models\MoveLog;
 use Illuminate\Http\JsonResponse;
 
 class Move
@@ -152,6 +151,21 @@ class Move
         $tile->buildings = $tile->buildings()->get();
 
         return response()->json($tile);
+    }
+
+    public function look_at(User $user, string $direction): ?JsonResponse
+    {
+        $tile = Tile::where('id', $user->tile_id)->first();
+
+        $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
+
+        if (!$adjacent_tile || !$this->check_if_edge_is_road($tile, $direction)) {
+            return response()->json(['error' => 'There is no road in that direction.'], 403);
+        }
+
+        $adjacent_tile->terrain = $adjacent_tile->terrain()->first();
+
+        return response()->json($adjacent_tile);
     }
 
     public function npcs(User $user): ?JsonResponse
