@@ -3,8 +3,8 @@
 namespace App\Skills;
 
 use App\Commands\Thieving\Pickpocket;
+use App\Commands\Thieving\Steal;
 use Illuminate\Support\Facades\Auth;
-use RangeException;
 
 class Thieving extends Skill
 {
@@ -13,20 +13,9 @@ class Thieving extends Skill
         return app(Pickpocket::class)->execute();
     }
 
-    protected function steal()
+    protected function steal(): \Illuminate\Http\JsonResponse
     {
-        $user = Auth::user();
-        $building = $user->building();
-
-        if (!$building) {
-            throw new RangeException('You are not in a building from which to steal!');
-        }
-
-        $user->thieving += 10;
-        $user->addGold(10);
-        $user->save();
-
-        return response()->json(['thieving' => $user->thieving, 'gold' => $user->gold]);
+        return app(Steal::class)->execute();
     }
 
     protected function pilfer()

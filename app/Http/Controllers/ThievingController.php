@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use RangeException;
 use App\Skills\Thieving;
 use Illuminate\Support\Facades\Auth;
-use Brick\Math\Exception\MathException;
+use MathException;
+use RangeException;
 
 class ThievingController extends Controller
 {
@@ -14,10 +14,10 @@ class ThievingController extends Controller
         return view('thieving.index');
     }
 
-    public function pickpocket()
+    public function pickpocket(): \Illuminate\Http\JsonResponse
     {
         try {
-            return response()->json(app(Thieving::class)->pickpocket());
+            return app(Thieving::class)->pickpocket();
         } catch (MathException $e) {
             return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(1)], 200);
         } catch (RangeException $e) {
@@ -32,7 +32,9 @@ class ThievingController extends Controller
         }
 
         try {
-            return response()->json(app(Thieving::class)->steal());
+            return app(Thieving::class)->steal();
+        } catch (MathException $e) {
+            return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(2)], 200);
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         }

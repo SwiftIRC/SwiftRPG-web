@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use RangeException;
 use App\Skills\Woodcutting;
+use RangeException;
 
 class WoodcuttingController extends Controller
 {
@@ -12,10 +12,10 @@ class WoodcuttingController extends Controller
         return view('woodcutting.index');
     }
 
-    public function chop()
+    public function chop(): \Illuminate\Http\JsonResponse
     {
         try {
-            return response()->json(app(Woodcutting::class)->chop());
+            return app(Woodcutting::class)->chop();
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         }
