@@ -37,6 +37,7 @@ class Burn extends Command
     {
         $user = Auth::user();
         $log = $user->items()->where('name', 'Logs')->withPivot('deleted_at')->first();
+        $command = array_pop($input);
 
         if (!isset($log)) {
             throw new RangeException('There are no logs in your inventory to burn!');
@@ -48,6 +49,8 @@ class Burn extends Command
             'skill' => 'firemaking',
             'experience' => $user->firemaking,
             'reward' => $this->generateReward($logs),
+            'ticks' => $command->ticks,
+            'seconds_until_tick' => seconds_until_tick($command->ticks),
         ]);
     }
 

@@ -36,6 +36,7 @@ class Pickpocket extends Command
         $user = Auth::user();
         $tile = $user->tile();
         $npcs = $tile->npcs();
+        $command = array_pop($input);
 
         if (!$npcs->count()) {
             $buildings = $tile->buildings()->get();
@@ -55,6 +56,8 @@ class Pickpocket extends Command
             'experience' => $user->thieving,
             'reward' => $this->generateReward($user->gold),
             'execute' => false,
+            'ticks' => $command->ticks,
+            'seconds_until_tick' => seconds_until_tick($command->ticks),
         ]);
     }
 

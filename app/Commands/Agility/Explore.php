@@ -36,6 +36,7 @@ class Explore extends Command
     {
         $user = Auth::user();
 
+        $command = array_pop($input);
         $direction = array_pop($input);
 
         if (empty($direction) || !in_array($direction, ['north', 'south', 'east', 'west'])) {
@@ -49,6 +50,7 @@ class Explore extends Command
             'reward' => $this->generateReward(),
             'meta' => compact('direction', 'response'),
             'execute' => false,
+            'ticks' => $command->ticks,
         ]);
     }
 

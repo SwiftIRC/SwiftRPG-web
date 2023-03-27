@@ -6,8 +6,8 @@ use App\Commands\Woodcutting\Chop;
 
 class Woodcutting extends Skill
 {
-    protected function chop(): \Illuminate\Http\JsonResponse
+    protected function chop($input): \Illuminate\Http\JsonResponse
     {
-        return app(Chop::class)->log();
+        return app(Chop::class)->log($input);
     }
 }

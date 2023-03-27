@@ -35,6 +35,8 @@ class Chop extends Command
         $user = Auth::user();
         $tile = $user->tile();
 
+        $command = array_pop($input);
+
         if ($tile->available_trees < 1) {
             throw new RangeException('There are no trees left on this tile to chop!');
         }
@@ -50,6 +52,8 @@ class Chop extends Command
             'experience' => $user->woodcutting,
             'reward' => $this->generateReward($logs),
             'execute' => false,
+            'ticks' => $command->ticks,
+            'seconds_until_tick' => seconds_until_tick($command->ticks),
         ]);
     }
 

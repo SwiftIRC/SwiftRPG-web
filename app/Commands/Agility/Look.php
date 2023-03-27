@@ -19,6 +19,7 @@ class Look extends Command
     {
         $user = Auth::user();
 
+        $command = array_pop($input);
         $direction = array_pop($input);
 
         if (in_array($direction, ['north', 'south', 'east', 'west'])) {
