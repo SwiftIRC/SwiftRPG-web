@@ -18,3 +18,13 @@ if (!function_exists('level_to_xp')) {
         return $level + 10 * $level ** 3;
     }
 }
+
+if (!function_exists('seconds_until_tick')) {
+    // Pass in 0 for previous tick
+    function seconds_until_tick($ticks = 1)
+    {
+        $now = now();
+        $next_tick = $now->copy()->addMinutes($ticks)->second(0);
+        return $now->diffInSeconds($next_tick);
+    }
+}
