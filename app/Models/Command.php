@@ -14,6 +14,7 @@ class Command extends Model
         'method',
         'ticks',
         'log',
+        'movement_cost',
     ];
 
     protected $hidden = [

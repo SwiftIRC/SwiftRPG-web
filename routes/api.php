@@ -65,6 +65,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::get('/', [AgilityController::class, 'look']);
                 Route::get('/npcs', [AgilityController::class, 'npcs']);
                 Route::get('/buildings', [AgilityController::class, 'buildings']);
+                Route::get('/{direction}', [AgilityController::class, 'look']);
             });
             Route::post('/explore', [AgilityController::class, 'explore']);
             Route::get('/{user}', function ($user) {

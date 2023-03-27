@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Terrain;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TerrainSeeder extends Seeder
 {
@@ -23,11 +22,13 @@ class TerrainSeeder extends Seeder
         Terrain::create([
             'name' => 'Forest',
             'description' => 'A piece of land with many trees.',
+            'movement_cost' => 1,
         ]);
 
         Terrain::create([
             'name' => 'Sand',
             'description' => 'A dry, sandy area.',
+            'movement_cost' => 2,
         ]);
 
         Terrain::create([
@@ -38,6 +39,7 @@ class TerrainSeeder extends Seeder
         Terrain::create([
             'name' => 'Mountains',
             'description' => 'A mountainous area.',
+            'movement_cost' => 3,
         ]);
     }
 }

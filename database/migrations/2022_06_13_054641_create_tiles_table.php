@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create("terrains", function (Blueprint $table) {
+        Schema::create('terrains', function (Blueprint $table) {
             $table->id();
 
-            $table->string("name", 100);
-            $table->string("description", 1000)->nullable();
+            $table->string('name', 100);
+            $table->string('description', 1000)->nullable();
+            $table->smallInteger('movement_cost')->default(0);
 
             $table->timestamps();
             $table->softDeletes();
@@ -26,29 +27,29 @@ return new class extends Migration
         Schema::create('tiles', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger("discovered_by")->nullable();
-            $table->unsignedBigInteger("terrain_id");
+            $table->unsignedBigInteger('discovered_by')->nullable();
+            $table->unsignedBigInteger('terrain_id');
 
-            $table->string("psuedo_id", 100)->unique();
-            $table->bigInteger("x");
-            $table->bigInteger("y");
+            $table->string('psuedo_id', 100)->unique();
+            $table->bigInteger('x');
+            $table->bigInteger('y');
 
-            $table->unsignedSmallInteger("max_trees")->default(0);
-            $table->unsignedSmallInteger("available_trees")->default(0);
+            $table->unsignedSmallInteger('max_trees')->default(0);
+            $table->unsignedSmallInteger('available_trees')->default(0);
 
             $table->timestamp('last_disturbed')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign("discovered_by")->references("id")->on("users");
-            $table->foreign("terrain_id")->references("id")->on("terrains");
+            $table->foreign('discovered_by')->references('id')->on('users');
+            $table->foreign('terrain_id')->references('id')->on('terrains');
         });
 
         Schema::create('zones', function (Blueprint $table) {
             $table->id();
 
-            $table->string("name", 100)->unique();
-            $table->string("description", 1000)->nullable();
+            $table->string('name', 100)->unique();
+            $table->string('description', 1000)->nullable();
 
             $table->boolean('is_shop')->default(false);
             $table->boolean('is_pub')->default(false);
@@ -66,24 +67,24 @@ return new class extends Migration
         Schema::create('buildings', function (Blueprint $table) {
             $table->id();
 
-            $table->string("name", 100);
-            $table->string("description", 1000)->nullable();
-            $table->bigInteger("zone_id")->unsigned();
+            $table->string('name', 100);
+            $table->string('description', 1000)->nullable();
+            $table->bigInteger('zone_id')->unsigned();
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign("zone_id")->references("id")->on("zones");
+            $table->foreign('zone_id')->references('id')->on('zones');
         });
 
         Schema::create('building_tile', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger("tile_id")->unsigned();
-            $table->bigInteger("building_id")->unsigned();
+            $table->bigInteger('tile_id')->unsigned();
+            $table->bigInteger('building_id')->unsigned();
 
-            $table->foreign("tile_id")->references("id")->on("tiles");
-            $table->foreign("building_id")->references("id")->on("buildings");
+            $table->foreign('tile_id')->references('id')->on('tiles');
+            $table->foreign('building_id')->references('id')->on('buildings');
 
             $table->timestamps();
             $table->softDeletes();
@@ -92,8 +93,8 @@ return new class extends Migration
         Schema::create('occupations', function (Blueprint $table) {
             $table->id();
 
-            $table->string("name", 100);
-            $table->string("description", 1000)->nullable();
+            $table->string('name', 100);
+            $table->string('description', 1000)->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -102,9 +103,9 @@ return new class extends Migration
         Schema::create('npcs', function (Blueprint $table) {
             $table->id();
 
-            $table->string("name", 100);
-            $table->string("description", 1000)->nullable();
-            $table->bigInteger("occupation_id")->unsigned()->nullable();
+            $table->string('name', 100);
+            $table->string('description', 1000)->nullable();
+            $table->bigInteger('occupation_id')->unsigned()->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -113,55 +114,55 @@ return new class extends Migration
         Schema::create('building_npc', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger("building_id")->unsigned();
-            $table->bigInteger("npc_id")->unsigned();
+            $table->bigInteger('building_id')->unsigned();
+            $table->bigInteger('npc_id')->unsigned();
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign("building_id")->references("id")->on("buildings");
-            $table->foreign("npc_id")->references("id")->on("npcs");
+            $table->foreign('building_id')->references('id')->on('buildings');
+            $table->foreign('npc_id')->references('id')->on('npcs');
         });
 
         Schema::create('npc_tile', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger("tile_id")->unsigned();
-            $table->bigInteger("npc_id")->unsigned();
+            $table->bigInteger('tile_id')->unsigned();
+            $table->bigInteger('npc_id')->unsigned();
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign("tile_id")->references("id")->on("tiles");
-            $table->foreign("npc_id")->references("id")->on("npcs");
+            $table->foreign('tile_id')->references('id')->on('tiles');
+            $table->foreign('npc_id')->references('id')->on('npcs');
         });
 
         Schema::create('edges', function (Blueprint $table) {
             $table->id();
 
-            $table->string("name", 100);
-            $table->string("description", 1000)->nullable();
-            $table->unsignedBigInteger("terrain_id");
+            $table->string('name', 100);
+            $table->string('description', 1000)->nullable();
+            $table->unsignedBigInteger('terrain_id');
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign("terrain_id")->references("id")->on("terrains");
+            $table->foreign('terrain_id')->references('id')->on('terrains');
         });
 
         Schema::create('edge_tile', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger("edge_id")->unsigned();
-            $table->bigInteger("tile_id")->unsigned();
+            $table->bigInteger('edge_id')->unsigned();
+            $table->bigInteger('tile_id')->unsigned();
             $table->enum('direction', ['north', 'east', 'south', 'west'])->default('north');
-            $table->boolean("is_road")->default(false);
+            $table->boolean('is_road')->default(false);
 
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign("tile_id")->references("id")->on("tiles");
-            $table->foreign("edge_id")->references("id")->on("edges");
+            $table->foreign('tile_id')->references('id')->on('tiles');
+            $table->foreign('edge_id')->references('id')->on('edges');
         });
 
         Schema::table('users', function (Blueprint $table) {

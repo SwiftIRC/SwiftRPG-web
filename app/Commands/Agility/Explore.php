@@ -50,7 +50,7 @@ class Explore extends Command
             'reward' => $this->generateReward(),
             'meta' => compact('direction', 'response'),
             'execute' => false,
-            'ticks' => $command->ticks,
+            'ticks' => $command->ticks + (isset($response['error']) ? 0 : $response['terrain']['movement_cost']),
         ]);
     }
 
