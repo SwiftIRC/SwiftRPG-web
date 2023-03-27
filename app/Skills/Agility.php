@@ -2,8 +2,10 @@
 
 namespace App\Skills;
 
+use App\Commands\Agility\Buildings;
 use App\Commands\Agility\Explore;
 use App\Commands\Agility\Look;
+use App\Commands\Agility\NPCs;
 use RangeException;
 
 class Agility extends Skill
@@ -25,4 +27,15 @@ class Agility extends Skill
             return response()->json(['error' => $e->getMessage()], 403);
         }
     }
+
+    protected function npcs()
+    {
+        return app(NPCs::class)->log();
+    }
+
+    protected function buildings()
+    {
+        return app(Buildings::class)->log();
+    }
+
 }

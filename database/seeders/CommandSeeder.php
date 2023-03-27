@@ -45,6 +45,22 @@ class CommandSeeder extends Seeder
 
         Command::create([
             'class' => 'agility',
+            'method' => 'npcs',
+            'verb' => 'looking at people',
+            'ticks' => 0,
+            'log' => false,
+        ]);
+
+        Command::create([
+            'class' => 'agility',
+            'method' => 'buildings',
+            'verb' => 'looking at buildings',
+            'ticks' => 0,
+            'log' => false,
+        ]);
+
+        Command::create([
+            'class' => 'agility',
             'method' => 'explore',
             'verb' => 'exploring',
             'ticks' => 5,

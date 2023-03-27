@@ -26,22 +26,14 @@ class AgilityController extends Controller
         }
     }
 
-    public function npcs(Request $request)
+    public function npcs()
     {
-        return app(Agility::class)->npcs($request->user());
+        return app(Agility::class)->npcs();
     }
 
-    public function buildings(Request $request)
+    public function buildings()
     {
-        return app(Agility::class)->buildings($request->user());
+        return app(Agility::class)->buildings();
     }
 
-    public function lookInDirection(Request $request, string $direction)
-    {
-        if (!in_array($direction, ['north', 'east', 'south', 'west'])) {
-            return response()->json(['error' => 'Invalid direction.'], 400);
-        }
-
-        return app(Agility::class)->look([$direction]);
-    }
 }
