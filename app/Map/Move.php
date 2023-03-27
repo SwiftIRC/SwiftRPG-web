@@ -5,6 +5,7 @@ namespace App\Map;
 use App\Models\MoveLog;
 use App\Models\Tile;
 use App\Models\User;
+use function PHPUnit\Framework\isNull;
 use Illuminate\Http\JsonResponse;
 
 class Move
@@ -125,6 +126,12 @@ class Move
         }
 
         $new_tile = Tile::where('x', $x)->where('y', $y)->first();
+
+        if (isNull($new_tile->discovered_by)) {
+            $new_tile->discovered_by = $user->id;
+            $new_tile->discovered_at = now();
+            $new_tile->save();
+        }
 
         $current_tile->last_disturbed = now();
         $current_tile->save();

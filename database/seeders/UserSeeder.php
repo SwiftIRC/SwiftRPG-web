@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Tile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class UserSeeder extends Seeder
 {
@@ -59,5 +58,7 @@ class UserSeeder extends Seeder
         //     'token' => '195a14888e8a8f8b47bdf6ce62decd5c845390039e223e7f59b48471933e3605',
         //     'abilities' => '["*"]',
         // ]);
+
+        Tile::where('id', 1)->update(['discovered_by' => 1, 'discovered_at' => now()]);
     }
 }

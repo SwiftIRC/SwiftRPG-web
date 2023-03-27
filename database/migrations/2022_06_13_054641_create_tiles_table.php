@@ -28,6 +28,7 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('discovered_by')->nullable();
+            $table->timestamp('discovered_at')->nullable();
             $table->unsignedBigInteger('terrain_id');
 
             $table->string('psuedo_id', 100)->unique();
