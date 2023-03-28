@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Skills;
 
-use Tests\TestCase;
+use App\Models\Building;
+use App\Models\Command;
 use App\Models\Tile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Models\Building;
+use Tests\TestCase;
 
 class ThievingTest extends TestCase
 {
@@ -24,9 +25,24 @@ class ThievingTest extends TestCase
             'thieving' => level_to_xp(50),
         ]);
 
+        $command = Command::create([
+            'class' => 'thieving',
+            'method' => 'pickpocket',
+            'verb' => 'pickpocketing',
+            'ticks' => 1,
+        ]);
+
         $response = $this->actingAs($user)->post('/api/thieving/pickpocket', [], ['X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(200);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'gold' => 0,
+            'thieving' => level_to_xp(50),
+        ]);
+
+        $this->artisan('tick:process');
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -36,10 +52,9 @@ class ThievingTest extends TestCase
 
         $this->assertDatabaseHas('command_logs', [
             'user_id' => $user->id,
-            'command' => 'thieving.pickpocket',
+            'command_id' => $command->id,
         ]);
     }
-
 
     public function test_user_cannot_pickpocket()
     {
@@ -53,6 +68,13 @@ class ThievingTest extends TestCase
             $tile->npcs()->detach($npcs[$i]);
         }
 
+        $command = Command::create([
+            'class' => 'thieving',
+            'method' => 'pickpocket',
+            'verb' => 'pickpocketing',
+            'ticks' => 1,
+        ]);
+
         $response = $this->actingAs($user)->post('/api/thieving/pickpocket', [], ['X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(403);
@@ -61,6 +83,12 @@ class ThievingTest extends TestCase
             'id' => $user->id,
             'gold' => 0,
             'thieving' => 0,
+        ]);
+
+        $this->assertDatabaseHas('command_logs', [
+            'user_id' => $user->id,
+            'command_id' => $command->id,
+            'message' => "{\"error\":\"You failed to pickpocket because there was nobody around! Check a building?\"}",
         ]);
     }
 
@@ -74,13 +102,20 @@ class ThievingTest extends TestCase
             'thieving' => level_to_xp(10),
         ]);
 
+        $command = Command::create([
+            'class' => 'thieving',
+            'method' => 'steal',
+            'verb' => 'stealing',
+            'ticks' => 1,
+        ]);
+
         $response = $this->actingAs($user)->post('/api/thieving/steal', [], ['X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('command_logs', [
             'user_id' => $user->id,
-            'command' => 'thieving.steal',
+            'command_id' => $command->id,
         ]);
 
         $this->assertDatabaseHas('users', [
@@ -96,6 +131,13 @@ class ThievingTest extends TestCase
             'tile_id' => Tile::all()->first()->id,
         ]);
 
+        Command::create([
+            'class' => 'thieving',
+            'method' => 'steal',
+            'verb' => 'stealing',
+            'ticks' => 1,
+        ]);
+
         $response = $this->actingAs($user)->post('/api/thieving/steal', [], ['X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(403);
@@ -108,13 +150,20 @@ class ThievingTest extends TestCase
             'thieving' => level_to_xp(20),
         ]);
 
+        $command = Command::create([
+            'class' => 'thieving',
+            'method' => 'pilfer',
+            'verb' => 'pilfering',
+            'ticks' => 1,
+        ]);
+
         $response = $this->actingAs($user)->post('/api/thieving/pilfer', [], ['X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('command_logs', [
             'user_id' => $user->id,
-            'command' => 'thieving.pilfer',
+            'command_id' => $command->id,
         ]);
 
         $this->assertDatabaseHas('users', [
@@ -142,13 +191,20 @@ class ThievingTest extends TestCase
             'thieving' => level_to_xp(30),
         ]);
 
+        $command = Command::create([
+            'class' => 'thieving',
+            'method' => 'plunder',
+            'verb' => 'plundering',
+            'ticks' => 1,
+        ]);
+
         $response = $this->actingAs($user)->post('/api/thieving/plunder', [], ['X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('command_logs', [
             'user_id' => $user->id,
-            'command' => 'thieving.plunder',
+            'command_id' => $command->id,
         ]);
 
         $this->assertDatabaseHas('users', [

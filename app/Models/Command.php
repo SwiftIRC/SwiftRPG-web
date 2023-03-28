@@ -12,6 +12,7 @@ class Command extends Model
     protected $fillable = [
         'class',
         'method',
+        'verb',
         'ticks',
         'log',
         'movement_cost',

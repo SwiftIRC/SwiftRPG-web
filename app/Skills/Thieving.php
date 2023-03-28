@@ -10,10 +10,10 @@ use RangeException;
 
 class Thieving extends Skill
 {
-    protected function pickpocket(): \Illuminate\Http\JsonResponse
+    protected function pickpocket($input): \Illuminate\Http\JsonResponse
     {
         try {
-            return app(Pickpocket::class)->log();
+            return app(Pickpocket::class)->log($input);
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         } catch (OverflowException $e) {

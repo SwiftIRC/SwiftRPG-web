@@ -2,11 +2,14 @@
 
 namespace App\Map;
 
+use App\Models\Building;
 use App\Models\MoveLog;
+use App\Models\Npc;
 use App\Models\Tile;
 use App\Models\User;
 use function PHPUnit\Framework\isNull;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class Move
 {
@@ -131,6 +134,44 @@ class Move
             $new_tile->discovered_by = $user->id;
             $new_tile->discovered_at = now();
             $new_tile->save();
+
+            // Add NPCs and buildings to the tile
+            $num_building = rand(0, 5);
+            $num_npcs = rand(0, 2) * $num_building + rand(0, 3);
+
+            Log::info('num_building: ' . $num_building);
+            Log::info('num_npcs: ' . $num_npcs);
+
+            $all_buildings = Building::all();
+            $buildings = [];
+            for ($i = 0; $i < $num_building; $i++) {
+                $building = $all_buildings->random();
+                $new_tile->buildings()->attach($building->id);
+                array_push($buildings, $building);
+            }
+
+            $available_occupations = [];
+            foreach ($buildings as $building) {
+                $occupations = $building->occupations()->get();
+                if (count($occupations) > 0) {
+                    $npc = Npc::where('occupation_id', $occupations->random()->id)->get()->random();
+                    array_push($available_occupations, $npc->occupation_id);
+                    $new_tile->npcs()->attach($npc->id); // Does this duplicate the NPC?
+                    $building->npcs()->attach($npc->id);
+                    $num_npcs--;
+                }
+            }
+
+            // for ($i = 0; $i < $num_npcs; $i++) {
+            //     $chance_for_building = rand(0, 100);
+            //     $npc = Npc::generate()->first();
+            //     $new_tile->npcs()->attach($npc->id);
+            //     if ($chance_for_building < 75) {
+            //         $building = Building::generate()->first();
+            //         $new_tile->buildings()->attach($building->id);
+            //         $building->npcs()->attach($npc->id);
+            //     }
+            // }
         }
 
         $current_tile->last_disturbed = now();

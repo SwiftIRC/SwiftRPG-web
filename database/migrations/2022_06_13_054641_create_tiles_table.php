@@ -101,6 +101,19 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('building_occupation', function (Blueprint $table) {
+            $table->id();
+
+            $table->bigInteger('building_id')->unsigned();
+            $table->bigInteger('occupation_id')->unsigned();
+
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('building_id')->references('id')->on('buildings');
+            $table->foreign('occupation_id')->references('id')->on('occupations');
+        });
+
         Schema::create('npcs', function (Blueprint $table) {
             $table->id();
 
@@ -192,8 +205,9 @@ return new class extends Migration
         Schema::dropIfExists('edges');
         Schema::dropIfExists('npc_tile');
         Schema::dropIfExists('building_npc');
-        Schema::dropIfExists('occupations');
+        Schema::dropIfExists('building_occupation');
         Schema::dropIfExists('npcs');
+        Schema::dropIfExists('occupations');
         Schema::dropIfExists('building_tile');
         Schema::dropIfExists('buildings');
         Schema::dropIfExists('zones');

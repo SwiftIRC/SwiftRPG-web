@@ -2,11 +2,12 @@
 
 namespace Tests\Feature\Skills;
 
-use Tests\TestCase;
+use App\Models\Command;
 use App\Models\Item;
 use App\Models\Tile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class FiremakingTest extends TestCase
 {
@@ -31,14 +32,28 @@ class FiremakingTest extends TestCase
         $user->items()->attach($item);
         $user->items()->attach($item);
 
+        $command = Command::create([
+            'class' => 'firemaking',
+            'method' => 'burn',
+            'verb' => 'burning',
+            'ticks' => 1,
+        ]);
+
         $response = $this->actingAs($user)->post('/api/firemaking/burn', [], ['X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('command_logs', [
             'user_id' => $user->id,
-            'command' => 'firemaking.burn',
+            'command_id' => $command->id,
         ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'firemaking' => 0,
+        ]);
+
+        $this->artisan('tick:process');
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -69,8 +84,19 @@ class FiremakingTest extends TestCase
             'name' => 'Logs',
         ]);
 
+        $command = Command::create([
+            'class' => 'firemaking',
+            'method' => 'burn',
+            'verb' => 'burning',
+            'ticks' => 1,
+        ]);
+
         $response = $this->actingAs($user)->post('/api/firemaking/burn', [], ['X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(403);
+
+        $response->assertJson([
+            'error' => 'There are no logs in your inventory to burn!',
+        ]);
     }
 }

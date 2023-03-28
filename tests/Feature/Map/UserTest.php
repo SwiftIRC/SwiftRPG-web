@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Map;
 
-use App\Models\Npc;
-use Tests\TestCase;
+use App\Models\Command;
 use App\Models\Edge;
+use App\Models\Npc;
+use App\Models\Terrain;
 use App\Models\Tile;
 use App\Models\User;
-use App\Models\Building;
-use App\Models\Terrain;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class UserTest extends TestCase
 {
@@ -21,6 +21,14 @@ class UserTest extends TestCase
 
         $user = User::factory()->create([
             'tile_id' => $tile->id,
+        ]);
+
+        $command = Command::create([
+            'class' => 'agility',
+            'method' => 'look',
+            'verb' => 'looking',
+            'ticks' => 0,
+            'log' => false,
         ]);
 
         $response = $this->actingAs($user)->get(implode(['/api/map/user/', $user->name]));
@@ -77,14 +85,32 @@ class UserTest extends TestCase
             $tile->edges()->attach($edge, ['is_road' => true]);
         }
 
-        $response = $this->actingAs($user)->post('/api/map/user/move', [
+        $command = Command::create([
+            'class' => 'agility',
+            'method' => 'explore',
+            'verb' => 'exploring',
+            'ticks' => 1,
+        ]);
+
+        $response = $this->actingAs($user)->post('/api/map/user/explore', [
             'direction' => 'north',
         ]);
 
         $response->assertJson([
-            'x' => $tile->x,
-            'y' => $tile->y + 1,
+            'meta' => [
+                'response' => [
+                    'x' => $tile->x,
+                    'y' => $tile->y + 1,
+                ],
+            ],
         ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'tile_id' => $tile->id,
+        ]);
+
+        $this->artisan('tick:process');
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -135,19 +161,36 @@ class UserTest extends TestCase
         }
 
         $user = User::factory()->create([
-            'tile_id' => $tile2->id
+            'tile_id' => $tile2->id,
         ]);
 
-        $response = $this->actingAs($user)->post('/api/map/user/move', [
+        $command = Command::create([
+            'class' => 'agility',
+            'method' => 'explore',
+            'verb' => 'exploring',
+            'ticks' => 5,
+        ]);
+
+        $response = $this->actingAs($user)->post('/api/map/user/explore', [
             'direction' => 'north',
         ]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(200);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
             'tile_id' => $tile2->id,
         ]);
+
+        $response->assertJson([
+            'ticks' => $command->ticks,
+            'meta' => [
+                'response' => [
+                    'error' => 'There is no road in that direction.',
+                ],
+            ],
+        ]);
+
     }
 
     public function test_user_can_look()
@@ -163,12 +206,24 @@ class UserTest extends TestCase
             $tile->npcs()->attach($npc);
         }
 
+        $command = Command::create([
+            'class' => 'agility',
+            'method' => 'look',
+            'verb' => 'looking',
+            'ticks' => 0,
+            'log' => false,
+        ]);
+
         $response = $this->actingAs($user)->get('/api/map/user/look');
 
         $response->assertStatus(200);
 
         $response->assertJson([
-            'id' => $tile->id,
+            'meta' => [
+                'response' => [
+                    'id' => $tile->id,
+                ],
+            ],
         ]);
     }
 }

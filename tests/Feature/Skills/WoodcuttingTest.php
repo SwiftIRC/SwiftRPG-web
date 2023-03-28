@@ -32,6 +32,7 @@ class WoodcuttingTest extends TestCase
         $command = Command::create([
             'class' => 'woodcutting',
             'method' => 'chop',
+            'verb' => 'chopping wood',
             'ticks' => 1,
         ]);
 
@@ -46,13 +47,21 @@ class WoodcuttingTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
-            'woodcutting' => 5,
+            'woodcutting' => 0,
         ]);
+
+        $this->artisan('tick:process');
 
         $this->assertDatabaseHas('item_user', [
             'user_id' => $user->id,
             'item_id' => $item->id,
         ]);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'woodcutting' => 5,
+        ]);
+
     }
 
     public function test_user_cannot_chop()
@@ -68,6 +77,7 @@ class WoodcuttingTest extends TestCase
         $command = Command::create([
             'class' => 'woodcutting',
             'method' => 'chop',
+            'verb' => 'chopping wood',
             'ticks' => 1,
         ]);
 

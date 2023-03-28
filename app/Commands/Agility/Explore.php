@@ -14,6 +14,13 @@ class Explore extends Command
     public function execute(object $input): \Illuminate\Http\JsonResponse
     {
         $user = $input->user()->first();
+        $json = json_decode($input['message']);
+
+        if (!empty($json->meta->response->error)) {
+            return response()->json([
+                'error' => $json->meta->response->error,
+            ]);
+        }
 
         $response = app(Move::class)->move($input->user()->first(), json_decode($input->message)->meta->direction);
 
@@ -44,13 +51,15 @@ class Explore extends Command
         }
         $response = app(Move::class)->look_at($user, $direction)->original;
 
+        $ticks = $command->ticks + (isset($response['error']) ? 0 : $response['terrain']['movement_cost']);
+
         return response()->json([
             'skill' => 'agility',
             'experience' => $user->agility,
             'reward' => $this->generateReward(),
             'meta' => compact('direction', 'response'),
             'execute' => false,
-            'ticks' => $command->ticks + (isset($response['error']) ? 0 : $response['terrain']['movement_cost']),
+            'ticks' => $ticks,
         ]);
     }
 

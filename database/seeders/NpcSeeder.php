@@ -2,13 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Building;
 use App\Models\Npc;
+use App\Models\Occupation;
 use App\Models\Tile;
 use App\Models\Zone;
-use App\Models\Building;
-use App\Models\Occupation;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class NpcSeeder extends Seeder
 {
@@ -21,53 +20,68 @@ class NpcSeeder extends Seeder
     {
         $tile1 = Tile::where('psuedo_id', '0,0')->first();
 
-        $farmhouse = Building::create([
-            'name' => 'Farmhouse',
-            'description' => 'An average sized farmhouse.',
-            'zone_id' => Zone::create([
+        $buildings = [
+            $farmhouse = Building::create([
                 'name' => 'Farmhouse',
-                'description' => 'Generic farmhouses.',
-                'is_shop' => false,
-                'is_pub' => false,
-                'is_house' => false,
-                'is_bed' => false,
-                'is_accessible' => true,
-                'is_locked' => false,
-                'is_pilferable' => false,
-            ])->id,
-        ]);
-
-        $church = Building::create([
-            'name' => 'Church',
-            'description' => 'A basic wooden church.',
-            'zone_id' => Zone::create([
-                'name' => 'Chuch',
-                'description' => 'Generic, basic churches.',
-                'is_shop' => false,
-                'is_pub' => false,
-                'is_house' => false,
-                'is_bed' => false,
-                'is_accessible' => true,
-                'is_locked' => false,
-                'is_pilferable' => false,
-            ])->id,
-        ]);
-
-        $shop = Building::create([
-            'name' => 'Shop',
-            'description' => 'A generic, basic shop.',
-            'zone_id' => Zone::create([
+                'description' => 'An average sized farmhouse.',
+                'zone_id' => Zone::create([
+                    'name' => 'Farmhouse',
+                    'description' => 'Generic farmhouses.',
+                    'is_shop' => false,
+                    'is_pub' => false,
+                    'is_house' => false,
+                    'is_bed' => false,
+                    'is_accessible' => true,
+                    'is_locked' => false,
+                    'is_pilferable' => false,
+                ])->id,
+            ]),
+            $church = Building::create([
+                'name' => 'Church',
+                'description' => 'A basic wooden church.',
+                'zone_id' => Zone::create([
+                    'name' => 'Church',
+                    'description' => 'Generic, basic churches.',
+                    'is_shop' => false,
+                    'is_pub' => false,
+                    'is_house' => false,
+                    'is_bed' => false,
+                    'is_accessible' => true,
+                    'is_locked' => false,
+                    'is_pilferable' => false,
+                ])->id,
+            ]),
+            $bar = Building::create([
+                'name' => 'Bar',
+                'description' => 'A bar that looks like it has been around a while.',
+                'zone_id' => Zone::create([
+                    'name' => 'Bar',
+                    'description' => 'Places to acquire a drink.',
+                    'is_shop' => false,
+                    'is_pub' => true,
+                    'is_house' => false,
+                    'is_bed' => false,
+                    'is_accessible' => true,
+                    'is_locked' => false,
+                    'is_pilferable' => true,
+                ])->id,
+            ]),
+            $shop = Building::create([
                 'name' => 'Shop',
-                'description' => 'Generic, basic shops.',
-                'is_shop' => true,
-                'is_pub' => false,
-                'is_house' => false,
-                'is_bed' => false,
-                'is_accessible' => true,
-                'is_locked' => false,
-                'is_pilferable' => false,
-            ])->id,
-        ]);
+                'description' => 'A generic, basic shop.',
+                'zone_id' => Zone::create([
+                    'name' => 'Shop',
+                    'description' => 'Generic, basic shops.',
+                    'is_shop' => true,
+                    'is_pub' => false,
+                    'is_house' => false,
+                    'is_bed' => false,
+                    'is_accessible' => true,
+                    'is_locked' => false,
+                    'is_pilferable' => true,
+                ])->id,
+            ]),
+        ];
 
         $house_zone = Zone::create([
             'name' => 'House',
@@ -173,18 +187,20 @@ class NpcSeeder extends Seeder
             ]),
         ];
 
+        $farmer = Occupation::create([
+            'name' => 'Farmer',
+            'description' => 'Works the farm.',
+        ]);
         $farmhouse->npcs()->create([
             'name' => 'Gibb Wyon',
             'description' => 'An experienced farmer, born and raised. His clothing looks worn.',
-            'occupation_id' => Occupation::create([
-                'name' => 'Farmer',
-                'description' => 'Works the farm.',
-            ])->id,
+            'occupation_id' => $farmer->id,
         ]);
 
-        foreach ($npcs as $npc) {
-            $tile1->npcs()->attach($npc);
-        };
+        // foreach ($npcs as $npc) {
+        //     $tile1->npcs()->attach($npc);
+        // };
+
         Occupation::create([
             'name' => 'Clerk',
             'description' => 'Works the cash register.',
@@ -202,5 +218,24 @@ class NpcSeeder extends Seeder
                 'description' => 'Lives and works in the church. Rarely seen without their hat on.',
             ])->id,
         ]);
+
+        $shop->npcs()->create([
+            'name' => 'Lilith',
+            'description' => 'A shopkeeper.',
+            'occupation_id' => Occupation::create([
+                'name' => 'Shopkeeper',
+                'description' => 'Sells you goods.',
+            ])->id,
+        ]);
+
+        $farmhouse->occupations()->attach($farmer);
+        $church->occupations()->attach($npcs[1]); // priest
+        $bar->occupations()->attach($npcs[5]); // bartender
+        $bar->occupations()->attach($npcs[6]); // barmaid
+        $shop->occupations()->attach($npcs[0]); // chef
+        $shop->occupations()->attach($npcs[3]); // guard
+
+        $tile1->npcs()->attach($npcs[4]); // bard
+        $tile1->npcs()->attach($npcs[2]); // guide
     }
 }

@@ -4,8 +4,8 @@ namespace App\Map;
 
 use App\Map\Move;
 use App\Models\Edge;
-use App\Models\Tile;
 use App\Models\Terrain;
+use App\Models\Tile;
 
 class Generate
 {
@@ -292,7 +292,7 @@ class Generate
                 $is_road = $adjacent_edge->pivot->is_road;
             } else {
                 $edge = Edge::where('name', '!=', 'Water')->get()->random();
-                $is_road = random_int(0, 100) <= 45;
+                $is_road = random_int(0, 100) <= 45; // 45% chance of being a road - this is the magic number
             }
 
             $edge->terrain_id = $tile->terrain_id;

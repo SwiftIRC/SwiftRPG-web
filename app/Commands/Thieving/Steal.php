@@ -10,7 +10,26 @@ class Steal extends Command
 {
     protected $quantity = 10;
 
-    public function execute(mixed $input = []): \Illuminate\Http\JsonResponse
+    public function execute(object $input): \Illuminate\Http\JsonResponse
+    {
+        $user = $input->user()->first();
+
+        $increment = $this->quantity;
+
+        $user->thieving += $increment;
+        $user->addGold($increment);
+        $user->save();
+
+        return response()->json([
+            'skill' => 'thieving',
+            'method' => 'steal',
+            'experience' => $user->thieving,
+            'reward' => $this->generateReward($user->gold),
+            'execute' => true,
+        ]);
+    }
+
+    public function log(array $input = []): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         $building = $user->building();
