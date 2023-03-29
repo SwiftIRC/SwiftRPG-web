@@ -3,10 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Edge;
-use App\Models\Tile;
 use App\Models\Terrain;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class EdgeSeeder extends Seeder
 {

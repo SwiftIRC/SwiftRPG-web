@@ -152,7 +152,12 @@ class Move
 
             $available_occupations = [];
             foreach ($buildings as $building) {
-                $occupations = $building->occupations()->get();
+                $zones = $building->zones;
+                if ($building->is_null()) {
+                    continue;
+                }
+                $zone = $zones->first();
+                $occupations = $zone->occupations()->get();
                 if (count($occupations) > 0) {
                     $npc = Npc::where('occupation_id', $occupations->random()->id)->get()->random();
                     array_push($available_occupations, $npc->occupation_id);

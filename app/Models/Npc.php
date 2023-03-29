@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Occupation;
 use App\Models\Tile;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +20,7 @@ class Npc extends Model
 
     public function tile()
     {
-        return $this->belongsTo(Tile::class)->withTimestamps();
+        return $this->belongsTo(Tile::class);
     }
 
     public function buildings()
@@ -29,6 +30,6 @@ class Npc extends Model
 
     public function occupation()
     {
-        return $this->belongsTo(Occupation::class)->withTimestamps();
+        return $this->belongsTo(Occupation::class);
     }
 }

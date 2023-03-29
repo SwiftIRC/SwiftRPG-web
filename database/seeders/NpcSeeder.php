@@ -20,66 +20,74 @@ class NpcSeeder extends Seeder
     {
         $tile1 = Tile::where('psuedo_id', '0,0')->first();
 
+        $church_zone = Zone::create([
+            'name' => 'Church',
+            'description' => 'Generic, basic churches.',
+            'is_shop' => false,
+            'is_pub' => false,
+            'is_house' => false,
+            'is_bed' => false,
+            'is_accessible' => true,
+            'is_locked' => false,
+            'is_pilferable' => false,
+        ]);
+
+        $bar_zone = Zone::create([
+            'name' => 'Bar',
+            'description' => 'Places to acquire a drink.',
+            'is_shop' => false,
+            'is_pub' => true,
+            'is_house' => false,
+            'is_bed' => false,
+            'is_accessible' => true,
+            'is_locked' => false,
+            'is_pilferable' => true,
+        ]);
+
+        $shop_zone = Zone::create([
+            'name' => 'Shop',
+            'description' => 'Generic, basic shops.',
+            'is_shop' => true,
+            'is_pub' => false,
+            'is_house' => false,
+            'is_bed' => false,
+            'is_accessible' => true,
+            'is_locked' => false,
+            'is_pilferable' => true,
+        ]);
+
+        $farmhouse_zone = Zone::create([
+            'name' => 'Farmland',
+            'description' => 'Potentially a lot of farming related shops .',
+            'is_shop' => true,
+            'is_pub' => false,
+            'is_house' => false,
+            'is_bed' => false,
+            'is_accessible' => true,
+            'is_locked' => false,
+            'is_pilferable' => false,
+        ]);
+
         $buildings = [
             $farmhouse = Building::create([
                 'name' => 'Farmhouse',
                 'description' => 'An average sized farmhouse.',
-                'zone_id' => $farmhouse_zone = Zone::create([
-                    'name' => 'Farmhouse',
-                    'description' => 'Generic farmhouses.',
-                    'is_shop' => false,
-                    'is_pub' => false,
-                    'is_house' => false,
-                    'is_bed' => false,
-                    'is_accessible' => true,
-                    'is_locked' => false,
-                    'is_pilferable' => false,
-                ])->id,
+                'zone_id' => $farmhouse_zone->id,
             ]),
             $church = Building::create([
                 'name' => 'Church',
                 'description' => 'A basic wooden church.',
-                'zone_id' => Zone::create([
-                    'name' => 'Church',
-                    'description' => 'Generic, basic churches.',
-                    'is_shop' => false,
-                    'is_pub' => false,
-                    'is_house' => false,
-                    'is_bed' => false,
-                    'is_accessible' => true,
-                    'is_locked' => false,
-                    'is_pilferable' => false,
-                ])->id,
+                'zone_id' => $church_zone->id,
             ]),
             $bar = Building::create([
                 'name' => 'Bar',
                 'description' => 'A bar that looks like it has been around a while.',
-                'zone_id' => Zone::create([
-                    'name' => 'Bar',
-                    'description' => 'Places to acquire a drink.',
-                    'is_shop' => false,
-                    'is_pub' => true,
-                    'is_house' => false,
-                    'is_bed' => false,
-                    'is_accessible' => true,
-                    'is_locked' => false,
-                    'is_pilferable' => true,
-                ])->id,
+                'zone_id' => $bar_zone->id,
             ]),
             $shop = Building::create([
                 'name' => 'Shop',
                 'description' => 'A generic, basic shop.',
-                'zone_id' => Zone::create([
-                    'name' => 'Shop',
-                    'description' => 'Generic, basic shops.',
-                    'is_shop' => true,
-                    'is_pub' => false,
-                    'is_house' => false,
-                    'is_bed' => false,
-                    'is_accessible' => true,
-                    'is_locked' => false,
-                    'is_pilferable' => true,
-                ])->id,
+                'zone_id' => $shop_zone->id,
             ]),
         ];
 
@@ -95,7 +103,7 @@ class NpcSeeder extends Seeder
             'is_pilferable' => false,
         ]);
 
-        $humble_hut_zone = Zone::create([
+        $living_quarters_zone = Zone::create([
             'name' => 'Humble Hut',
             'description' => 'A small, humble hut made of wood.',
             'is_shop' => false,
@@ -107,9 +115,9 @@ class NpcSeeder extends Seeder
             'is_pilferable' => false,
         ]);
 
-        $house_zone = Zone::create([
-            'name' => 'House',
-            'description' => 'Generic, basic houses. Resting is available here.',
+        $living_quarters_zone = Zone::create([
+            'name' => 'Residential',
+            'description' => 'Living quarters. Resting should be available here.',
             'is_shop' => false,
             'is_pub' => false,
             'is_house' => true,
@@ -122,17 +130,17 @@ class NpcSeeder extends Seeder
         $house = Building::create([
             'name' => 'House',
             'description' => 'A standard wooden house.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $rundown_house = Building::create([
             'name' => 'Abandoned House',
             'description' => 'A rundown wooden house.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $empty_house = Building::create([
             'name' => 'Empty House',
             'description' => 'The bed appears to have been made recently.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $tile1->buildings()->attach($farmhouse);
@@ -145,49 +153,49 @@ class NpcSeeder extends Seeder
         $large_house = Building::create([
             'name' => 'Large House',
             'description' => 'A spacious house with multiple rooms.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $small_house = Building::create([
             'name' => 'Small House',
             'description' => 'A tiny one-room house.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $cozy_cottage = Building::create([
             'name' => 'Cozy Cottage',
             'description' => 'A small but cozy cottage with a fireplace.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $seaside_cabin = Building::create([
             'name' => 'Seaside Cabin',
             'description' => 'A cabin by the sea, with a view of the water.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $rustic_cabin = Building::create([
             'name' => 'Rustic Cabin',
             'description' => 'A cabin in the woods, with a rustic feel.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $old_mansion = Building::create([
             'name' => 'Old Mansion',
             'description' => 'A large, old mansion with creaky floors and hidden passageways.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $modern_apartment = Building::create([
             'name' => 'Modern Apartment',
             'description' => 'A sleek and modern apartment with all the latest amenities.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $artistic_loft = Building::create([
             'name' => 'Artistic Loft',
             'description' => 'A loft apartment filled with art and creative touches.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $medieval_tower = Building::create([
@@ -199,118 +207,118 @@ class NpcSeeder extends Seeder
         $humble_hut = Building::create([
             'name' => 'Humble Hut',
             'description' => 'A simple hut made of mud and thatch.',
-            'zone_id' => $humble_hut_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $small_cabin = Building::create([
             'name' => 'Small Cabin',
             'description' => 'A tiny cabin made of logs.',
-            'zone_id' => $humble_hut_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $cozy_cottage = Building::create([
             'name' => 'Cozy Cottage',
             'description' => 'A warm and inviting cottage with a thatched roof.',
-            'zone_id' => $humble_hut_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $quaint_house = Building::create([
             'name' => 'Quaint House',
             'description' => 'A small, charming house with a white picket fence.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $spacious_house = Building::create([
             'name' => 'Spacious House',
             'description' => 'A large and airy house with plenty of windows.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $rustic_cabin = Building::create([
             'name' => 'Rustic Cabin',
             'description' => 'A cozy log cabin with a fireplace.',
-            'zone_id' => $humble_hut_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $sturdy_house = Building::create([
             'name' => 'Sturdy House',
             'description' => 'A sturdy stone house with a thatched roof.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $grand_mansion = Building::create([
             'name' => 'Grand Mansion',
             'description' => 'An opulent mansion with a sprawling lawn.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $modest_home = Building::create([
             'name' => 'Modest Home',
             'description' => 'A simple home with a welcoming atmosphere.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $tall_apartment = Building::create([
             'name' => 'Tall Apartment',
             'description' => 'A tall building with multiple levels of apartments.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $coastal_cottage = Building::create([
             'name' => 'Coastal Cottage',
             'description' => 'A cozy cottage on the beach with a view of the ocean.',
-            'zone_id' => $humble_hut_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $stone_house = Building::create([
             'name' => 'Stone House',
             'description' => 'A sturdy house made of stone.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $thatched_cottage = Building::create([
             'name' => 'Thatched Cottage',
             'description' => 'A quaint cottage with a thatched roof.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $cozy_cabin = Building::create([
             'name' => 'Cozy Cabin',
             'description' => 'A small, cozy cabin nestled in the woods.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $tudor_house = Building::create([
             'name' => 'Tudor House',
             'description' => 'An elegant Tudor-style house with exposed timber framing.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $brick_townhouse = Building::create([
             'name' => 'Brick Townhouse',
             'description' => 'A row of connected brick townhouses.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $rustic_farmhouse = Building::create([
             'name' => 'Rustic Farmhouse',
             'description' => 'A large farmhouse with a rustic charm.',
-            'zone_id' => $farmhouse_zone,
+            'zone_id' => $farmhouse_zone->id,
         ]);
         $modern_house = Building::create([
             'name' => 'Modern House',
             'description' => 'A contemporary house with sleek design elements.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $small_hovel = Building::create([
             'name' => 'Small Hovel',
             'description' => 'A cramped, humble dwelling.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $halfling_burrow = Building::create([
             'name' => 'Halfling Burrow',
             'description' => 'A cozy underground burrow, perfect for a halfling family.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
         $mage_tower = Building::create([
             'name' => 'Mage Tower',
             'description' => 'A tall, slender tower filled with magical artifacts and a living space.',
-            'zone_id' => $house_zone->id,
+            'zone_id' => $living_quarters_zone->id,
         ]);
 
         $zones = [
@@ -516,7 +524,7 @@ class NpcSeeder extends Seeder
             Building::create([
                 'name' => 'The Farmstead',
                 'description' => 'A sprawling complex of fields and barns.',
-                'zone_id' => $farmhouse_zone,
+                'zone_id' => $farmhouse_zone->id,
             ]),
             Building::create([
                 'name' => 'The Enchanter\'s Emporium',
@@ -605,62 +613,76 @@ class NpcSeeder extends Seeder
             ]),
         ];
 
+        $chef_occupation = Occupation::create([
+            'name' => 'Chef',
+            'description' => 'A talented cook by nature.',
+        ]);
+
+        $priest_occupation = Occupation::create([
+            'name' => 'Priest',
+            'description' => 'Lives and works in the church.',
+        ]);
+
+        $guide_occupation = Occupation::create([
+            'name' => 'Guide',
+            'description' => 'Offers guidance.',
+        ]);
+
+        $guard_occupation = Occupation::create([
+            'name' => 'Guard',
+            'description' => 'A pay-to-play mercenary.',
+        ]);
+
+        $bard_occupation = Occupation::create([
+            'name' => 'Bard',
+            'description' => 'Sing me a song, you\'re the music man.',
+        ]);
+
+        $bartender_occupation = Occupation::create([
+            'name' => 'Bartender',
+            'description' => 'Serves you food and beverages, and maybe has heard a thing or two.',
+        ]);
+
+        $barmaid_occupation = Occupation::create([
+            'name' => 'Barmaid',
+            'description' => 'Serves you food and beverages, and maybe has heard a thing or two.',
+        ]);
+
         $npcs = [
             Npc::create([
                 'name' => 'Chef Isaac',
                 'description' => 'A highly skilled chef. He is a bit of a stickler for the quality of his food. Prefers to cook pork.',
-                'occupation_id' => Occupation::create([
-                    'name' => 'Chef',
-                    'description' => 'A talented cook by nature.',
-                ])->id,
+                'occupation_id' => $chef_occupation->id,
             ]),
             Npc::create([
                 'name' => 'Priest Peter',
                 'description' => 'A priest of the church. He speaks in foreign tongues and wears a pendant with what looks like a squid.',
-                'occupation_id' => Occupation::create([
-                    'name' => 'Priest',
-                    'description' => 'Lives and works in the church.',
-                ])->id,
+                'occupation_id' => $priest_occupation->id,
             ]),
             Npc::create([
                 'name' => 'Asselin Alderman',
                 'description' => 'A very friendly person. He is holding a heavy book and seems to know what he is talking about.',
-                'occupation_id' => Occupation::create([
-                    'name' => 'Guide',
-                    'description' => 'Offers guidance.',
-                ])->id,
+                'occupation_id' => $guide_occupation->id,
             ]),
             Npc::create([
                 'name' => 'Vicar Bertaut',
                 'description' => 'A scar under his eye, and a beard that is a bit too long. The quality of his armor is lacking but he sports expensive jewelry.',
-                'occupation_id' => Occupation::create([
-                    'name' => 'Guard',
-                    'description' => 'A pay-to-play mercenary.',
-                ])->id,
+                'occupation_id' => $guard_occupation->id,
             ]),
             Npc::create([
                 'name' => 'Edrick Fryee',
                 'description' => 'Wearing an unfamiliar animal skin, he plays a beautiful and unique string instrument of his own creation.',
-                'occupation_id' => Occupation::create([
-                    'name' => 'Bard',
-                    'description' => 'Sing me a song, you\'re the music man.',
-                ])->id,
+                'occupation_id' => $bard_occupation->id,
             ]),
             Npc::create([
                 'name' => 'Thistle Tatume',
                 'description' => 'Mystical eyes look back at you, inviting you for a drink.',
-                'occupation_id' => Occupation::create([
-                    'name' => 'Bartender',
-                    'description' => 'Serves you food and beverages, and maybe has heard a thing or two.',
-                ])->id,
+                'occupation_id' => $bartender_occupation->id,
             ]),
             Npc::create([
                 'name' => 'Sylvia Wescotte',
                 'description' => 'A beautiful girl that appears to be poverty-stricken. She works hard and shares little information.',
-                'occupation_id' => Occupation::create([
-                    'name' => 'Barmaid',
-                    'description' => 'Serves you food and beverages, and maybe has heard a thing or two.',
-                ])->id,
+                'occupation_id' => $barmaid_occupation->id,
             ]),
         ];
 
@@ -672,15 +694,6 @@ class NpcSeeder extends Seeder
             'name' => 'Gibb Wyon',
             'description' => 'An experienced farmer, born and raised. His clothing looks worn.',
             'occupation_id' => $farmer->id,
-        ]);
-
-        Occupation::create([
-            'name' => 'Clerk',
-            'description' => 'Works the cash register.',
-        ]);
-        Occupation::create([
-            'name' => 'Cook',
-            'description' => 'Cooks the food.',
         ]);
 
         $occupations = [
@@ -716,47 +729,47 @@ class NpcSeeder extends Seeder
                 'name' => 'Sommelier',
                 'description' => 'A skilled wine expert who recommends and serves wine to customers.',
             ]),
+            Occupation::create([
+                'name' => 'Baker',
+                'description' => 'Skilled in the art of making bread and pastries.',
+            ]),
+            Occupation::create([
+                'name' => 'Butcher',
+                'description' => 'A skilled meat cutter who knows how to break down carcasses and prepare meat for sale.',
+            ]),
+            Occupation::create([
+                'name' => 'Brewer',
+                'description' => 'An expert in creating beer, ale, and other fermented beverages.',
+            ]),
+            Occupation::create([
+                'name' => 'Cheesemaker',
+                'description' => 'A skilled artisan who can turn milk into a variety of delicious cheeses.',
+            ]),
+            Occupation::create([
+                'name' => 'Coffee Roaster',
+                'description' => 'An expert in roasting and brewing coffee to perfection.',
+            ]),
+            Occupation::create([
+                'name' => 'Fishmonger',
+                'description' => 'A seller of fish and other seafood, with expertise in filleting and preparation.',
+            ]),
+            Occupation::create([
+                'name' => 'Pastry Chef',
+                'description' => 'An expert in creating desserts and other sweet treats.',
+            ]),
+            Occupation::create([
+                'name' => 'Sommelier',
+                'description' => 'A wine expert who can recommend the perfect vintage to accompany any meal.',
+            ]),
+            Occupation::create([
+                'name' => 'Clerk',
+                'description' => 'Works the cash register.',
+            ]),
+            Occupation::create([
+                'name' => 'Cook',
+                'description' => 'Cooks the food.',
+            ]),
         ];
-
-        Occupation::create([
-            'name' => 'Baker',
-            'description' => 'Skilled in the art of making bread and pastries.',
-        ]);
-
-        Occupation::create([
-            'name' => 'Butcher',
-            'description' => 'A skilled meat cutter who knows how to break down carcasses and prepare meat for sale.',
-        ]);
-
-        Occupation::create([
-            'name' => 'Brewer',
-            'description' => 'An expert in creating beer, ale, and other fermented beverages.',
-        ]);
-
-        Occupation::create([
-            'name' => 'Cheesemaker',
-            'description' => 'A skilled artisan who can turn milk into a variety of delicious cheeses.',
-        ]);
-
-        Occupation::create([
-            'name' => 'Coffee Roaster',
-            'description' => 'An expert in roasting and brewing coffee to perfection.',
-        ]);
-
-        Occupation::create([
-            'name' => 'Fishmonger',
-            'description' => 'A seller of fish and other seafood, with expertise in filleting and preparation.',
-        ]);
-
-        Occupation::create([
-            'name' => 'Pastry Chef',
-            'description' => 'An expert in creating desserts and other sweet treats.',
-        ]);
-
-        Occupation::create([
-            'name' => 'Sommelier',
-            'description' => 'A wine expert who can recommend the perfect vintage to accompany any meal.',
-        ]);
 
         $church->npcs()->create([
             'name' => 'Kimberley Haytere',
@@ -776,13 +789,37 @@ class NpcSeeder extends Seeder
             ])->id,
         ]);
 
-        $farmhouse->occupations()->attach($farmer);
+        $church_zone->occupations()->attach($npcs[1]->occupation()->first()); // priest
+        $bar_zone->occupations()->attach($npcs[5]->occupation()->first()); // bartender
+        $bar_zone->occupations()->attach($npcs[6]->occupation()->first()); // barmaid
+        $shop_zone->occupations()->attach($npcs[0]->occupation()->first()); // chef
+        $shop_zone->occupations()->attach($npcs[3]->occupation()->first()); // guard
+
+        $farmhouse_zone->occupations()->attach($farmer);
+        $farmhouse_zone->occupations()->attach($occupations[0]); // baker
+        $farmhouse_zone->occupations()->attach($occupations[1]); // butcher
+        $farmhouse_zone->occupations()->attach($occupations[2]); // cheesemaker
+        $farmhouse_zone->occupations()->attach($occupations[3]); // fishmonger
+        $farmhouse_zone->occupations()->attach($occupations[4]); // gardener
+        $farmhouse_zone->occupations()->attach($occupations[5]); // herbalist
+        $farmhouse_zone->occupations()->attach($occupations[11]); // cheesemaker
+        $farmhouse_zone->occupations()->attach($occupations[13]); // fishmonger
+
+        $bar_zone->occupations()->attach($occupations[6]); // pastry chef
+        $bar_zone->occupations()->attach($occupations[7]); // sommelier
+        $bar_zone->occupations()->attach($occupations[8]); // clerk
+
+        $shop_zone->occupations()->attach($occupations[3]); // fishmonger
+        $shop_zone->occupations()->attach($occupations[2]); // cheesemaker
+        $shop_zone->occupations()->attach($occupations[9]); // cook
+        $shop_zone->occupations()->attach($occupations[10]); // brewer
+        $shop_zone->occupations()->attach($occupations[11]); // cheesemaker
+        $shop_zone->occupations()->attach($occupations[12]); // coffee roaster
+        $shop_zone->occupations()->attach($occupations[13]); // fishmonger
+        $shop_zone->occupations()->attach($occupations[14]); // pastry chef
+        $shop_zone->occupations()->attach($occupations[15]); // sommelier
+
         $farmhouse->npcs()->attach($farmer);
-        $church->occupations()->attach($npcs[1]); // priest
-        $bar->occupations()->attach($npcs[5]); // bartender
-        $bar->occupations()->attach($npcs[6]); // barmaid
-        $shop->occupations()->attach($npcs[0]); // chef
-        $shop->occupations()->attach($npcs[3]); // guard
 
         $tile1->npcs()->attach($npcs[4]); // bard
         $tile1->npcs()->attach($npcs[2]); // guide

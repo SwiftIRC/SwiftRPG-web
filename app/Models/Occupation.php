@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Building;
 use App\Models\Npc;
+use App\Models\Zone;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,11 +20,11 @@ class Occupation extends Model
 
     public function npcs()
     {
-        return $this->hasOne(Npc::class);
+        return $this->hasOne(Npc::class)->withTimestamps();
     }
 
-    public function buildings()
+    public function zones()
     {
-        return $this->belongsToMany(Building::class)->withTimestamps();
+        return $this->belongsToMany(Zone::class)->withTimestamps();
     }
 }

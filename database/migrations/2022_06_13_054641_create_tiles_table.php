@@ -101,6 +101,19 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('occupation_zone', function (Blueprint $table) {
+            $table->id();
+
+            $table->bigInteger('zone_id')->unsigned();
+            $table->bigInteger('occupation_id')->unsigned();
+
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('zone_id')->references('id')->on('zones');
+            $table->foreign('occupation_id')->references('id')->on('occupations');
+        });
+
         Schema::create('building_occupation', function (Blueprint $table) {
             $table->id();
 
@@ -149,6 +162,18 @@ return new class extends Migration
 
             $table->foreign('tile_id')->references('id')->on('tiles');
             $table->foreign('npc_id')->references('id')->on('npcs');
+        });
+
+        Schema::create('item_npc', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger("npc_id")->unsigned();
+            $table->bigInteger("item_id")->unsigned();
+
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign("npc_id")->references("id")->on("npcs");
+            $table->foreign("item_id")->references("id")->on("items");
         });
 
         Schema::create('edges', function (Blueprint $table) {
@@ -203,10 +228,12 @@ return new class extends Migration
         });
         Schema::dropIfExists('edge_tile');
         Schema::dropIfExists('edges');
+        Schema::dropIfExists('item_npc');
         Schema::dropIfExists('npc_tile');
         Schema::dropIfExists('building_npc');
         Schema::dropIfExists('building_occupation');
         Schema::dropIfExists('npcs');
+        Schema::dropIfExists('occupation_zone');
         Schema::dropIfExists('occupations');
         Schema::dropIfExists('building_tile');
         Schema::dropIfExists('buildings');

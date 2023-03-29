@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Occupation;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -37,8 +36,4 @@ class Building extends Model
         return $this->belongsToMany(User::class)->withTimestamps();
     }
 
-    public function occupations()
-    {
-        return $this->belongsToMany(Occupation::class)->withTimestamps();
-    }
 }

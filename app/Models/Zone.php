@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Occupation;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,18 +15,15 @@ class Zone extends Model
     protected $fillable = [
         'name',
         'description',
-        'is_shop',
-        'is_pub',
-        'is_house',
-        'is_accessible',
-        'is_locked',
-        'is_bed',
-        'is_pilferable',
-        'last_pilfered',
     ];
 
     public function buildings()
     {
         return $this->hasOne(Building::class, 'id', 'building_id');
+    }
+
+    public function occupations()
+    {
+        return $this->belongsToMany(Occupation::class)->withTimestamps();
     }
 }
