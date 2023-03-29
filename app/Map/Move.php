@@ -162,6 +162,10 @@ class Move
                 }
             }
 
+            for (; $num_npcs > 0; $num_npcs--) {
+                $npc = Npc::all()->random();
+            }
+
             // for ($i = 0; $i < $num_npcs; $i++) {
             //     $chance_for_building = rand(0, 100);
             //     $npc = Npc::generate()->first();
