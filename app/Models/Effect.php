@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 
 class Effect extends Model
 {
@@ -33,5 +33,10 @@ class Effect extends Model
     public function items()
     {
         return $this->hasMany(Item::class);
+    }
+
+    public function effectproperties()
+    {
+        return $this->belongsToMany(Effectproperty::class)->withTimestamps();
     }
 }

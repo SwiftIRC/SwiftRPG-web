@@ -153,7 +153,7 @@ class Move
             $available_occupations = [];
             foreach ($buildings as $building) {
                 $zones = $building->zones;
-                if ($building->is_null()) {
+                if (isNull($zones)) {
                     continue;
                 }
                 $zone = $zones->first();
