@@ -112,38 +112,16 @@ class NpcSeeder extends Seeder
         $medieval_tower_zone = Zone::create([
             'name' => 'Medieval Tower',
             'description' => 'A tall, ancient tower made of stone.',
-            'is_shop' => false,
-            'is_pub' => false,
-            'is_house' => false,
-            'is_bed' => false,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => false,
         ]);
-
-        $living_quarters_zone = Zone::create([
-            'name' => 'Humble Hut',
-            'description' => 'A small, humble hut made of wood.',
-            'is_shop' => false,
-            'is_pub' => false,
-            'is_house' => true,
-            'is_bed' => true,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => false,
-        ]);
+        $medieval_tower_zone->zoneproperties()->attach($is_accessible);
 
         $living_quarters_zone = Zone::create([
             'name' => 'Residential',
             'description' => 'Living quarters. Resting should be available here.',
-            'is_shop' => false,
-            'is_pub' => false,
-            'is_house' => true,
-            'is_bed' => true,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => false,
         ]);
+        $living_quarters_zone->zoneproperties()->attach($is_house);
+        $living_quarters_zone->zoneproperties()->attach($is_bed);
+        $living_quarters_zone->zoneproperties()->attach($is_accessible);
 
         $house = Building::create([
             'name' => 'House',
@@ -343,155 +321,98 @@ class NpcSeeder extends Seeder
             $industrial_zone = Zone::create([
                 'name' => 'Industrial Zone',
                 'description' => 'For factories, warehouses, and other industrial buildings.',
-                'is_shop' => false,
-                'is_pub' => false,
-                'is_house' => false,
-                'is_bed' => false,
-                'is_accessible' => true,
-                'is_locked' => false,
-                'is_pilferable' => false,
             ]),
             $residential_zone = Zone::create([
                 'name' => 'Residential Zone',
                 'description' => 'For houses, apartments, and other types of residential buildings.',
-                'is_shop' => false,
-                'is_pub' => false,
-                'is_house' => true,
-                'is_bed' => true,
-                'is_accessible' => true,
-                'is_locked' => false,
-                'is_pilferable' => false,
             ]),
             $commercial_zone = Zone::create([
                 'name' => 'Commercial Zone',
                 'description' => 'For shops, malls, and other types of commercial buildings.',
-                'is_shop' => true,
-                'is_pub' => true,
-                'is_house' => false,
-                'is_bed' => false,
-                'is_accessible' => true,
-                'is_locked' => false,
-                'is_pilferable' => false,
             ]),
             $educational_zone = Zone::create([
                 'name' => 'Educational Zone',
                 'description' => 'For schools, universities, and other educational buildings.',
-                'is_shop' => false,
-                'is_pub' => false,
-                'is_house' => false,
-                'is_bed' => false,
-                'is_accessible' => true,
-                'is_locked' => false,
-                'is_pilferable' => false,
             ]),
             $medical_zone = Zone::create([
                 'name' => 'Medical Zone',
                 'description' => 'For hospitals, clinics, and other medical buildings.',
-                'is_shop' => false,
-                'is_pub' => false,
-                'is_house' => false,
-                'is_bed' => true,
-                'is_accessible' => true,
-                'is_locked' => false,
-                'is_pilferable' => false,
             ]),
         ];
+        $industrial_zone->zoneproperties()->attach($is_accessible);
+
+        $residential_zone->zoneproperties()->attach($is_house);
+        $residential_zone->zoneproperties()->attach($is_accessible);
+        $residential_zone->zoneproperties()->attach($is_bed);
+
+        $commercial_zone->zoneproperties()->attach($is_shop);
+        $commercial_zone->zoneproperties()->attach($is_pub);
+        $commercial_zone->zoneproperties()->attach($is_accessible);
+
+        $educational_zone->zoneproperties()->attach($is_accessible);
+
+        $medical_zone->zoneproperties()->attach($is_accessible);
+        $medical_zone->zoneproperties()->attach($is_bed);
 
         $inn_zone = Zone::create([
             'name' => 'Inn',
             'description' => 'A place for travelers to rest, eat, and drink.',
-            'is_shop' => false,
-            'is_pub' => true,
-            'is_house' => false,
-            'is_bed' => true,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => false,
         ]);
+        $inn_zone->zoneproperties()->attach($is_bed);
+        $inn_zone->zoneproperties()->attach($is_accessible);
+        $inn_zone->zoneproperties()->attach($is_pub);
 
         $tavern_zone = Zone::create([
             'name' => 'Tavern',
             'description' => 'A place for drinking, eating, and socializing.',
-            'is_shop' => false,
-            'is_pub' => true,
-            'is_house' => false,
-            'is_bed' => false,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => false,
         ]);
+        $tavern_zone->zoneproperties()->attach($is_accessible);
+        $tavern_zone->zoneproperties()->attach($is_pub);
 
         $forge_zone = Zone::create([
             'name' => 'Forge',
             'description' => 'A place for metalworking and crafting weapons and armor.',
-            'is_shop' => true,
-            'is_pub' => false,
-            'is_house' => false,
-            'is_bed' => false,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => false,
         ]);
+        $forge_zone->zoneproperties()->attach($is_shop);
+        $forge_zone->zoneproperties()->attach($is_accessible);
 
         $laboratory_zone = Zone::create([
             'name' => 'Laboratory',
             'description' => 'A place for conducting experiments and researching new inventions.',
-            'is_shop' => true,
-            'is_pub' => false,
-            'is_house' => false,
-            'is_bed' => false,
-            'is_accessible' => true,
-            'is_locked' => true,
-            'is_pilferable' => false,
         ]);
+        $laboratory_zone->zoneproperties()->attach($is_shop);
+        $laboratory_zone->zoneproperties()->attach($is_accessible);
+        $laboratory_zone->zoneproperties()->attach($is_locked);
 
         $guild_zone = Zone::create([
             'name' => 'Guild',
             'description' => 'A place for joining forces with other adventurers and completing quests together.',
-            'is_shop' => false,
-            'is_pub' => false,
-            'is_house' => false,
-            'is_bed' => false,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => false,
         ]);
+        $guild_zone->zoneproperties()->attach($is_accessible);
 
         $hideout_zone = Zone::create([
             'name' => 'Hideout',
             'description' => 'A secret place for outlaws and criminals to gather and plan their heists.',
-            'is_shop' => false,
-            'is_pub' => false,
-            'is_house' => true,
-            'is_bed' => false,
-            'is_accessible' => false,
-            'is_locked' => true,
-            'is_pilferable' => true,
         ]);
+        $hideout_zone->zoneproperties()->attach($is_locked);
 
         $tower_zone = Zone::create([
             'name' => 'Tower',
             'description' => 'A tall, imposing structure for conducting arcane research and practicing magic.',
-            'is_shop' => false,
-            'is_pub' => false,
-            'is_house' => false,
-            'is_bed' => true,
-            'is_accessible' => true,
-            'is_locked' => true,
-            'is_pilferable' => false,
         ]);
+        $tower_zone->zoneproperties()->attach($is_locked);
+        $tower_zone->zoneproperties()->attach($is_bed);
+        $tower_zone->zoneproperties()->attach($is_accessible);
 
         $lodge_zone = Zone::create([
             'name' => 'Lodge',
             'description' => 'A cozy retreat for hunters and outdoors enthusiasts, complete with rustic accommodations and hunting gear.',
-            'is_shop' => true,
-            'is_pub' => false,
-            'is_house' => true,
-            'is_bed' => true,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => true,
         ]);
+        $lodge_zone->zoneproperties()->attach($is_shop);
+        $lodge_zone->zoneproperties()->attach($is_house);
+        $lodge_zone->zoneproperties()->attach($is_bed);
+        $lodge_zone->zoneproperties()->attach($is_accessible);
+        $lodge_zone->zoneproperties()->attach($is_pilferable);
 
         $more_buildings = [
             Building::create([

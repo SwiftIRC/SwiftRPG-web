@@ -52,14 +52,7 @@ return new class extends Migration
             $table->string('name', 100)->unique();
             $table->string('description', 1000)->nullable();
 
-            $table->boolean('is_shop')->default(false);
-            $table->boolean('is_pub')->default(false);
-            $table->boolean('is_house')->default(false);
-            $table->boolean('is_accessible')->default(false);
-            $table->boolean('is_locked')->default(false);
-            $table->boolean('is_bed')->default(false);
-            $table->boolean('is_pilferable')->default(false);
-            $table->timestamp('last_pilfered')->nullable();
+            $table->timestamp('last_modified')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
