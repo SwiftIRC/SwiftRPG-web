@@ -3,10 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Edge;
-use App\Models\Tile;
 use App\Models\Terrain;
+use App\Models\Tile;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TileSeeder extends Seeder
 {

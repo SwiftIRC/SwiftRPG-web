@@ -1192,7 +1192,23 @@ class NameSeeder extends Seeder
             "Zephyr",
         ];
 
-        $dwarven_nbs = [];
+        $dwarven_nbs = [
+            "Kethril",
+            "Orin",
+            "Haela",
+            "Darvin",
+            "Zofia",
+            "Brynn",
+            "Kaelen",
+            "Valtor",
+            "Tyne",
+            "Nethril",
+            "Ashur",
+            "Torga",
+            "Thryn",
+            "Elsira",
+            "Jorrim",
+        ];
 
         $human_last = [
             "Albrecht",
@@ -1612,7 +1628,6 @@ class NameSeeder extends Seeder
             Name::create([
                 'name' => $name,
                 'species' => 'human',
-                'surname' => true,
             ]);
         }
 
@@ -1620,7 +1635,6 @@ class NameSeeder extends Seeder
             Name::create([
                 'name' => $name,
                 'species' => 'elf',
-                'surname' => true,
             ]);
         }
 
@@ -1628,7 +1642,6 @@ class NameSeeder extends Seeder
             Name::create([
                 'name' => $name,
                 'species' => 'dwarf',
-                'surname' => true,
             ]);
         }
     }

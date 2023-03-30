@@ -18,11 +18,9 @@ return new class extends Migration
             $table->timestamps();
 
             $table->string("name");
-            $table->boolean("surname")->default(false);
 
             $table->string("species");
             $table->string("gender")->nullable();
-
         });
     }
 

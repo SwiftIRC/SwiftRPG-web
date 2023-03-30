@@ -5,8 +5,10 @@ namespace App\Map;
 use App\Models\Building;
 use App\Models\MoveLog;
 use App\Models\Npc;
+use App\Models\Occupation;
 use App\Models\Tile;
 use App\Models\User;
+use Database\Factories\NpcFactory;
 use function PHPUnit\Framework\isNull;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -159,7 +161,9 @@ class Move
                 $zone = $zones->first();
                 $occupations = $zone->occupations()->get();
                 if (count($occupations) > 0) {
-                    $npc = Npc::where('occupation_id', $occupations->random()->id)->get()->random();
+                    $npc = NpcFactory::generate();
+                    $npc->available_occupations = $occupations->random()->id;
+                    $npc->save();
                     array_push($available_occupations, $npc->occupation_id);
                     $new_tile->npcs()->attach($npc); // Does this duplicate the NPC?
                     $building->npcs()->attach($npc);
@@ -168,7 +172,9 @@ class Move
             }
 
             for (; $num_npcs > 0; $num_npcs--) {
-                $npc = Npc::all()->random();
+                $npc = Npc::factory()->create();
+                $npc->occupation_id = Occupation::inRandomOrder()->first()->id;
+                $npc->save();
                 $new_tile->npcs()->attach($npc);
             }
 

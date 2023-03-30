@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Name;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,11 +15,19 @@ class NpcFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition($last_name = null)
     {
+        $genders = ["male", "female", "non-binary"];
+        $gender = $genders[array_rand($genders)];
+
+        $species_list = ["human", "dwarf", "elf"];
+        $species = $species_list[array_rand($species_list)];
+
+        $first = Name::inRandomOrder()->where(compact('species'))->where(compact('gender'))->first()->name;
+        $last = (!empty($last_name) ? $last_name : Name::inRandomOrder()->where(compact('species'))->where('gender', null)->first()->name);
+
         return [
-            'name' => $this->faker->firstName() . ' ' . $this->faker->lastName(),
-            'description' => $this->faker->sentence,
+            'name' => $first . ' ' . $last,
         ];
     }
 }

@@ -152,6 +152,8 @@ return new class extends Migration
 
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('occupation_id')->references('id')->on('occupations');
         });
 
         Schema::create('building_npc', function (Blueprint $table) {
