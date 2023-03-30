@@ -137,7 +137,7 @@ class Move
 
             // Add NPCs and buildings to the tile
             $num_building = rand(0, 5);
-            $num_npcs = rand(0, 2) * $num_building + rand(0, 3);
+            $num_npcs = rand(0, 2) * $num_building + rand(0, 6);
 
             Log::info('num_building: ' . $num_building);
             Log::info('num_npcs: ' . $num_npcs);
@@ -161,14 +161,15 @@ class Move
                 if (count($occupations) > 0) {
                     $npc = Npc::where('occupation_id', $occupations->random()->id)->get()->random();
                     array_push($available_occupations, $npc->occupation_id);
-                    $new_tile->npcs()->attach($npc->id); // Does this duplicate the NPC?
-                    $building->npcs()->attach($npc->id);
+                    $new_tile->npcs()->attach($npc); // Does this duplicate the NPC?
+                    $building->npcs()->attach($npc);
                     $num_npcs--;
                 }
             }
 
             for (; $num_npcs > 0; $num_npcs--) {
                 $npc = Npc::all()->random();
+                $new_tile->npcs()->attach($npc);
             }
 
             // for ($i = 0; $i < $num_npcs; $i++) {

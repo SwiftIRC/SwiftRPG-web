@@ -7,6 +7,7 @@ use App\Models\Npc;
 use App\Models\Occupation;
 use App\Models\Tile;
 use App\Models\Zone;
+use App\Models\Zoneproperty;
 use Illuminate\Database\Seeder;
 
 class NpcSeeder extends Seeder
@@ -20,53 +21,70 @@ class NpcSeeder extends Seeder
     {
         $tile1 = Tile::where('psuedo_id', '0,0')->first();
 
+        $is_shop = Zoneproperty::create([
+            'name' => 'is_shop',
+            'description' => 'Is this a shop? Can we buy things from it?',
+        ]);
+
+        $is_pub = Zoneproperty::create([
+            'name' => 'is_pub',
+            'description' => 'Is this a pub? Can we drink here?',
+        ]);
+
+        $is_house = Zoneproperty::create([
+            'name' => 'is_house',
+            'description' => 'Is this a house? Can we sleep here?',
+        ]);
+
+        $is_bed = Zoneproperty::create([
+            'name' => 'is_bed',
+            'description' => 'Is this a bed? Can we sleep here?',
+        ]);
+
+        $is_accessible = Zoneproperty::create([
+            'name' => 'is_accessible',
+            'description' => 'Is this accessible? Can we go here?',
+        ]);
+
+        $is_locked = Zoneproperty::create([
+            'name' => 'is_locked',
+            'description' => 'Is this locked? Can we go here?',
+        ]);
+
+        $is_pilferable = Zoneproperty::create([
+            'name' => 'is_pilferable',
+            'description' => 'Is this pilferable? Can we steal from it?',
+        ]);
+
         $church_zone = Zone::create([
             'name' => 'Church',
             'description' => 'Generic, basic churches.',
-            'is_shop' => false,
-            'is_pub' => false,
-            'is_house' => false,
-            'is_bed' => false,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => false,
         ]);
+        $church_zone->zoneproperties()->attach($is_accessible);
 
         $bar_zone = Zone::create([
             'name' => 'Bar',
             'description' => 'Places to acquire a drink.',
-            'is_shop' => false,
-            'is_pub' => true,
-            'is_house' => false,
-            'is_bed' => false,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => true,
         ]);
+        $bar_zone->zoneproperties()->attach($is_pub);
+        $bar_zone->zoneproperties()->attach($is_accessible);
+        $bar_zone->zoneproperties()->attach($is_pilferable);
 
         $shop_zone = Zone::create([
             'name' => 'Shop',
             'description' => 'Generic, basic shops.',
-            'is_shop' => true,
-            'is_pub' => false,
-            'is_house' => false,
-            'is_bed' => false,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => true,
         ]);
+        $shop_zone->zoneproperties()->attach($is_shop);
+        $shop_zone->zoneproperties()->attach($is_accessible);
+        $shop_zone->zoneproperties()->attach($is_pilferable);
 
         $farmhouse_zone = Zone::create([
             'name' => 'Farmland',
             'description' => 'Potentially a lot of farming related shops .',
-            'is_shop' => true,
-            'is_pub' => false,
-            'is_house' => false,
-            'is_bed' => false,
-            'is_accessible' => true,
-            'is_locked' => false,
-            'is_pilferable' => false,
         ]);
+        $farmhouse_zone->zoneproperties()->attach($is_shop);
+        $farmhouse_zone->zoneproperties()->attach($is_accessible);
+        $farmhouse_zone->zoneproperties()->attach($is_pilferable);
 
         $buildings = [
             $farmhouse = Building::create([

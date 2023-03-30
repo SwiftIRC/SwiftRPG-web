@@ -65,6 +65,29 @@ return new class extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('zoneproperties', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('name', 100);
+            $table->string('description', 1000);
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('zone_zoneproperty', function (Blueprint $table) {
+            $table->id();
+
+            $table->bigInteger('zone_id')->unsigned();
+            $table->bigInteger('zoneproperty_id')->unsigned();
+
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('zone_id')->references('id')->on('zones');
+            $table->foreign('zoneproperty_id')->references('id')->on('zoneproperties');
+        });
+
         Schema::create('buildings', function (Blueprint $table) {
             $table->id();
 
@@ -237,6 +260,8 @@ return new class extends Migration
         Schema::dropIfExists('occupations');
         Schema::dropIfExists('building_tile');
         Schema::dropIfExists('buildings');
+        Schema::dropIfExists('zone_zoneproperty');
+        Schema::dropIfExists('zoneproperties');
         Schema::dropIfExists('zones');
         Schema::dropIfExists('tiles');
         Schema::dropIfExists('terrains');
