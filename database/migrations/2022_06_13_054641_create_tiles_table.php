@@ -146,10 +146,25 @@ return new class extends Migration
         Schema::create('npcs', function (Blueprint $table) {
             $table->id();
 
-            $table->string('name', 100);
+            $table->string('first_name', 50);
+            $table->string('last_name', 50);
             $table->enum('species', ['human', 'dwarf', 'elf']);
             $table->enum('gender', ["male", "female", "non-binary"]);
             $table->bigInteger('occupation_id')->unsigned()->nullable();
+
+            $table->unsignedMediumInteger('thieving')->default(0);
+            $table->unsignedMediumInteger('fishing')->default(0);
+            $table->unsignedMediumInteger('mining')->default(0);
+            $table->unsignedMediumInteger('woodcutting')->default(0);
+            $table->unsignedMediumInteger('firemaking')->default(0);
+            $table->unsignedMediumInteger('cooking')->default(0);
+            $table->unsignedMediumInteger('smithing')->default(0);
+            $table->unsignedMediumInteger('fletching')->default(0);
+            $table->unsignedMediumInteger('crafting')->default(0);
+            $table->unsignedMediumInteger('herblore')->default(0);
+            $table->unsignedMediumInteger('agility')->default(0);
+            $table->unsignedMediumInteger('farming')->default(0);
+            $table->unsignedMediumInteger('hunter')->default(0);
 
             $table->timestamps();
             $table->softDeletes();

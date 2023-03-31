@@ -588,44 +588,51 @@ class NpcSeeder extends Seeder
         ]);
 
         $npcs = [
-            Npc::create([
-                'name' => 'Chef Isaac',
+            Npc::factory()->create([
+                'first_name' => 'Chef',
+                'last_name' => 'Isaac',
                 'occupation_id' => $chef_occupation->id,
                 'species' => 'human',
                 'gender' => 'male',
             ]),
-            Npc::create([
-                'name' => 'Priest Peter',
+            Npc::factory()->create([
+                'first_name' => 'Priest',
+                'last_name' => 'Peter',
                 'occupation_id' => $priest_occupation->id,
                 'species' => 'human',
                 'gender' => 'male',
             ]),
-            Npc::create([
-                'name' => 'Asselin Alderman',
+            Npc::factory()->create([
+                'first_name' => 'Asselin',
+                'last_name' => 'Alderman',
                 'occupation_id' => $guide_occupation->id,
                 'species' => 'human',
                 'gender' => 'male',
             ]),
-            Npc::create([
-                'name' => 'Vicar Bertaut',
+            Npc::factory()->create([
+                'first_name' => 'Vicar',
+                'last_name' => 'Bertaut',
                 'occupation_id' => $guard_occupation->id,
                 'species' => 'human',
                 'gender' => 'male',
             ]),
-            Npc::create([
-                'name' => 'Edrick Fryee',
+            Npc::factory()->create([
+                'first_name' => 'Edrick',
+                'last_name' => 'Fryee',
                 'occupation_id' => $bard_occupation->id,
                 'species' => 'human',
                 'gender' => 'male',
             ]),
-            Npc::create([
-                'name' => 'Thistle Tatume',
+            Npc::factory()->create([
+                'first_name' => 'Thistle',
+                'last_name' => 'Tatume',
                 'occupation_id' => $bartender_occupation->id,
                 'species' => 'elf',
                 'gender' => 'non-binary',
             ]),
-            Npc::create([
-                'name' => 'Sylvia Wescotte',
+            Npc::factory()->create([
+                'first_name' => 'Sylvia',
+                'last_name' => 'Wescotte',
                 'occupation_id' => $barmaid_occupation->id,
                 'species' => 'human',
                 'gender' => 'female',
@@ -636,12 +643,15 @@ class NpcSeeder extends Seeder
             'name' => 'Farmer',
             'description' => 'An experienced farmer, born and raised. His clothing looks worn. He is holding a pitchfork; how cliché.',
         ]);
-        $farmhouse->npcs()->create([
-            'name' => 'Gibb Wyon',
-            'occupation_id' => $farmer->id,
-            'species' => 'human',
-            'gender' => 'male',
-        ]);
+        $farmhouse->npcs()->attach(
+            Npc::factory()->create([
+                'first_name' => 'Gibb',
+                'last_name' => 'Wyon',
+                'occupation_id' => $farmer->id,
+                'species' => 'human',
+                'gender' => 'male',
+            ])
+        );
 
         $occupations = [
             Occupation::create([
@@ -718,25 +728,31 @@ class NpcSeeder extends Seeder
             ]),
         ];
 
-        $church->npcs()->create([
-            'name' => 'Kimberley Haytere',
-            'occupation_id' => Occupation::create([
-                'name' => 'Bishop',
-                'description' => 'Lives and works in the church. Rarely seen without their hat on.',
-            ])->id,
-            'species' => 'human',
-            'gender' => 'female',
-        ]);
+        $church->npcs()->attach(
+            Npc::factory()->create([
+                'first_name' => 'Kimberley',
+                'last_name' => 'Haytere',
+                'occupation_id' => Occupation::create([
+                    'name' => 'Bishop',
+                    'description' => 'Lives and works in the church. Rarely seen without their hat on.',
+                ])->id,
+                'species' => 'human',
+                'gender' => 'female',
+            ])
+        );
 
-        $shop->npcs()->create([
-            'name' => 'Lilith',
-            'occupation_id' => Occupation::create([
-                'name' => 'Shopkeeper',
-                'description' => 'Sells you goods and manages the shop.',
-            ])->id,
-            'species' => 'human',
-            'gender' => 'female',
-        ]);
+        $shop->npcs()->attach(
+            Npc::factory()->create([
+                'first_name' => 'Lilith',
+                'last_name' => 'Lambert',
+                'occupation_id' => Occupation::create([
+                    'name' => 'Shopkeeper',
+                    'description' => 'Sells you goods and manages the shop.',
+                ])->id,
+                'species' => 'human',
+                'gender' => 'female',
+            ])
+        );
 
         $church_zone->occupations()->attach($npcs[1]->occupation()->first()); // priest
         $bar_zone->occupations()->attach($npcs[5]->occupation()->first()); // bartender
