@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgilityController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FiremakingController;
 use App\Http\Controllers\ThievingController;
 use App\Http\Controllers\WoodcuttingController;
@@ -25,6 +26,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['app'])->name('auth.')->prefix('auth')->group(function () {
     Route::post('/', [AuthController::class, 'check']);
     Route::post('/register', [AuthController::class, 'register']);
+});
+
+Route::middleware(['app'])->name('client.')->prefix('client')->group(function () {
+    Route::post('/register', [ClientController::class, 'register']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
