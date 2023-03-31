@@ -147,7 +147,8 @@ return new class extends Migration
             $table->id();
 
             $table->string('name', 100);
-            $table->string('description', 1000)->nullable();
+            $table->enum('species', ['human', 'dwarf', 'elf']);
+            $table->enum('gender', ["male", "female", "non-binary"]);
             $table->bigInteger('occupation_id')->unsigned()->nullable();
 
             $table->timestamps();

@@ -554,85 +554,93 @@ class NpcSeeder extends Seeder
 
         $chef_occupation = Occupation::create([
             'name' => 'Chef',
-            'description' => 'A talented cook by nature.',
+            'description' => 'A highly skilled chef. He is a bit of a stickler for the quality of his food. Prefers to cook pork.',
         ]);
 
         $priest_occupation = Occupation::create([
             'name' => 'Priest',
-            'description' => 'Lives and works in the church.',
+            'description' => 'A priest of the church. He speaks in foreign tongues and wears a pendant with what looks like a squid.',
         ]);
 
         $guide_occupation = Occupation::create([
             'name' => 'Guide',
-            'description' => 'Offers guidance.',
+            'description' => 'A very friendly person. He is holding a heavy book and seems to know what he is talking about.',
         ]);
 
         $guard_occupation = Occupation::create([
             'name' => 'Guard',
-            'description' => 'A pay-to-play mercenary.',
+            'description' => 'A scar under his eye, and a beard that is a bit too long. The quality of his armor is lacking but he sports expensive jewelry.',
         ]);
 
         $bard_occupation = Occupation::create([
             'name' => 'Bard',
-            'description' => 'Sing me a song, you\'re the music man.',
+            'description' => 'Wearing an unfamiliar animal skin, he plays a beautiful and unique string instrument of his own creation.',
         ]);
 
         $bartender_occupation = Occupation::create([
             'name' => 'Bartender',
-            'description' => 'Serves you food and beverages, and maybe has heard a thing or two.',
+            'description' => 'Mystical eyes look back at you, inviting you for a drink.',
         ]);
 
         $barmaid_occupation = Occupation::create([
             'name' => 'Barmaid',
-            'description' => 'Serves you food and beverages, and maybe has heard a thing or two.',
+            'description' => 'A beautiful girl that appears to be poverty-stricken. She works hard and shares little information.',
         ]);
 
         $npcs = [
             Npc::create([
                 'name' => 'Chef Isaac',
-                'description' => 'A highly skilled chef. He is a bit of a stickler for the quality of his food. Prefers to cook pork.',
                 'occupation_id' => $chef_occupation->id,
+                'species' => 'human',
+                'gender' => 'male',
             ]),
             Npc::create([
                 'name' => 'Priest Peter',
-                'description' => 'A priest of the church. He speaks in foreign tongues and wears a pendant with what looks like a squid.',
                 'occupation_id' => $priest_occupation->id,
+                'species' => 'human',
+                'gender' => 'male',
             ]),
             Npc::create([
                 'name' => 'Asselin Alderman',
-                'description' => 'A very friendly person. He is holding a heavy book and seems to know what he is talking about.',
                 'occupation_id' => $guide_occupation->id,
+                'species' => 'human',
+                'gender' => 'male',
             ]),
             Npc::create([
                 'name' => 'Vicar Bertaut',
-                'description' => 'A scar under his eye, and a beard that is a bit too long. The quality of his armor is lacking but he sports expensive jewelry.',
                 'occupation_id' => $guard_occupation->id,
+                'species' => 'human',
+                'gender' => 'male',
             ]),
             Npc::create([
                 'name' => 'Edrick Fryee',
-                'description' => 'Wearing an unfamiliar animal skin, he plays a beautiful and unique string instrument of his own creation.',
                 'occupation_id' => $bard_occupation->id,
+                'species' => 'human',
+                'gender' => 'male',
             ]),
             Npc::create([
                 'name' => 'Thistle Tatume',
-                'description' => 'Mystical eyes look back at you, inviting you for a drink.',
                 'occupation_id' => $bartender_occupation->id,
+                'species' => 'elf',
+                'gender' => 'non-binary',
             ]),
             Npc::create([
                 'name' => 'Sylvia Wescotte',
-                'description' => 'A beautiful girl that appears to be poverty-stricken. She works hard and shares little information.',
                 'occupation_id' => $barmaid_occupation->id,
+                'species' => 'human',
+                'gender' => 'female',
             ]),
         ];
 
         $farmer = Occupation::create([
             'name' => 'Farmer',
-            'description' => 'Works the farm.',
+            'description' => 'An experienced farmer, born and raised. His clothing looks worn. He is holding a pitchfork; how cliché.',
         ]);
         $farmhouse->npcs()->create([
             'name' => 'Gibb Wyon',
-            'description' => 'An experienced farmer, born and raised. His clothing looks worn.',
             'occupation_id' => $farmer->id,
+            'species' => 'human',
+            'gender' => 'male',
         ]);
 
         $occupations = [
@@ -712,20 +720,22 @@ class NpcSeeder extends Seeder
 
         $church->npcs()->create([
             'name' => 'Kimberley Haytere',
-            'description' => 'A bishop of the church.',
             'occupation_id' => Occupation::create([
                 'name' => 'Bishop',
                 'description' => 'Lives and works in the church. Rarely seen without their hat on.',
             ])->id,
+            'species' => 'human',
+            'gender' => 'female',
         ]);
 
         $shop->npcs()->create([
             'name' => 'Lilith',
-            'description' => 'A shopkeeper.',
             'occupation_id' => Occupation::create([
                 'name' => 'Shopkeeper',
-                'description' => 'Sells you goods.',
+                'description' => 'Sells you goods and manages the shop.',
             ])->id,
+            'species' => 'human',
+            'gender' => 'female',
         ]);
 
         $church_zone->occupations()->attach($npcs[1]->occupation()->first()); // priest

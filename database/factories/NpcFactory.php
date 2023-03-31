@@ -28,6 +28,8 @@ class NpcFactory extends Factory
 
         return [
             'name' => join(' ', [$first, $last]),
+            'species' => $species,
+            'gender' => $gender,
         ];
     }
 }

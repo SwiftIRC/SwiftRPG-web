@@ -234,7 +234,12 @@ class Move
 
     public function npcs(User $user): ?JsonResponse
     {
-        return response()->json(Tile::where('id', $user->tile_id)->first()->npcs()->get());
+        $npcs = Tile::where('id', $user->tile_id)->first()->npcs()->get();
+        foreach ($npcs as $npc) {
+            $npc->occupation = $npc->occupation()->first();
+        }
+
+        return response()->json($npcs);
     }
 
     public function buildings(User $user): ?JsonResponse

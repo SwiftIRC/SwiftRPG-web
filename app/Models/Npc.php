@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Building;
 use App\Models\Occupation;
 use App\Models\Tile;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
@@ -15,7 +16,15 @@ class Npc extends Model
 
     protected $fillable = [
         'name',
-        'description',
+        'race',
+        'gender',
+        'occupation_id',
+    ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     public function tile()
