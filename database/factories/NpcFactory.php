@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Name;
+use App\Models\Occupation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,6 +27,8 @@ class NpcFactory extends Factory
         $first = Name::inRandomOrder()->where(compact('species'))->where(compact('gender'))->first()->name;
         $last = Name::inRandomOrder()->where(compact('species'))->whereNull('gender')->first()->name;
 
+        $occupation_id = Occupation::inRandomOrder()->first()->id;
+
         $base_level = rand(0, 50);
         $max_level = rand($base_level, 99);
 
@@ -34,6 +37,7 @@ class NpcFactory extends Factory
             'last_name' => $last,
             'species' => $species,
             'gender' => $gender,
+            'occupation_id' => $occupation_id,
             'thieving' => level_to_xp(rand($base_level, $max_level)) + rand(0, 1000),
             'fishing' => level_to_xp(rand($base_level, $max_level)) + rand(0, 1000),
             'mining' => level_to_xp(rand($base_level, $max_level)) + rand(0, 1000),
