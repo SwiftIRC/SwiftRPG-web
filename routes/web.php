@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AgilityController;
 use App\Http\Controllers\ThievingController;
-use App\Map\Regenerate;
+use App\Models\Client;
 use App\Models\Tile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -87,11 +87,7 @@ Route::name('thieving.')->prefix('thieving')->group(function () {
 });
 
 Route::get('test', function () {
-    $user = Auth::user();
-    $retrievedItem = $user->items()->where('items.name', "Logs")->withPivot('id')->first();
-    dd($retrievedItem->pivot->id);
-
-    return response()->json(['response' => app(Regenerate::class)->map()]);
+    return app(Client::class)->endpoints();
 });
 
 require __DIR__ . '/auth.php';
