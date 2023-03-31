@@ -27,7 +27,7 @@ class NpcFactory extends Factory
         $last = (!empty($last_name) ? $last_name : Name::inRandomOrder()->where(compact('species'))->where('gender', null)->first()->name);
 
         return [
-            'name' => $first . ' ' . $last,
+            'name' => join(' ', [$first, $last]),
         ];
     }
 }
