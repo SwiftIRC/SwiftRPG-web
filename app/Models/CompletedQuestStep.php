@@ -21,6 +21,11 @@ class CompletedQuestStep extends Model
         'updated_at',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function quest()
     {
         return $this->belongsTo(Quest::class);
@@ -29,5 +34,10 @@ class CompletedQuestStep extends Model
     public function questStep()
     {
         return $this->belongsTo(QuestStep::class);
+    }
+
+    public function questStepDependency()
+    {
+        return $this->belongsTo(QuestStepDependency::class, 'quest_step_id', 'quest_step_id');
     }
 }

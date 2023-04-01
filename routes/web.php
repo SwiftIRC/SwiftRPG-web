@@ -6,6 +6,7 @@ use App\Models\Client;
 use App\Models\Quest;
 use App\Models\Tile;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -87,17 +88,18 @@ Route::name('thieving.')->prefix('thieving')->group(function () {
     Route::get('/pickpocket', [ThievingController::class, 'pickpocket']);
 });
 
-Route::get('queststart1', function () {
+Route::get('queststart1', function (Request $request) {
     $user = Auth::user();
 
     if (empty($user)) {
         return response()->json('log in you fool');
     }
 
-    app(Quest::class)->start($user, 1);
+    app(Quest::class)->start($user, 1, $request->input('step_id') ?? 1);
 
     return response()->json($user->quests()->get());
 });
+
 Route::get('queststart2', function () {
     $user = Auth::user();
 

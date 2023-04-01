@@ -53,13 +53,21 @@ class Quest extends Model
     {
         $quest = $this->findOrFail($quest_id)->first();
 
-        $quest->step = $quest->steps()->offset($step_id - 1)->firstOrFail();
+        $quest->step = $quest->steps()->orderBy('id')->offset($step_id - 1)->firstOrFail();
 
-        $quest->step->dependencies = $quest->step->dependencies()->get();
+        $quest->step->dependencies = $quest->step->incompleteDependencies()->get();
+
+        $quest->incompleteSteps = 0;
+        if ($quest->step->dependencies->count() > 0) {
+            foreach ($quest->step->dependencies as $dependency) {
+                $quest->incompleteSteps += $dependency->incompleteSteps()->get()->count();
+            }
+        }
 
         if (!empty($quest->step)
             && $quest->step->completedSteps()->offset($step_id - 1)->first() === null
-            && $quest->step->whereDoesntHave('completedSteps')->get()->count() > 0) {
+            && $quest->step->doesntHave('completedSteps')->get()->count() > 0
+            && $quest->incompleteSteps === 0) {
             $quest->completedSteps()->create([
                 'quest_step_id' => $quest->step->id,
             ]);

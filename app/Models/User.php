@@ -104,6 +104,10 @@ class User extends Authenticatable
 
     public function quests()
     {
-        return $this->belongsToMany(Quest::class, CompletedQuestStep::class);
+        return $this->hasOne(CompletedQuestStep::class)
+            ->selectRaw('quests.*, count(quests.id) as completed, (SELECT count(quest_id) FROM quest_steps WHERE quest_id = quests.id) as total')
+            ->leftJoin('quests', 'quests.id', '=', 'completed_quest_steps.quest_id')
+            ->leftJoin('quest_steps', 'quest_steps.id', '=', 'completed_quest_steps.quest_step_id')
+            ->groupBy('quests.id');
     }
 }

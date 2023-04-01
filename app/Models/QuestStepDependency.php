@@ -35,4 +35,14 @@ class QuestStepDependency extends Model
     {
         return $this->belongsTo(QuestStep::class);
     }
+
+    public function completedSteps()
+    {
+        return $this->hasOne(CompletedQuestStep::class, 'quest_step_id', 'quest_step_id');
+    }
+
+    public function incompleteSteps()
+    {
+        return $this->doesntHave('completedSteps');
+    }
 }
