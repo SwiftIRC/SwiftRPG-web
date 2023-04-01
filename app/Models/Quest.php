@@ -49,12 +49,10 @@ class Quest extends Model
         return $this->hasMany(CompletedQuestStep::class);
     }
 
-    public function start(User $user, int $quest_id, int $step_id = 3)
+    public function start(User $user, int $quest_id, int $step_id = 1)
     {
         $quest = $this->findOrFail($quest_id)->first();
-
         $quest->step = $quest->steps()->orderBy('id')->offset($step_id - 1)->firstOrFail();
-
         $quest->step->dependencies = $quest->step->incompleteDependencies()->get();
 
         $quest->incompleteSteps = 0;
@@ -64,8 +62,7 @@ class Quest extends Model
             }
         }
 
-        if (!empty($quest->step)
-            && $quest->step->completedSteps()->offset($step_id - 1)->first() === null
+        if ($quest->step->completedSteps()->offset($step_id - 1)->first() === null
             && $quest->step->doesntHave('completedSteps')->get()->count() > 0
             && $quest->incompleteSteps === 0) {
             $quest->completedSteps()->create([

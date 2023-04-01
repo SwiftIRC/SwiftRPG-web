@@ -89,6 +89,7 @@ Route::name('thieving.')->prefix('thieving')->group(function () {
 });
 
 Route::get('queststart1', function (Request $request) {
+
     $user = Auth::user();
 
     if (empty($user)) {
@@ -140,7 +141,7 @@ Route::get('test', function () {
     $endpoints = app(Client::class)->endpoints();
 
     foreach ($endpoints as $endpoint) {
-        post_endpoint($endpoint, 'foo');
+        post_webhook_endpoint($endpoint, 'foo');
     }
 
     return response()->json();
