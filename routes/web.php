@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgilityController;
 use App\Http\Controllers\ThievingController;
 use App\Models\Client;
+use App\Models\Quest;
 use App\Models\Tile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -84,6 +85,53 @@ Route::name('stats.')->prefix('stats')->group(function () {
 
 Route::name('thieving.')->prefix('thieving')->group(function () {
     Route::get('/pickpocket', [ThievingController::class, 'pickpocket']);
+});
+
+Route::get('queststart1', function () {
+    $user = Auth::user();
+
+    if (empty($user)) {
+        return response()->json('log in you fool');
+    }
+
+    app(Quest::class)->start($user, 1);
+
+    return response()->json($user->quests()->get());
+});
+Route::get('queststart2', function () {
+    $user = Auth::user();
+
+    if (empty($user)) {
+        return response()->json('log in you fool');
+    }
+
+    app(Quest::class)->start($user, 2);
+
+    return response()->json($user->quests()->get());
+});
+
+Route::get('quest', function () {
+    $user = Auth::user();
+
+    if (empty($user)) {
+        return response()->json('log in you fool');
+    }
+
+    return response()->json($user->quests()->get());
+});
+
+Route::get('quests', function () {
+    $quests = Quest::all();
+
+    foreach ($quests as $quest) {
+        $quest->steps = $quest->steps()->get();
+
+        foreach ($quest->steps as $step) {
+            $step->dependencies = $step->dependencies()->get();
+        }
+    }
+
+    return response()->json($quests);
 });
 
 Route::get('test', function () {

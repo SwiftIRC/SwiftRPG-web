@@ -28,7 +28,7 @@ class QuestStep extends Model
 
     public function dependencies()
     {
-        return $this->hasMany(QuestStepDependency::class);
+        return $this->hasOne(QuestStepDependency::class);
     }
 
     public function completedSteps()

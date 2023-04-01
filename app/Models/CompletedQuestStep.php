@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Sbine\Tenancy\HasTenancy;
 
 class CompletedQuestStep extends Model
 {
-    use HasFactory, HasTimestamps;
+    use HasFactory, HasTimestamps, HasTenancy;
 
     protected $fillable = [
-        'user_id',
         'quest_id',
         'quest_step_id',
     ];
@@ -20,11 +20,6 @@ class CompletedQuestStep extends Model
         'created_at',
         'updated_at',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function quest()
     {

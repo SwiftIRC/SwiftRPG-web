@@ -89,16 +89,21 @@ class User extends Authenticatable
 
     public function building()
     {
-        return $this->hasOne(Building::class, 'id', 'building_id')->first();
+        return $this->hasOne(Building::class)->first();
     }
 
     public function tile()
     {
-        return $this->hasOne(Tile::class, 'id', 'tile_id')->first();
+        return $this->hasOne(Tile::class)->first();
     }
 
     public function items()
     {
         return $this->belongsToMany(Item::class)->withTimestamps()->wherePivot('item_user.deleted_at', null)->groupBy('item_id')->selectRaw('items.*, count(item_id) as quantity');
+    }
+
+    public function quests()
+    {
+        return $this->belongsToMany(Quest::class, CompletedQuestStep::class);
     }
 }
