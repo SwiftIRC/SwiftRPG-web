@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Log;
+
 if (!function_exists('xp_to_level')) {
     function xp_to_level($xp)
     {
@@ -26,5 +28,26 @@ if (!function_exists('seconds_until_tick')) {
         $now = now();
         $next_tick = $now->copy()->addMinutes($ticks)->second(0);
         return $now->diffInSeconds($next_tick);
+    }
+}
+
+if (!function_exists('post_endpoint')) {
+    function post_endpoint($endpoint, $data)
+    {
+        Log::info('POST ' . $endpoint . ' ' . json_encode($data));
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $endpoint);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'X-Bot-Token: ' . env('BOT_TOKEN'),
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        return $result;
     }
 }

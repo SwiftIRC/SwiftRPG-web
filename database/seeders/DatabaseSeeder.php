@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             NpcSeeder::class,
             UserSeeder::class,
             ItemSeeder::class,
+            QuestSeeder::class,
         ]);
     }
 }

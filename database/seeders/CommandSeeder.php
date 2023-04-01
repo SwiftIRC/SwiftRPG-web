@@ -65,5 +65,12 @@ class CommandSeeder extends Seeder
             'verb' => 'exploring',
             'ticks' => 5,
         ]);
+
+        Command::create([
+            'class' => 'quest',
+            'method' => 'step',
+            'verb' => 'questing',
+            'ticks' => 0,
+        ]);
     }
 }

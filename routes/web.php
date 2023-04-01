@@ -87,7 +87,13 @@ Route::name('thieving.')->prefix('thieving')->group(function () {
 });
 
 Route::get('test', function () {
-    return app(Client::class)->endpoints();
+    $endpoints = app(Client::class)->endpoints();
+
+    foreach ($endpoints as $endpoint) {
+        post_endpoint($endpoint, 'foo');
+    }
+
+    return response()->json();
 });
 
 require __DIR__ . '/auth.php';

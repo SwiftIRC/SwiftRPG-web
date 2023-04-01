@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('tick:process')->everyMinute();
+        $schedule->command('tick:specialevent')->everyMinute();
         $schedule->command('map:regenerate')->everyFiveMinutes();
     }
 
