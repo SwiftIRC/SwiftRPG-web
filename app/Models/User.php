@@ -89,12 +89,12 @@ class User extends Authenticatable
 
     public function building()
     {
-        return $this->hasOne(Building::class)->first();
+        return $this->hasOne(Building::class, 'id', 'building_id')->first();
     }
 
     public function tile()
     {
-        return $this->hasOne(Tile::class)->first();
+        return $this->hasOne(Tile::class, 'id', 'tile_id')->first();
     }
 
     public function items()

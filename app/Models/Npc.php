@@ -15,10 +15,24 @@ class Npc extends Model
     use HasFactory, HasTimestamps, SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'race',
+        'first_name',
+        'last_name',
+        'species',
         'gender',
         'occupation_id',
+        'thieving',
+        'fishing',
+        'mining',
+        'woodcutting',
+        'firemaking',
+        'cooking',
+        'smithing',
+        'fletching',
+        'crafting',
+        'herblore',
+        'agility',
+        'farming',
+        'hunter',
     ];
 
     protected $hidden = [

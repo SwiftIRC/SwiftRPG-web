@@ -19,13 +19,13 @@ class ZoneFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->sentence(),
-            'is_shop' => false,
-            'is_pub' => false,
-            'is_house' => false,
-            'is_accessible' => false,
-            'is_locked' => false,
-            'is_bed' => false,
-            'is_pilferable' => false,
+            // 'is_shop' => false,
+            // 'is_pub' => false,
+            // 'is_house' => false,
+            // 'is_accessible' => false,
+            // 'is_locked' => false,
+            // 'is_bed' => false,
+            // 'is_pilferable' => false,
         ];
     }
 }
