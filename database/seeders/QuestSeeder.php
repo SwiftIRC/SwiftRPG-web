@@ -18,7 +18,7 @@ class QuestSeeder extends Seeder
     public function run()
     {
         $this->seed_quest_one();
-
+        $this->seed_quest_two();
     }
 
     public function seed_quest_one()
@@ -70,5 +70,63 @@ class QuestSeeder extends Seeder
             'item_id' => 2,
             'quantity' => 1,
         ]);
+    }
+
+    public function seed_quest_two()
+    {
+        Quest::create([
+            'name' => 'Reeling in the Basics',
+            'description' => 'Embark on a fishing adventure, starting from the basics and working your way up to become a master fisherman, facing challenges and earning rewards along the way.',
+            'woodcutting' => 50,
+        ]);
+
+        $step1 = QuestStep::create([
+            'quest_id' => 2,
+            'output' => 'You spot an old fisherman by the riverside and approach him to learn the art of fishing, starting with the basics of casting and baiting your hook.',
+            'ticks' => 10,
+        ]);
+
+        $step2 = QuestStep::create([
+            'quest_id' => 2,
+            'output' => 'You have learned the basics of casting and baiting your hook. You are now ready to catch your first fish.',
+            'ticks' => 10,
+        ]);
+
+        QuestStepDependency::create([
+            'quest_id' => 2,
+            'quest_step_id' => $step2->id,
+            'quest_step_dependency_id' => $step1->id,
+        ]);
+
+        $step3 = QuestStep::create([
+            'quest_id' => 2,
+            'output' => 'You have caught your first fish! You are now ready to learn how to cook your catch.',
+            'ticks' => 10,
+        ]);
+
+        QuestStepDependency::create([
+            'quest_id' => 2,
+            'quest_step_id' => $step3->id,
+            'quest_step_dependency_id' => $step2->id,
+        ]);
+
+        $step4 = QuestStep::create([
+            'quest_id' => 2,
+            'output' => 'You have learned how to cook your catch. You are now ready to learn how to fish in the deep sea.',
+            'ticks' => 5,
+        ]);
+
+        QuestStepDependency::create([
+            'quest_id' => 2,
+            'quest_step_id' => $step4->id,
+            'quest_step_dependency_id' => $step3->id,
+        ]);
+
+        // QuestItemReward::create([
+        //     'quest_id' => 2,
+        //     'item_id' => 3, // TODO revisit this
+        //     'quantity' => 50, // && this
+        // ]);
+
     }
 }

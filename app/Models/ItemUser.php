@@ -9,7 +9,7 @@ use Sbine\Tenancy\HasTenancy;
 
 class ItemUser extends Model
 {
-    use HasTenancy, SoftDeletes, HasTimestamps;
+    use SoftDeletes, HasTimestamps, HasTenancy;
 
     protected $table = 'item_user';
 

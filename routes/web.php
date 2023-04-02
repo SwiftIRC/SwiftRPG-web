@@ -91,7 +91,6 @@ Route::name('thieving.')->prefix('thieving')->group(function () {
 // The below routes are all for testing and will be removed later
 
 Route::get('queststart1', function (Request $request) {
-
     $user = Auth::user();
 
     if (empty($user)) {
@@ -103,16 +102,16 @@ Route::get('queststart1', function (Request $request) {
     return response()->json($response);
 });
 
-Route::get('queststart2', function () {
+Route::get('queststart2', function (Request $request) {
     $user = Auth::user();
 
     if (empty($user)) {
         return response()->json('log in you fool');
     }
 
-    app(Quest::class)->start($user, 2);
+    $response = app(Quest::class)->start(2, $request->input('step_id') ?? 1);
 
-    return response()->json($user->quests()->get());
+    return response()->json($response);
 });
 
 Route::get('quest', function () {
