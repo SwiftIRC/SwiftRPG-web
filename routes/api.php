@@ -83,4 +83,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
             return Npc::id($npc)->first();
         });
     });
+    Route::name('quests.')->prefix('quests')->group(function () {
+        Route::get('/', [QuestController::class, 'index']);
+        Route::post('/start/{quest}/{start?}', [QuestController::class, 'start']);
+    });
 });

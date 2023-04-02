@@ -56,4 +56,9 @@ class QuestStep extends Model
         return $this->hasOne(CompletedQuestStep::class);
     }
 
+    public function incompleteSteps()
+    {
+        return $this->doesntHave('completedSteps');
+    }
+
 }

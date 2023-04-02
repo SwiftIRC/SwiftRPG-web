@@ -49,26 +49,28 @@ class Quest extends Model
         return $this->hasMany(CompletedQuestStep::class);
     }
 
-    public function start(User $user, int $quest_id, int $step_id = 1)
+    public function start(int $quest_id, int $step_id = 1)
     {
         $quest = $this->findOrFail($quest_id)->first();
         $quest->step = $quest->steps()->orderBy('id')->offset($step_id - 1)->firstOrFail();
+        $quest->requested_step_id = $step_id;
+        $quest->incompleteDependencies = 0;
         $quest->step->dependencies = $quest->step->incompleteDependencies()->get();
 
-        $quest->incompleteSteps = 0;
-        if ($quest->step->dependencies->count() > 0) {
-            foreach ($quest->step->dependencies as $dependency) {
-                $quest->incompleteSteps += $dependency->incompleteSteps()->get()->count();
-            }
-        }
+        $quest->step->dependencies->each(function ($dependency) use ($quest) {
+            $dependency->incompleteSteps = $dependency->incompleteSteps()->get();
+            $quest->incompleteDependencies += $dependency->incompleteSteps->count();
+        });
 
         if ($quest->step->completedSteps()->offset($step_id - 1)->first() === null
-            && $quest->step->doesntHave('completedSteps')->get()->count() > 0
-            && $quest->incompleteSteps === 0) {
+            && $quest->step->incompleteSteps()->get()->count() > 0
+            && $quest->incompleteDependencies === 0) {
             $quest->completedSteps()->create([
                 'quest_step_id' => $quest->step->id,
             ]);
         }
+
+        return $quest;
 
     }
 }
