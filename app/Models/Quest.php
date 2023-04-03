@@ -64,7 +64,6 @@ class Quest extends Model
         $quest = $this->where('id', $quest_id)->firstOrFail();
         $quest->step = $quest->steps()->where('quest_id', $quest_id)->orderBy('id')->offset($step_id - 1)->firstOrFail();
         $quest->requested_step_id = $step_id;
-        $quest->incompleteDependencies = 0;
         $quest->incompleteSteps = $quest->step->incompleteSteps($quest->id)->get();
         $quest->dependencies = $quest->step->dependencies()->get();
         $quest->completeStep = $quest->completeSteps()->where('quest_id', $quest_id)->where('quest_step_id', $quest->step->id)->first();
