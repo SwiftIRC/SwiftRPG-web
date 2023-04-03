@@ -29,14 +29,8 @@ class QuestController extends Controller
             'quest_id' => 'numeric|integer',
         ]);
 
-        $quest = Quest::find($request->quest_id);
+        $response = app(Quest::class)->inspect($request->quest_id);
 
-        $quest->steps = $quest->steps()->get();
-
-        foreach ($quest->steps as $step) {
-            $step->dependencies = $step->dependencies()->get();
-        }
-
-        return response()->json($quest);
+        return response()->json($response);
     }
 }

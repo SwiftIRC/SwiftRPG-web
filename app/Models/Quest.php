@@ -61,6 +61,21 @@ class Quest extends Model
 
     public function start(int $quest_id, int $step_id = 1)
     {
+        $quest = $this->inspect($quest_id, $step_id);
+
+        if ($quest->completeStep === null
+            && $quest->incompleteSteps->count() > 0
+            && $quest->incompleteDependencies === 0) {
+            $quest->completeSteps()->create([
+                'quest_step_id' => $quest->step->id,
+            ]);
+        }
+
+        return $quest;
+    }
+
+    public function inspect(int $quest_id, int $step_id = 1)
+    {
         $quest = $this->where('id', $quest_id)->firstOrFail();
         $quest->step = $quest->steps()->where('quest_id', $quest_id)->orderBy('id')->offset($step_id - 1)->firstOrFail();
         $quest->requested_step_id = $step_id;
@@ -74,14 +89,6 @@ class Quest extends Model
         $quest->incompleteDependencies = $quest->dependencies->pluck('quest_step_id')->filter(function ($dependency_id, $key) use ($completeStepsIds) {
             return !$completeStepsIds->contains($dependency_id);
         })->count();
-
-        if ($quest->completeStep === null
-            && $quest->incompleteSteps->count() > 0
-            && $quest->incompleteDependencies === 0) {
-            $quest->completeSteps()->create([
-                'quest_step_id' => $quest->step->id,
-            ]);
-        }
 
         return $quest;
     }
