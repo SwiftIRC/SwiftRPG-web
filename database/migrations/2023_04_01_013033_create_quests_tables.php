@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->string('gp')->default(0);
+            $table->unsignedMediumInteger('gold')->default(0);
             $table->unsignedMediumInteger("thieving")->default(0);
             $table->unsignedMediumInteger("fishing")->default(0);
             $table->unsignedMediumInteger("mining")->default(0);

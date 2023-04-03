@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\AgilityController;
+use App\Http\Controllers\QuestController;
 use App\Http\Controllers\ThievingController;
 use App\Models\Client;
 use App\Models\Quest;
 use App\Models\Tile;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -90,30 +90,6 @@ Route::name('thieving.')->prefix('thieving')->group(function () {
 
 // The below routes are all for testing and will be removed later
 
-Route::get('queststart1', function (Request $request) {
-    $user = Auth::user();
-
-    if (empty($user)) {
-        return response()->json('log in you fool');
-    }
-
-    $response = app(Quest::class)->start(1, $request->input('step_id') ?? 1);
-
-    return response()->json($response);
-});
-
-Route::get('queststart2', function (Request $request) {
-    $user = Auth::user();
-
-    if (empty($user)) {
-        return response()->json('log in you fool');
-    }
-
-    $response = app(Quest::class)->start(2, $request->input('step_id') ?? 1);
-
-    return response()->json($response);
-});
-
 Route::get('quest', function () {
     $user = Auth::user();
 
@@ -147,5 +123,8 @@ Route::get('test', function () {
 
     return response()->json();
 });
+
+// Route::get('/quest/start/{quest_id}/{step_id?}', [QuestController::class, 'start']);
+Route::get('/quest/inspect/{quest_id}', [QuestController::class, 'inspect']);
 
 require __DIR__ . '/auth.php';

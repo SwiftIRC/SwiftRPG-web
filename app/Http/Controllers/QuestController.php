@@ -2,24 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quest;
 use Illuminate\Http\Request;
 
 class QuestController extends Controller
 {
-    public function index(Request $request)
-    {
-        return response()->json($request->user->quests()->get());
+    function list(Request $request) {
+        return response()->json($request->user()->quests()->get());
     }
 
     public function start(Request $request)
     {
         $request->validate([
-            'quest_id' => ['required', 'integer'],
-            'step_id' => ['nullable', 'integer'],
+            'quest_id' => 'numeric|integer',
+            'step_id' => 'nullable|numeric|integer',
         ]);
 
-        app(Quest::class)->start($request->quest_id, $request->step_id ?? 1);
+        $response = app(Quest::class)->start($request->quest_id, $request->step_id ?? 1);
 
-        return $this->index($request);
+        return response()->json($response);
+    }
+
+    public function inspect(Request $request)
+    {
+        $request->validate([
+            'quest_id' => 'numeric|integer',
+        ]);
+
+        $quest = Quest::find($request->quest_id);
+
+        $quest->steps = $quest->steps()->get();
+
+        foreach ($quest->steps as $step) {
+            $step->dependencies = $step->dependencies()->get();
+        }
+
+        return response()->json($quest);
     }
 }

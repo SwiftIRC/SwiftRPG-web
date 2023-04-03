@@ -13,7 +13,7 @@ class Quest extends Model
     protected $fillable = [
         'name',
         'description',
-        'gp',
+        'gold',
         'thieving',
         'fishing',
         'mining',
@@ -85,6 +85,6 @@ class Quest extends Model
         }
 
         return $quest;
-
     }
+
 }

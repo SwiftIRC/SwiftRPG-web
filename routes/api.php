@@ -4,6 +4,7 @@ use App\Http\Controllers\AgilityController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\FiremakingController;
+use App\Http\Controllers\QuestController;
 use App\Http\Controllers\ThievingController;
 use App\Http\Controllers\WoodcuttingController;
 use App\Models\Npc;
@@ -84,7 +85,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
     });
     Route::name('quests.')->prefix('quests')->group(function () {
-        Route::get('/', [QuestController::class, 'index']);
-        Route::post('/start/{quest}/{start?}', [QuestController::class, 'start']);
+        Route::get('/', [QuestController::class, 'list']);
+        Route::get('/start/{quest_id}/{step_id?}', [QuestController::class, 'start']);
+        Route::get('/inspect/{quest_id}', [QuestController::class, 'inspect']);
     });
 });
