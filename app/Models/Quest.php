@@ -70,13 +70,11 @@ class Quest extends Model
         $quest->completeStep = $quest->completeSteps()->where('quest_id', $quest_id)->where('quest_step_id', $quest->step->id)->first();
         $quest->completeSteps = $quest->completeSteps()->where('quest_id', $quest_id)->get();
 
-        $completeStepsIds = array_values($quest->completeSteps->pluck('quest_step_id')->toArray());
+        $completeStepsIds = $quest->completeSteps->pluck('quest_step_id');
 
-        foreach ($quest->dependencies->pluck('quest_step_id') as $dependency_id) {
-            if (!in_array($dependency_id, $completeStepsIds)) {
-                $quest->incompleteDependencies++;
-            }
-        }
+        $quest->incompleteDependencies = $quest->dependencies->pluck('quest_step_id')->filter(function ($dependency_id, $key) use ($completeStepsIds) {
+            return !$completeStepsIds->contains($dependency_id);
+        })->count();
 
         if ($quest->completeStep === null
             && $quest->incompleteSteps->count() > 0
