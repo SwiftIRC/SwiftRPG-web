@@ -46,9 +46,11 @@ class User extends Authenticatable
         'deleted_at',
     ];
 
-    public function addToInventory(Item $item)
+    public function addToInventory(Item $item, int $quantity = 1)
     {
-        $this->items()->attach($item);
+        for ($i = 0; $i < $quantity; $i++) {
+            $this->items()->attach($item);
+        }
 
         return $this->items()->where('name', $item->name)->count();
     }

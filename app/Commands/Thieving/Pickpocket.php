@@ -22,13 +22,7 @@ class Pickpocket extends Command
         $user->addGold($increment);
         $user->save();
 
-        return response()->json([
-            'skill' => 'thieving',
-            'method' => 'pickpocket',
-            'experience' => $user->thieving,
-            'reward' => $this->generateReward($user->gold),
-            'execute' => true,
-        ]);
+        return response()->json();
     }
 
     public function log(array $input = []): \Illuminate\Http\JsonResponse

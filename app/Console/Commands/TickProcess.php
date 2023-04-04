@@ -33,7 +33,7 @@ class TickProcess extends Command
      */
     public function handle()
     {
-        $where = CommandLog::where('ticks', '>', 0);
+        $where = CommandLog::where('ticks_remaining', '>', 0);
 
         $map = [
             'agility' => [
@@ -58,22 +58,11 @@ class TickProcess extends Command
             if ($row->ticks == 1) {
                 $row->command = $commands->where('id', $row->command_id)->first();
 
-                $json = json_decode($row->message);
-                if (!isset($json->error) || $json->error == false) {
-                    $response = app($map[$row->command->class][$row->command->method])->execute($row);
-
-                    CommandLog::create([
-                        'user_id' => $row->user_id,
-                        'command_id' => $row->command_id,
-                        'message' => json_encode($response->original),
-                        'ticks' => 0,
-                    ]);
-                }
-
+                app($map[$row->command->class][$row->command->method])->execute($row);
             }
         }
 
-        $where->decrement('ticks');
+        $where->decrement('ticks_remaining');
 
         return 0;
     }

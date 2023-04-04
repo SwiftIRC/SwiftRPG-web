@@ -14,8 +14,8 @@ class CommandLog extends Model
     protected $fillable = [
         'user_id',
         'command_id',
-        'message',
         'ticks',
+        'ticks_remaining',
     ];
 
     protected $hidden = [

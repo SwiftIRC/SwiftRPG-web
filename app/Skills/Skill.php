@@ -21,22 +21,28 @@ class Skill
             throw new RangeException('Command not found.');
         }
 
-        $last_run = CommandLog::where('ticks', '>', 0)->latest()->first();
+        $last_run = CommandLog::where('ticks_remaining', '>', 0)->latest()->first();
         if ($last_run) {
             $last_run->command = $last_run->command()->first();
 
-            throw new RangeException($last_run->ticks . ' tick' . ($last_run->ticks > 1 ? 's' : '') . ' (' . seconds_until_tick($last_run->ticks) . ' second' . (seconds_until_tick($last_run->ticks) > 1 ? 's' : '') . ') remaining until you are done with ' . $last_run->command->verb . ".");
+            $plural_ticks = $last_run->ticks_remaining > 1 ? 's' : '';
+            $plural_seconds = seconds_until_tick($last_run->ticks_remaining) > 1 ? 's' : '';
+
+            throw new RangeException($last_run->ticks_remaining . ' tick' . $plural_ticks . ' (' . seconds_until_tick($last_run->ticks_remaining) . ' second' . $plural_seconds . ') remaining until you are done with ' . $last_run->command->verb . ".");
         }
 
         array_push($parameters, $command);
 
         $output = $this->$methodName($parameters);
 
+        $ticks = $output->original['ticks'] ?? $command->ticks;
+
         if ($command->log) {
             CommandLog::create([
                 'command_id' => $command->id,
                 'message' => json_encode($output->original),
-                'ticks' => $output->original['ticks'] ?? $command->ticks,
+                'ticks' => $ticks,
+                'ticks_remaining' => $ticks,
             ]);
         }
 

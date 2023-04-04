@@ -20,7 +20,7 @@ class Chop extends Command
         $user->save();
 
         $item = Item::where('name', 'Logs')->first();
-        $logs = $user->addToInventory($item);
+        $logs = $user->addToInventory($item, $this->quantity);
 
         return response()->json([
             'skill' => 'woodcutting',
