@@ -33,7 +33,7 @@ class Burn extends Command
         ]);
     }
 
-    public function log(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         $log = $user->items()->where('name', 'Logs')->withPivot('deleted_at')->first();

@@ -40,7 +40,6 @@ class Skill
         if ($command->log) {
             CommandLog::create([
                 'command_id' => $command->id,
-                'message' => json_encode($output->original),
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,
             ]);

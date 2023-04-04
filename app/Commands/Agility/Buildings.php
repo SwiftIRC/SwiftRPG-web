@@ -15,7 +15,7 @@ class Buildings extends Command
         return response()->json();
     }
 
-    public function log(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
 
@@ -26,7 +26,6 @@ class Buildings extends Command
             'experience' => $user->agility,
             'reward' => $this->generateReward(),
             'meta' => compact('response'),
-            'execute' => false,
         ]);
     }
 

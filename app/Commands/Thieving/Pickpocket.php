@@ -25,11 +25,11 @@ class Pickpocket extends Command
         return response()->json();
     }
 
-    public function log(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         $tile = $user->tile();
-        $npcs = $tile->npcs();
+        $npcs = $tile->npcs()->get();
         $command = array_pop($input);
 
         if (!$npcs->count()) {
@@ -37,11 +37,11 @@ class Pickpocket extends Command
             throw new RangeException('You failed to pickpocket because there was nobody around! ' . ($buildings->count() ? 'Check a building?' : ''));
         }
 
-        $npc = $npcs->get()->random();
+        $npc = $npcs->random();
 
         $chance_to_fail = random_int(0, xp_to_level($user->thieving) + 1);
         if (!$chance_to_fail) {
-            throw new OverflowException('You failed to pickpocket, ' . $npc->name . '!');
+            throw new OverflowException('You failed to pickpocket, ' . $npc->first_name . ' ' . $npc->last_name . '!');
         }
 
         return response()->json([
@@ -49,7 +49,6 @@ class Pickpocket extends Command
             'method' => 'pickpocket',
             'experience' => $user->thieving,
             'reward' => $this->generateReward($user->gold),
-            'execute' => false,
             'ticks' => $command->ticks,
             'seconds_until_tick' => seconds_until_tick($command->ticks),
         ]);

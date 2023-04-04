@@ -25,12 +25,13 @@ class Chop extends Command
         return response()->json([
             'skill' => 'woodcutting',
             'experience' => $user->woodcutting,
+            'reward_xp' => $this->quantity,
             'reward' => $this->generateReward($logs),
             'execute' => true,
         ]);
     }
 
-    public function log(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): \Illuminate\Http\JsonResponse
     {
         $user = Auth::user();
         $tile = $user->tile();
@@ -50,8 +51,8 @@ class Chop extends Command
         return response()->json([
             'skill' => 'woodcutting',
             'experience' => $user->woodcutting,
+            'reward_xp' => $this->quantity,
             'reward' => $this->generateReward($logs),
-            'execute' => false,
             'ticks' => $command->ticks,
             'seconds_until_tick' => seconds_until_tick($command->ticks),
         ]);

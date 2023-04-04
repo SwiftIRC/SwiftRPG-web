@@ -8,6 +8,6 @@ class Woodcutting extends Skill
 {
     protected function chop($input): \Illuminate\Http\JsonResponse
     {
-        return app(Chop::class)->log($input);
+        return app(Chop::class)->queue($input);
     }
 }

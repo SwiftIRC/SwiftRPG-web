@@ -13,7 +13,7 @@ class Agility extends Skill
     protected function explore(array $direction)
     {
         try {
-            return app(Explore::class)->log($direction);
+            return app(Explore::class)->queue($direction);
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         }
@@ -22,7 +22,7 @@ class Agility extends Skill
     protected function look(array $direction)
     {
         try {
-            return app(Look::class)->log($direction);
+            return app(Look::class)->queue($direction);
         } catch (RangeException $e) {
             return response()->json(['error' => $e->getMessage()], 403);
         }
@@ -30,12 +30,12 @@ class Agility extends Skill
 
     protected function npcs()
     {
-        return app(NPCs::class)->log();
+        return app(NPCs::class)->queue();
     }
 
     protected function buildings()
     {
-        return app(Buildings::class)->log();
+        return app(Buildings::class)->queue();
     }
 
 }
