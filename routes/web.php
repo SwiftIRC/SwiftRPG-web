@@ -5,6 +5,7 @@ use App\Http\Controllers\QuestController;
 use App\Http\Controllers\ThievingController;
 use App\Models\Client;
 use App\Models\Quest;
+use App\Models\Terrain;
 use App\Models\Tile;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -53,20 +54,34 @@ Route::get('/dashboard', function () {
 Route::get('/api/tiles', function () {
     $tiles = Tile::all();
 
-    foreach ($tiles as $tile) {
-        $tile->edges = $tile->edges()->get();
+    $tiles->each(function ($tile) {
         $tile->terrain = $tile->terrain()->first();
-        $tile->npcs = $tile->npcs()->get();
-        $tile->users = $tile->users()->get();
-        foreach ($tile->edges as $edge) {
-            $edge->terrain = $edge->terrain()->first();
+        if ($tile->discovered_by !== null || $tile->terrain->name == 'Water') {
+            $tile->edges = $tile->edges()->get()->each(function ($edge) {
+                $edge->terrain = $edge->terrain()->first();
+            });
+            $tile->npcs = $tile->npcs()->get();
+            $tile->users = $tile->users()->whereNull('building_id')->get();
+            $tile->buildings = $tile->buildings()->get()->each(function ($building) {
+                $building->npcs = $building->npcs()->count();
+                $building->users = $building->users()->get();
+            });
+        } else {
+            $tile->terrain = [
+                'id' => 0,
+                'name' => 'Fog of War',
+                'description' => 'You cannot see what is on the other side of this edge.',
+                'movement_cost' => 0,
+            ];
+            $tile->edges = $tile->edges()->get()->each(function ($edge) use ($tile) {
+                $edge->terrain = $tile->terrain;
+            });
+            $tile->npcs = [];
+            $tile->users = [];
+            $tile->buildings = [];
         }
-        $tile->buildings = $tile->buildings()->get();
-        foreach ($tile->buildings as $building) {
-            $building->npcs = $building->npcs()->count();
-            $building->users = $building->users()->get();
-        }
-    }
+    });
+
     return $tiles;
 })->name('api.tiles');
 Route::get('/api/tiles/{tile}', function (Tile $tile) {
