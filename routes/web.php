@@ -69,16 +69,19 @@ Route::get('/api/tiles', function () {
         } else {
             $tile->terrain = [
                 'id' => 0,
-                'name' => 'Fog of War',
-                'description' => 'You cannot see what is on the other side of this edge.',
+                'name' => 'Fog',
+                'description' => 'You cannot see what is hidden in the fog.',
                 'movement_cost' => 0,
             ];
             $tile->edges = $tile->edges()->get()->each(function ($edge) use ($tile) {
                 $edge->terrain = $tile->terrain;
+                $edge->pivot->is_road = false;
             });
             $tile->npcs = [];
             $tile->users = [];
             $tile->buildings = [];
+            $tile->max_trees = 0;
+            $tile->available_trees = 0;
         }
     });
 
