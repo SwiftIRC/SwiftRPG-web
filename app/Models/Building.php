@@ -31,9 +31,9 @@ class Building extends Model
         return $this->belongsTo(Zone::class);
     }
 
-    public function user()
+    public function users()
     {
-        return $this->belongsToMany(User::class)->withTimestamps();
+        return $this->belongsTo(User::class, 'id', 'building_id');
     }
 
 }

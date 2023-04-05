@@ -61,6 +61,11 @@ Route::get('/api/tiles', function () {
         foreach ($tile->edges as $edge) {
             $edge->terrain = $edge->terrain()->first();
         }
+        $tile->buildings = $tile->buildings()->get();
+        foreach ($tile->buildings as $building) {
+            $building->npcs = $building->npcs()->count();
+            $building->users = $building->users()->get();
+        }
     }
     return $tiles;
 })->name('api.tiles');
