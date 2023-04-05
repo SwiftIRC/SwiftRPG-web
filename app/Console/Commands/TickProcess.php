@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Commands\Agility\Explore;
 use App\Commands\Firemaking\Burn;
+use App\Commands\Questing\Start;
 use App\Commands\Thieving\Pickpocket;
 use App\Commands\Woodcutting\Chop;
 use App\Models\Command as CommandModel;
@@ -47,6 +48,9 @@ class TickProcess extends Command
             ],
             'woodcutting' => [
                 'chop' => Chop::class,
+            ],
+            'questing' => [
+                'start' => Start::class,
             ],
         ];
 

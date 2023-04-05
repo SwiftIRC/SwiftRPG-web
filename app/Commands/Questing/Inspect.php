@@ -6,20 +6,12 @@ use App\Commands\Command;
 use App\Models\Quest;
 use Illuminate\Support\Facades\Auth;
 
-class Start extends Command
+class Inspect extends Command
 {
     protected $quantity = 5;
 
     public function execute(object $input): \Illuminate\Http\JsonResponse
     {
-        $user = $input->user()->first();
-
-        $increment = $this->quantity;
-
-        $user->thieving += $increment;
-        $user->addGold($increment);
-        $user->save();
-
         return response()->json();
     }
 
@@ -28,16 +20,13 @@ class Start extends Command
         $user = Auth::user();
 
         $command = array_pop($input);
-        $request = array_pop($input);
+        $quest_id = array_pop($input);
 
-        $step_id = $request->step_id;
-        $quest_id = $request->quest_id;
-
-        $response = app(Quest::class)->start($quest_id, $step_id ?? 1);
+        $response = app(Quest::class)->inspect($quest_id);
 
         return response()->json([
             'skill' => 'questing',
-            'method' => 'start',
+            'method' => 'inspect',
             'experience' => 0,
             'reward' => $this->generateReward(),
             'meta' => compact('response'),
@@ -48,10 +37,6 @@ class Start extends Command
 
     protected function generateReward($total = 0): array
     {
-        return [
-            'type' => 'gold',
-            'quantity' => $this->quantity,
-            'total' => $total,
-        ];
+        return [];
     }
 }

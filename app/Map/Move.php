@@ -10,7 +10,6 @@ use App\Models\Tile;
 use App\Models\User;
 use function PHPUnit\Framework\isNull;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 
 class Move
 {
@@ -139,9 +138,6 @@ class Move
             // Add NPCs and buildings to the tile
             $num_building = rand(0, 5);
             $num_npcs = rand(0, 2) * $num_building + rand(0, 6);
-
-            Log::info('num_building: ' . $num_building);
-            Log::info('num_npcs: ' . $num_npcs);
 
             $all_buildings = Building::all();
             $buildings = [];

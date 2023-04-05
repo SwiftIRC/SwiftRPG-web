@@ -72,5 +72,12 @@ class CommandSeeder extends Seeder
             'verb' => 'questing',
             'ticks' => 0,
         ]);
+
+        Command::create([
+            'class' => 'questing',
+            'method' => 'inspect',
+            'verb' => 'questing',
+            'ticks' => 0,
+        ]);
     }
 }

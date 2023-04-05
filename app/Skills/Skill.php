@@ -31,8 +31,10 @@ class Skill
             throw new RangeException($last_run->ticks_remaining . ' tick' . $plural_ticks . ' (' . seconds_until_tick($last_run->ticks_remaining) . ' second' . $plural_seconds . ') remaining until you are done with ' . $last_run->command->verb . ".");
         }
 
-        array_push($parameters, $command);
-        Log::info($parameters);
+        $parameters = [[
+            ...$parameters,
+            $command,
+        ]];
 
         $output = $this->$methodName(...$parameters);
 

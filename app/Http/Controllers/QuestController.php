@@ -33,8 +33,10 @@ class QuestController extends Controller
             'quest_id' => 'numeric|integer',
         ]);
 
-        $response = app(Questing::class)->inspect($request->quest_id);
-
-        return response()->json($response);
+        try {
+            return app(Questing::class)->inspect($request->quest_id);
+        } catch (RangeException $e) {
+            return response()->json(['error' => $e->getMessage()], 403);
+        }
     }
 }

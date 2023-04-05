@@ -77,7 +77,7 @@ class QuestSeeder extends Seeder
         Quest::create([
             'name' => 'Reeling in the Basics',
             'description' => 'Embark on a fishing adventure, starting from the basics and working your way up to become a master fisherman, facing challenges and earning rewards along the way.',
-            'woodcutting' => 50,
+            'fishing' => 50,
         ]);
 
         $step1 = QuestStep::create([
