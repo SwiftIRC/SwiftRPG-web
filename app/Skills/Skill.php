@@ -42,6 +42,7 @@ class Skill
                 'command_id' => $command->id,
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,
+                'direction' => $output->original['meta']['direction'] ?? null,
             ]);
         }
 

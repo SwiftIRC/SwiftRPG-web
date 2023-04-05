@@ -31,6 +31,7 @@ return new class extends Migration
             $table->bigInteger('command_id')->unsigned();
             $table->smallInteger('ticks')->default(1);
             $table->smallInteger('ticks_remaining')->default(1);
+            $table->enum('direction', ["north", "east", "south", "west"])->nullable();
 
             $table->timestamps();
 

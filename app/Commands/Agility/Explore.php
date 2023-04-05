@@ -14,29 +14,13 @@ class Explore extends Command
     public function execute(object $input): \Illuminate\Http\JsonResponse
     {
         $user = $input->user()->first();
-        $json = json_decode($input['message']);
 
-        if (!empty($json->meta->response->error)) {
-            return response()->json([
-                'error' => $json->meta->response->error,
-            ]);
-        }
-
-        $response = app(Move::class)->move($input->user()->first(), json_decode($input->message)->meta->direction);
+        $response = app(Move::class)->move($input->user()->first(), $input->direction);
 
         $user->agility += $this->quantity;
         $user->save();
 
-        return response()->json([
-            'skill' => 'agility',
-            'experience' => $this->quantity,
-            'reward' => $this->generateReward(),
-            'meta' => [
-                'direction' => $input->direction,
-                'response' => $response->original,
-            ],
-            'execute' => true,
-        ]);
+        return response()->json($response);
     }
 
     public function queue(array $input = []): \Illuminate\Http\JsonResponse

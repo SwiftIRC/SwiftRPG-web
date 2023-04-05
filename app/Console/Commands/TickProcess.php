@@ -55,7 +55,7 @@ class TickProcess extends Command
         $rows = $where->get();
 
         foreach ($rows as $row) {
-            if ($row->ticks == 1) {
+            if ($row->ticks_remaining == 1) {
                 $row->command = $commands->where('id', $row->command_id)->first();
 
                 app($map[$row->command->class][$row->command->method])->execute($row);

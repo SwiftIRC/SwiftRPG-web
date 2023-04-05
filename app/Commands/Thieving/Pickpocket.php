@@ -3,7 +3,6 @@
 namespace App\Commands\Thieving;
 
 use App\Commands\Command;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use OverflowException;
 use RangeException;
