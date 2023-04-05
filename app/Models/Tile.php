@@ -50,8 +50,8 @@ class Tile extends Model
         return $this->belongsTo(Terrain::class);
     }
 
-    public function users(): ?BelongsToMany
+    public function users(): ?BelongsTo
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class, 'id', 'tile_id');
     }
 }

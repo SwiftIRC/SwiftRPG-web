@@ -67,8 +67,8 @@ class CommandSeeder extends Seeder
         ]);
 
         Command::create([
-            'class' => 'quest',
-            'method' => 'step',
+            'class' => 'questing',
+            'method' => 'start',
             'verb' => 'questing',
             'ticks' => 0,
         ]);

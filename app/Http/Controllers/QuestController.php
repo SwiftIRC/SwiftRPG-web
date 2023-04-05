@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Quest;
+use App\Skills\Questing;
 use Illuminate\Http\Request;
+use RangeException;
 
 class QuestController extends Controller
 {
@@ -18,9 +19,12 @@ class QuestController extends Controller
             'step_id' => 'nullable|numeric|integer',
         ]);
 
-        $response = app(Quest::class)->start($request->quest_id, $request->step_id ?? 1);
+        try {
+            return app(Questing::class)->start($request);
+        } catch (RangeException $e) {
+            return response()->json(['error' => $e->getMessage()], 403);
+        }
 
-        return response()->json($response);
     }
 
     public function inspect(Request $request)
@@ -29,7 +33,7 @@ class QuestController extends Controller
             'quest_id' => 'numeric|integer',
         ]);
 
-        $response = app(Quest::class)->inspect($request->quest_id);
+        $response = app(Questing::class)->inspect($request->quest_id);
 
         return response()->json($response);
     }

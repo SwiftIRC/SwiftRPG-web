@@ -32,8 +32,9 @@ class Skill
         }
 
         array_push($parameters, $command);
+        Log::info($parameters);
 
-        $output = $this->$methodName($parameters);
+        $output = $this->$methodName(...$parameters);
 
         $ticks = $output->original['ticks'] ?? $command->ticks;
 
