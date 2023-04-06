@@ -28,17 +28,21 @@ Route::get('/', function () {
 
 Route::get('/help', function () {
     return view('help');
-})->name('help');
+})->name('help')->middleware(['auth']);
 
 Route::get('/hiscores', function () {
     $users = User::selectRaw('*, thieving + woodcutting as total')->orderByDesc('total')->get();
 
     return view('hiscores', compact('users'));
-})->name('hiscores');
+})->name('hiscores')->middleware(['auth']);
+
+Route::get('/usermap', function () {
+    return view('map');
+})->name('usermap')->middleware(['auth']);
 
 Route::get('/map', function () {
-    return view('map');
-})->name('map');
+    return view('mapguest');
+})->name('mapguest');
 
 Route::get('/admin', function () {
     return view('admin');
