@@ -37,7 +37,7 @@ Route::get('/hiscores', function () {
 })->name('hiscores');
 
 Route::get('/map', function () {
-    return view('map', compact('users'));
+    return view('map');
 })->name('map');
 
 Route::get('/admin', function () {

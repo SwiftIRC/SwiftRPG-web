@@ -5,7 +5,8 @@ export default defineConfig({
     plugins: [
         laravel([
             'resources/css/app.css',
-            'resources/js/app.js',
+            'resources/js/app.ts',
+            'resources/js/map.ts',
         ]),
     ],
 });
