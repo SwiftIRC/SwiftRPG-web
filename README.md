@@ -4,14 +4,7 @@
 
 ### Dependencies
 
-#### git
-
-First, clone the other required services:
-
-https://github.com/SwiftIRC/SwiftRPG
-https://github.com/SwiftIRC/SwiftRPG-map
-
-We will become root for the rest of this work.
+We will become root for the following steps, until we need to create the `.env` file.
 
 ```
 sudo -i
@@ -19,7 +12,7 @@ sudo -i
 
 #### packages
 
-Second, add the PHP repository to your apt sources:
+First, add the PHP repository to your apt sources:
 
 NOTE: This command is for Ubuntu 20.04
 
@@ -34,7 +27,7 @@ Third, install the following packages:
 NOTE: php8.1-fpm and nginx are optional (more information below)
 
 ```
-sudo apt install php8.1-fpm php8.1-mysql php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-zip mysql-server mysql-client nginx
+apt install php8.1-fpm php8.1-mysql php8.1-gd php8.1-mbstring php8.1-xml php8.1-curl php8.1-zip mysql-server mysql-client nginx
 ```
 
 This will install PHP 8.1, MySQL 8.0, and nginx 1.18.0.
@@ -150,6 +143,7 @@ npm run dev
 
 ```
 php artisan migrate --seed
+php artisan map:generate
 ```
 
 ### Load it in Your Browser
@@ -160,12 +154,12 @@ Open up your new development environment!
 
 ```
 http://rpg.swiftirc.dev/
-http://rpg.swiftirc.dev/map
 ```
 
 #### Option 2: Development Servers
 
 Run the following commands:
+
 ```
 npm run dev &
 php artisan serve
