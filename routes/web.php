@@ -57,10 +57,15 @@ Route::get('/dashboard', function () {
 
 Route::get('/api/tiles', function () {
     $tiles = Tile::all();
+    $is_admin = false;
 
-    $tiles->each(function ($tile) {
+    if (Auth::check()) {
+        $is_admin = Auth::user()->getAttributes('is_admin');
+    }
+
+    $tiles->each(function ($tile) use ($is_admin) {
         $tile->terrain = $tile->terrain()->first();
-        if ($tile->discovered_by !== null || $tile->terrain->name == 'Water') {
+        if ($tile->discovered_by !== null || $tile->terrain->name == 'Water' || $is_admin) {
             $tile->edges = $tile->edges()->get()->each(function ($edge) {
                 $edge->terrain = $edge->terrain()->first();
             });

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Map\Generate;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class MapGenerate extends Command
 {
@@ -12,7 +13,7 @@ class MapGenerate extends Command
      *
      * @var string
      */
-    protected $signature = 'map:generate';
+    protected $signature = 'map:generate {--seed=0}';
 
     /**
      * The console command description.
@@ -28,6 +29,12 @@ class MapGenerate extends Command
      */
     public function handle()
     {
+        $seed = $this->option('seed');
+
+        Log::info("Generating Map - using seed: " . $seed);
+
+        srand(crc32($seed));
+
         return app(Generate::class)->map();
     }
 }

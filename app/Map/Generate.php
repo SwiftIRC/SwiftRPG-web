@@ -252,8 +252,8 @@ class Generate
     public function terrain(): array
     {
         $terrain = [
-            'count' => random_int(2, 7),
-            'terrain_id' => Terrain::where('name', '!=', 'Water')->inRandomOrder()->first()->id,
+            'count' => rand(2, 7),
+            'terrain_id' => Terrain::where('name', '!=', 'Water')->get()->random()->id,
         ];
 
         return $terrain;
@@ -267,11 +267,11 @@ class Generate
         }
 
         if ($tile->terrain_id == 1) { // Grass
-            $trees = random_int(0, 100);
+            $trees = rand(0, 100);
         } elseif ($tile->terrain_id == 2) { // Forest
-            $trees = random_int(50, 200);
+            $trees = rand(50, 200);
         } elseif ($tile->terrain_id == 5) { // Mountain
-            $trees = random_int(0, 15);
+            $trees = rand(0, 15);
         } else {
             $trees = 0;
         }
@@ -292,7 +292,7 @@ class Generate
                 $is_road = $adjacent_edge->pivot->is_road;
             } else {
                 $edge = Edge::where('name', '!=', 'Water')->get()->random();
-                $is_road = random_int(0, 100) <= 45; // 45% chance of being a road - this is the magic number
+                $is_road = rand(0, 100) <= 45; // 45% chance of being a road - this is the magic number
             }
 
             $edge->terrain_id = $tile->terrain_id;
