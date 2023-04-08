@@ -18,12 +18,6 @@ class Item extends Model
         'name',
         'description',
         'weight',
-        'interactive',
-        'wieldable',
-        'throwable',
-        'wearable',
-        'consumable',
-        'durability',
     ];
 
     protected $hidden = [

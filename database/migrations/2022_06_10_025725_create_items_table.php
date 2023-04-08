@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
-            $table->softDeletes();
             $table->string("name", 100)->unique();
             $table->string("description", 255)->nullable();
             $table->bigInteger("weight")->unsigned();
-            $table->smallInteger("durability")->unsigned()->default(100);
+            $table->float("ticks")->unsigned()->default(0);
+
+            $table->timestamps();
+            $table->softDeletes();
+            // $table->smallInteger("durability")->unsigned()->default(100);
             // $table->boolean("interactive")->default(false);
             // $table->boolean("wieldable")->default(false);
             // $table->boolean("throwable")->default(false);
@@ -51,7 +53,7 @@ return new class extends Migration
             $table->boolean("compounds");
         });
 
-        Schema::create('effectproperties', function (Blueprint $table) {
+        Schema::create('effect_properties', function (Blueprint $table) {
             $table->id();
             $table->string("name", 100);
             $table->string("description", 255);
@@ -60,16 +62,16 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('effect_effectproperties', function (Blueprint $table) {
+        Schema::create('effect_effect_property', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("effect_id")->unsigned();
-            $table->bigInteger("effectproperty_id")->unsigned();
+            $table->bigInteger("effect_property_id")->unsigned();
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign("effect_id")->references("id")->on("effects");
-            $table->foreign("effectproperty_id")->references("id")->on("effectproperties");
+            $table->foreign("effect_property_id")->references("id")->on("effect_properties");
         });
 
         Schema::create('effect_item', function (Blueprint $table) {
@@ -96,7 +98,7 @@ return new class extends Migration
             $table->foreign("item_id")->references("id")->on("items");
         });
 
-        Schema::create('itemproperties', function (Blueprint $table) {
+        Schema::create('item_properties', function (Blueprint $table) {
             $table->id();
             $table->string("name", 100);
             $table->string("description", 255);
@@ -105,15 +107,15 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('item_itemproperties', function (Blueprint $table) {
+        Schema::create('item_item_property', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->softDeletes();
             $table->bigInteger("item_id")->unsigned();
-            $table->bigInteger("itemproperty_id")->unsigned();
+            $table->bigInteger("item_property_id")->unsigned();
 
             $table->foreign("item_id")->references("id")->on("items");
-            $table->foreign("itemproperty_id")->references("id")->on("itemproperties");
+            $table->foreign("item_property_id")->references("id")->on("item_properties");
         });
     }
 
@@ -124,12 +126,12 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('item_itemproperties');
-        Schema::dropIfExists('itemproperties');
+        Schema::dropIfExists('item_item_property');
+        Schema::dropIfExists('item_properties');
         Schema::dropIfExists('item_user');
         Schema::dropIfExists('effect_item');
-        Schema::dropIfExists('effect_effectproperties');
-        Schema::dropIfExists('effectproperties');
+        Schema::dropIfExists('effect_effect_property');
+        Schema::dropIfExists('effect_properties');
         Schema::dropIfExists('effects');
         Schema::dropIfExists('items');
     }
