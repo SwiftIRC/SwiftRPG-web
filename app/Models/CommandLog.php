@@ -16,7 +16,7 @@ class CommandLog extends Model
         'command_id',
         'ticks',
         'ticks_remaining',
-        'direction',
+        'metadata',
     ];
 
     protected $hidden = [

@@ -9,7 +9,8 @@ use App\Models\Occupation;
 use App\Models\Tile;
 use App\Models\User;
 use function PHPUnit\Framework\isNull;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class Move
 {
@@ -98,7 +99,7 @@ class Move
         $current_tile = Tile::where('id', $user->tile_id)->first();
 
         if (!$this->check_if_edge_is_road($current_tile, $direction)) {
-            return response()->json(['error' => 'There is no road in that direction.'], 403);
+            return ['error' => 'There is no road in that direction.'];
         }
 
         $x = $user->tile()->x;
@@ -134,6 +135,10 @@ class Move
             $new_tile->discovered_by = $user->id;
             $new_tile->discovered_at = now();
             $new_tile->save();
+
+            Log::info($new_tile->just_discovered);
+
+            $user->agility += $new_tile->just_discovered;
 
             // Add NPCs and buildings to the tile
             $num_building = rand(0, 5);
@@ -200,45 +205,44 @@ class Move
         return $new_tile;
     }
 
-    public function look(User $user): ?JsonResponse
+    public function look(User $user): ?Tile
     {
-        $tile = Tile::where('id', $user->tile_id)->first();
+        $tile = Tile::find($user->tile_id);
 
         $tile->npcs = $tile->npcs()->get();
         $tile->edges = $tile->edges()->get();
         $tile->terrain = $tile->terrain()->get();
         $tile->buildings = $tile->buildings()->get();
 
-        return response()->json($tile);
+        return $tile;
     }
 
-    public function look_at(User $user, string $direction): ?JsonResponse
+    public function look_at(User $user, string $direction): ?Tile
     {
-        $tile = Tile::where('id', $user->tile_id)->first();
+        $tile = Tile::find($user->tile_id);
 
         $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
 
         if (!$adjacent_tile || !$this->check_if_edge_is_road($tile, $direction)) {
-            return response()->json(['error' => 'There is no road in that direction.'], 403);
+            return ['error' => 'There is no road in that direction.'];
         }
 
         $adjacent_tile->terrain = $adjacent_tile->terrain()->first();
 
-        return response()->json($adjacent_tile);
+        return $adjacent_tile;
     }
 
-    public function npcs(User $user): ?JsonResponse
+    public function npcs(User $user): ?Collection
     {
-        $npcs = Tile::where('id', $user->tile_id)->first()->npcs()->get();
-        foreach ($npcs as $npc) {
+        $npcs = Tile::find($user->tile_id)->first()->npcs()->get()->each(function ($npc) {
             $npc->occupation = $npc->occupation()->first();
-        }
+        });
 
-        return response()->json($npcs);
+        return $npcs;
     }
 
-    public function buildings(User $user): ?JsonResponse
+    public function buildings(User $user): ?Collection
     {
-        return response()->json(Tile::where('id', $user->tile_id)->first()->buildings()->get());
+        return Tile::find($user->tile_id)->first()->buildings()->get();
     }
 }

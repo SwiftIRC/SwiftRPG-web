@@ -29,7 +29,7 @@ class Inspect extends Command
             'method' => 'inspect',
             'experience' => 0,
             'reward' => $this->generateReward(),
-            'meta' => compact('response'),
+            'metadata' => compact('response'),
             'ticks' => $command->ticks + $response->step->ticks,
             'seconds_until_tick' => 0,
         ]);

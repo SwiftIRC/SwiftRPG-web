@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,6 +31,10 @@ class Tile extends Model
         'deleted_at',
     ];
 
+    protected $appends = [
+        'just_discovered',
+    ];
+
     public function buildings(): ?BelongsToMany
     {
         return $this->belongsToMany(Building::class);
@@ -53,5 +58,12 @@ class Tile extends Model
     public function users(): ?BelongsTo
     {
         return $this->belongsTo(User::class, 'id', 'tile_id');
+    }
+
+    protected function justDiscovered(): Attribute
+    {
+        return Attribute::make(
+            get:fn($value) => ($this->discovered_by === null ? 50 : 0),
+        );
     }
 }

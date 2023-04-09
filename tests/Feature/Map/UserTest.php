@@ -97,7 +97,7 @@ class UserTest extends TestCase
         ]);
 
         $response->assertJson([
-            'meta' => [
+            'metadata' => [
                 'response' => [
                     'x' => $tile->x,
                     'y' => $tile->y + 1,
@@ -184,7 +184,7 @@ class UserTest extends TestCase
 
         $response->assertJson([
             'ticks' => $command->ticks,
-            'meta' => [
+            'metadata' => [
                 'response' => [
                     'error' => 'There is no road in that direction.',
                 ],
@@ -219,7 +219,7 @@ class UserTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJson([
-            'meta' => [
+            'metadata' => [
                 'response' => [
                     'id' => $tile->id,
                 ],

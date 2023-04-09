@@ -13,11 +13,17 @@ class Start extends Command
     public function execute(object $input): \Illuminate\Http\JsonResponse
     {
         $user = $input->user()->first();
+        $quest = Quest::find($input->quest_id);
 
         $increment = $this->quantity;
 
-        $user->thieving += $increment;
-        $user->addGold($increment);
+        $skills = get_skills();
+
+        $skills->each(function ($skill) use ($user, $quest) {
+            $user->{$skill} += $quest->{$skill};
+        });
+
+        $user->addGold($quest->gold);
         $user->save();
 
         return response()->json();
@@ -40,7 +46,7 @@ class Start extends Command
             'method' => 'start',
             'experience' => 0,
             'reward' => $this->generateReward(),
-            'meta' => compact('response'),
+            'metadata' => compact('response'),
             'ticks' => $command->ticks + $response->step->ticks,
             'seconds_until_tick' => 0,
         ]);

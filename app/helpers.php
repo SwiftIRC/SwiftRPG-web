@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -38,5 +39,26 @@ if (!function_exists('post_webhook_endpoint')) {
         Log::info('POST ' . $endpoint . ' ' . json_encode($data));
 
         return Http::withHeaders(['X-Bot-Token' => env('BOT_TOKEN')])->withoutVerifying()->post($endpoint, $data);
+    }
+}
+
+if (!function_exists('get_skills')) {
+    function get_skills()
+    {
+        return Collection::make([
+            'thieving',
+            'fishing',
+            'mining',
+            'woodcutting',
+            'firemaking',
+            'cooking',
+            'smithing',
+            'fletching',
+            'crafting',
+            'herblore',
+            'agility',
+            'farming',
+            'hunter',
+        ]);
     }
 }

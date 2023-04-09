@@ -45,7 +45,8 @@ class Skill
                 'command_id' => $command->id,
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,
-                'direction' => $output->original['meta']['direction'] ?? null,
+                'metadata' => json_encode($output->original['metadata'] ?? null),
+                // 'direction' => $output->original['metadata']['direction'] ?? null,
             ]);
         }
 

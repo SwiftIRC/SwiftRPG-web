@@ -4,6 +4,7 @@ namespace App\Commands\Agility;
 
 use App\Commands\Command;
 use App\Map\Move;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class Look extends Command
@@ -23,18 +24,22 @@ class Look extends Command
         $direction = array_pop($input);
 
         if (in_array($direction, ['north', 'south', 'east', 'west'])) {
-            $return = app(Move::class)->look_at($user, $direction);
+            $response = app(Move::class)->look_at($user, $direction);
         } else {
-            $return = app(Move::class)->look($user);
+            $response = app(Move::class)->look($user);
         }
 
-        $response = $return->original;
+        $metadata = [
+            'direction' => $direction,
+            'response' => $response,
+            'discovered_by' => User::find($response->discovered_by),
+        ];
 
         return response()->json([
             'skill' => 'agility',
             'experience' => $user->agility,
             'reward' => $this->generateReward(),
-            'meta' => compact('direction', 'response'),
+            'metadata' => $metadata,
         ]);
     }
 

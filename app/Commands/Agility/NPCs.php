@@ -19,13 +19,13 @@ class NPCs extends Command
     {
         $user = Auth::user();
 
-        $response = app(Move::class)->npcs($user)->original;
+        $response = app(Move::class)->npcs($user);
 
         return response()->json([
             'skill' => 'agility',
             'experience' => $user->agility,
             'reward' => $this->generateReward(),
-            'meta' => compact('response'),
+            'metadata' => compact('response'),
         ]);
     }
 

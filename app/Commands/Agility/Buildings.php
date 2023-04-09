@@ -19,13 +19,13 @@ class Buildings extends Command
     {
         $user = Auth::user();
 
-        $response = app(Move::class)->buildings($user)->original;
+        $response = app(Move::class)->buildings($user);
 
         return response()->json([
             'skill' => 'agility',
             'experience' => $user->agility,
             'reward' => $this->generateReward(),
-            'meta' => compact('response'),
+            'metadata' => compact('response'),
         ]);
     }
 
