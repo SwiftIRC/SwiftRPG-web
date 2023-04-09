@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -33,6 +34,7 @@ return new class extends Migration
             $table->unsignedMediumInteger("hunter")->default(0);
 
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('quest_steps', function (Blueprint $table) {
