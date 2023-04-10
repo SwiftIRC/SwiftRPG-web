@@ -58,7 +58,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('zoneproperties', function (Blueprint $table) {
+        Schema::create('zone_properties', function (Blueprint $table) {
             $table->id();
 
             $table->string('name', 100);
@@ -68,17 +68,17 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('zone_zoneproperty', function (Blueprint $table) {
+        Schema::create('zone_zone_property', function (Blueprint $table) {
             $table->id();
 
             $table->bigInteger('zone_id')->unsigned();
-            $table->bigInteger('zoneproperty_id')->unsigned();
+            $table->bigInteger('zone_property_id')->unsigned();
 
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('zone_id')->references('id')->on('zones');
-            $table->foreign('zoneproperty_id')->references('id')->on('zoneproperties');
+            $table->foreign('zone_property_id')->references('id')->on('zone_properties');
         });
 
         Schema::create('buildings', function (Blueprint $table) {
@@ -271,8 +271,8 @@ return new class extends Migration
         Schema::dropIfExists('occupations');
         Schema::dropIfExists('building_tile');
         Schema::dropIfExists('buildings');
-        Schema::dropIfExists('zone_zoneproperty');
-        Schema::dropIfExists('zoneproperties');
+        Schema::dropIfExists('zone_zone_property');
+        Schema::dropIfExists('zone_properties');
         Schema::dropIfExists('zones');
         Schema::dropIfExists('tiles');
         Schema::dropIfExists('terrains');

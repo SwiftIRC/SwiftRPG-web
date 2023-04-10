@@ -63,7 +63,7 @@ class Tile extends Model
     protected function justDiscovered(): Attribute
     {
         return Attribute::make(
-            get:fn($value) => ($this->discovered_by === null ? 50 : 0),
+            get:fn() => ($this->discovered_by === null ? 50 : 0),
         );
     }
 }

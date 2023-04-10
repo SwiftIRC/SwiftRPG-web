@@ -38,6 +38,6 @@ class Item extends Model
 
     public function itemproperties()
     {
-        return $this->belongsTo(Itemproperty::class)->withTimestamps();
+        return $this->belongsTo(ItemProperty::class)->withTimestamps();
     }
 }

@@ -37,6 +37,6 @@ class Effect extends Model
 
     public function effectproperties()
     {
-        return $this->belongsToMany(Effectproperty::class)->withTimestamps();
+        return $this->belongsToMany(EffectProperty::class)->withTimestamps();
     }
 }

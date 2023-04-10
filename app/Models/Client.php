@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,19 +26,19 @@ class Client extends Model
         'webhook_port' => 'integer',
     ];
 
+    protected $appends = [
+        'endpoint',
+    ];
+
     public function valid()
     {
         return $this->where('updated_at', '>=', now()->subMinutes(5))->get();
     }
 
-    public function endpoints()
+    protected function endpoint(): Attribute
     {
-        $clients = $this->valid();
-        $endpoints = [];
-        foreach ($clients as $client) {
-            array_push($endpoints, 'https://' . $client->webhook_address . ':' . $client->webhook_port . '/global');
-        }
-
-        return $endpoints;
+        return Attribute::make(
+            get:fn() => 'https://' . $this->webhook_address . ':' . $this->webhook_port . '/global',
+        );
     }
 }

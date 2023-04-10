@@ -7,7 +7,7 @@ use App\Models\Npc;
 use App\Models\Occupation;
 use App\Models\Tile;
 use App\Models\Zone;
-use App\Models\Zoneproperty;
+use App\Models\ZoneProperty;
 use Illuminate\Database\Seeder;
 
 class NpcSeeder extends Seeder
@@ -21,37 +21,37 @@ class NpcSeeder extends Seeder
     {
         $tile1 = Tile::where('psuedo_id', '0,0')->first();
 
-        $is_shop = Zoneproperty::create([
+        $is_shop = ZoneProperty::create([
             'name' => 'is_shop',
             'description' => 'Is this a shop? Can we buy things from it?',
         ]);
 
-        $is_pub = Zoneproperty::create([
+        $is_pub = ZoneProperty::create([
             'name' => 'is_pub',
             'description' => 'Is this a pub? Can we drink here?',
         ]);
 
-        $is_house = Zoneproperty::create([
+        $is_house = ZoneProperty::create([
             'name' => 'is_house',
             'description' => 'Is this a house? Can we sleep here?',
         ]);
 
-        $is_bed = Zoneproperty::create([
+        $is_bed = ZoneProperty::create([
             'name' => 'is_bed',
             'description' => 'Is this a bed? Can we sleep here?',
         ]);
 
-        $is_accessible = Zoneproperty::create([
+        $is_accessible = ZoneProperty::create([
             'name' => 'is_accessible',
             'description' => 'Is this accessible? Can we go here?',
         ]);
 
-        $is_locked = Zoneproperty::create([
+        $is_locked = ZoneProperty::create([
             'name' => 'is_locked',
             'description' => 'Is this locked? Can we go here?',
         ]);
 
-        $is_pilferable = Zoneproperty::create([
+        $is_pilferable = ZoneProperty::create([
             'name' => 'is_pilferable',
             'description' => 'Is this pilferable? Can we steal from it?',
         ]);

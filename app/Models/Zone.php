@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Occupation;
-use App\Models\Zoneproperty;
+use App\Models\ZoneProperty;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -30,6 +30,6 @@ class Zone extends Model
 
     public function zoneproperties()
     {
-        return $this->belongsToMany(Zoneproperty::class)->withTimestamps();
+        return $this->belongsToMany(ZoneProperty::class)->withTimestamps();
     }
 }
