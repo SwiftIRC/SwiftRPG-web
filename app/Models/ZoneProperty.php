@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Models\Effect;
+use App\Models\Zone;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Effectproperty extends Model
+class ZoneProperty extends Model
 {
-    use HasTimestamps, SoftDeletes;
+    use SoftDeletes, HasTimestamps;
 
     protected $fillable = [
         'name',
@@ -22,8 +22,8 @@ class Effectproperty extends Model
         'deleted_at',
     ];
 
-    public function effects()
+    public function zones()
     {
-        return $this->hasMany(Effect::class);
+        return $this->hasMany(Zone::class);
     }
 }
