@@ -28,12 +28,12 @@ class Quest extends Model
         'agility',
         'farming',
         'hunter',
+        'deleted_at',
     ];
 
     protected $hidden = [
         'created_at',
         'updated_at',
-        'deleted_at',
     ];
 
     public function steps()

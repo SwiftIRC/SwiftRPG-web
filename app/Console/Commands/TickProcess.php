@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Commands\Agility\Explore;
 use App\Commands\Firemaking\Burn;
+use App\Commands\Questing\Inspect;
 use App\Commands\Questing\Start;
 use App\Commands\Thieving\Pickpocket;
 use App\Commands\Woodcutting\Chop;
@@ -51,20 +52,19 @@ class TickProcess extends Command
             ],
             'questing' => [
                 'start' => Start::class,
+                'inspect' => Inspect::class,
             ],
         ];
 
         $commands = CommandModel::all();
 
-        $rows = $where->get();
-
-        foreach ($rows as $row) {
+        $where->get()->each(function ($row) use ($commands, $map) {
             if ($row->ticks_remaining == 1) {
-                $row->command = $commands->where('id', $row->command_id)->first();
+                $row->command = $commands->firstWhere('id', $row->command_id);
 
                 app($map[$row->command->class][$row->command->method])->execute($row);
             }
-        }
+        });
 
         $where->decrement('ticks_remaining');
 

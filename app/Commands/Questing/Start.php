@@ -4,27 +4,30 @@ namespace App\Commands\Questing;
 
 use App\Commands\Command;
 use App\Models\Quest;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class Start extends Command
 {
-    protected $quantity = 5;
+    protected $quantity = 0;
 
     public function execute(object $input): \Illuminate\Http\JsonResponse
     {
         $user = $input->user()->first();
-        $quest = Quest::find($input->quest_id);
+        $json = json_decode($input->metadata);
+        $quest = Collection::make([$json->response])[0];
 
-        $increment = $this->quantity;
+        if (count($quest->incompleteSteps) == 1 && $quest->incompleteSteps[0]->id == $quest->requested_step_id) {
 
-        $skills = get_skills();
+            $skills = get_skills();
 
-        $skills->each(function ($skill) use ($user, $quest) {
-            $user->{$skill} += $quest->{$skill};
-        });
+            $skills->each(function ($skill) use ($user, $quest) {
+                $user->{$skill} += $quest->{$skill};
+            });
 
-        $user->addGold($quest->gold);
-        $user->save();
+            $user->addGold($quest->gold);
+            $user->save();
+        }
 
         return response()->json();
     }
