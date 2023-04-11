@@ -1,10 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgilityController;
-use App\Http\Controllers\QuestController;
 use App\Http\Controllers\ThievingController;
-use App\Models\Client;
-use App\Models\Quest;
 use App\Models\Terrain;
 use App\Models\Tile;
 use App\Models\User;
@@ -44,9 +41,13 @@ Route::get('/map', function () {
     return view('mapguest');
 })->name('mapguest');
 
+Route::get('/user', function () {
+    return view('user');
+})->middleware(['auth'])->name('user');
+
 Route::get('/admin', function () {
     return view('admin');
-})->middleware(['admin']);
+})->middleware(['admin'])->name('admin');
 
 Route::get('/dashboard', function () {
     $user = Auth::user();
@@ -121,44 +122,5 @@ Route::name('stats.')->prefix('stats')->group(function () {
 Route::name('thieving.')->prefix('thieving')->group(function () {
     Route::get('/pickpocket', [ThievingController::class, 'pickpocket']);
 });
-
-// The below routes are all for testing and will be removed later
-
-Route::get('quest', function () {
-    $user = Auth::user();
-
-    if (empty($user)) {
-        return response()->json('log in you fool');
-    }
-
-    return response()->json($user->quests()->get());
-});
-
-Route::get('quests', function () {
-    $quests = Quest::all();
-
-    foreach ($quests as $quest) {
-        $quest->steps = $quest->steps()->get();
-
-        foreach ($quest->steps as $step) {
-            $step->dependencies = $step->dependencies()->get();
-        }
-    }
-
-    return response()->json($quests);
-});
-
-Route::get('test', function () {
-    $endpoints = app(Client::class)->endpoints();
-
-    foreach ($endpoints as $endpoint) {
-        post_webhook_endpoint($endpoint, 'foo');
-    }
-
-    return response()->json();
-});
-
-// Route::get('/quest/start/{quest_id}/{step_id?}', [QuestController::class, 'start']);
-Route::get('/quest/inspect/{quest_id}', [QuestController::class, 'inspect']);
 
 require __DIR__ . '/auth.php';

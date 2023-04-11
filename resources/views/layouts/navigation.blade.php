@@ -47,6 +47,9 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        <x-dropdown-link :href="route('user')">
+                            {{ __('User') }}
+                        </x-dropdown-link>
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
@@ -89,6 +92,9 @@
             <x-responsive-nav-link :href="route('hiscores')" :active="request()->routeIs('hiscores')">
                 {{ __('Hiscores') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('usermap')" :active="request()->routeIs('usermap')">
+                {{ __('Map') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -98,6 +104,9 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('user')">
+                    {{ __('User') }}
+                </x-responsive-nav-link>
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf

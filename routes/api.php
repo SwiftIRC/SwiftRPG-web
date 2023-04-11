@@ -24,16 +24,21 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::middleware(['app'])->name('auth.')->prefix('auth')->group(function () {
-    Route::post('/', [AuthController::class, 'check']);
-    Route::post('/register', [AuthController::class, 'register']);
-});
-
 Route::middleware(['app'])->name('client.')->prefix('client')->group(function () {
     Route::post('/register', [ClientController::class, 'register']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::name('auth.')->prefix('auth')->group(function () {
+        Route::get('/token', [AuthController::class, 'token'])->name('token');
+
+        Route::middleware('auth:sanctum', 'abilities:login')->group(function () {
+            Route::name('token.')->prefix('token')->group(function () {
+                Route::get('login', [AuthController::class, 'login'])->name('login');
+            });
+        });
+    });
+
     Route::name('thieving.')->prefix('thieving')->group(function () {
         Route::get('/', [ThievingController::class, 'index']);
         Route::post('/pickpocket', [ThievingController::class, 'pickpocket']);
