@@ -13,8 +13,22 @@
                             event.target.style.display = 'none';
                         }
                     }">
-                        <button @click="getToken()">Get Token</button>
+                        <button @click="getToken()">Click Here to generate a login token</button>
                         <p x-text="token"></p>
+                        <br>
+                        <h1>What is a token?</h1>
+                        You can messag the bot the token to log in. It's usually `/login` or `.login` depending on your
+                        platform.<br>
+                        <br>
+                        <code>
+                            /login 11|1aatijh8eIMxCEye2Rs4K0HW12T4mXFr5ts7gEP8
+                        </code>
+                        <br>
+                        OR
+                        <br>
+                        <code>
+                            .login 11|1aatijh8eIMxCEye2Rs4K0HW12T4mXFr5ts7gEP8
+                        </code>
                     </div>
                 </div>
             </div>
