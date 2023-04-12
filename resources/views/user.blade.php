@@ -4,7 +4,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div x-data="{
-                        token: null,
+                        token: '<token>',
                     
                         getToken() {
                             fetch('{{ route('auth.token') }}')
@@ -21,13 +21,13 @@
                         platform.<br>
                         <br>
                         <code>
-                            /login 11|1aatijh8eIMxCEye2Rs4K0HW12T4mXFr5ts7gEP8
+                            /login <code x-text="token"></code>
                         </code>
                         <br>
-                        OR
+                        or
                         <br>
                         <code>
-                            .login 11|1aatijh8eIMxCEye2Rs4K0HW12T4mXFr5ts7gEP8
+                            .login <code x-text="token"></code>
                         </code>
                     </div>
                 </div>
