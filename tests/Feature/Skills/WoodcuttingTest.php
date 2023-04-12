@@ -87,6 +87,6 @@ class WoodcuttingTest extends TestCase
 
         $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Bot-Token' => config('app.token')]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(200);
     }
 }

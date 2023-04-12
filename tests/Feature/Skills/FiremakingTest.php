@@ -93,7 +93,7 @@ class FiremakingTest extends TestCase
 
         $response = $this->actingAs($user)->post('/api/firemaking/burn', [], ['X-Bot-Token' => config('app.token')]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(200);
 
         $response->assertJson([
             'error' => 'There are no logs in your inventory to burn!',

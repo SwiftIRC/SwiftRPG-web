@@ -12,7 +12,7 @@ class Firemaking extends Skill
         try {
             return app(Burn::class)->queue($input);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         }
     }
 }

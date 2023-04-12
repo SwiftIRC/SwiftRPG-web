@@ -17,7 +17,7 @@ class WoodcuttingController extends Controller
         try {
             return app(Woodcutting::class)->chop();
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         }
     }
 }

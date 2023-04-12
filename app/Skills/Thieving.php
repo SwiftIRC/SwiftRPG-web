@@ -15,7 +15,7 @@ class Thieving extends Skill
         try {
             return app(Pickpocket::class)->queue($input);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         } catch (OverflowException $e) {
             return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(1)], 200);
         }
@@ -26,7 +26,7 @@ class Thieving extends Skill
         try {
             return app(Steal::class)->queue();
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         } catch (OverflowException $e) {
             return response()->json(['error' => $e->getMessage(), 'hitpoints' => Auth::user()->damage(2)], 200);
         }

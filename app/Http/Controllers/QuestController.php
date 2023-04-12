@@ -22,7 +22,7 @@ class QuestController extends Controller
         try {
             return app(Questing::class)->start($request);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         }
 
     }
@@ -36,7 +36,7 @@ class QuestController extends Controller
         try {
             return app(Questing::class)->inspect($request->quest_id);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         }
     }
 }

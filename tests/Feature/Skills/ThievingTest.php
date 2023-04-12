@@ -77,7 +77,7 @@ class ThievingTest extends TestCase
 
         $response = $this->actingAs($user)->post('/api/thieving/pickpocket', [], ['X-Bot-Token' => config('app.token')]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(200);
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -140,7 +140,7 @@ class ThievingTest extends TestCase
 
         $response = $this->actingAs($user)->post('/api/thieving/steal', [], ['X-Bot-Token' => config('app.token')]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(200);
     }
 
     public function test_user_can_pilfer()
@@ -181,7 +181,7 @@ class ThievingTest extends TestCase
 
         $response = $this->actingAs($user)->post('/api/thieving/pilfer', [], ['X-Bot-Token' => config('app.token')]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(200);
     }
 
     public function test_user_can_plunder()
@@ -222,6 +222,6 @@ class ThievingTest extends TestCase
 
         $response = $this->actingAs($user)->post('/api/thieving/plunder', [], ['X-Bot-Token' => config('app.token')]);
 
-        $response->assertStatus(403);
+        $response->assertStatus(200);
     }
 }

@@ -15,7 +15,7 @@ class Agility extends Skill
         try {
             return app(Explore::class)->queue($direction);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         }
     }
 
@@ -24,7 +24,7 @@ class Agility extends Skill
         try {
             return app(Look::class)->queue($direction);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         }
     }
 

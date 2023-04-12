@@ -13,7 +13,7 @@ class AgilityController extends Controller
         try {
             return app(Agility::class)->explore($request->direction);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         }
     }
 
@@ -22,7 +22,7 @@ class AgilityController extends Controller
         try {
             return app(Agility::class)->look($request->direction);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         }
     }
 

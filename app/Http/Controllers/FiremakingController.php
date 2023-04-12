@@ -12,7 +12,7 @@ class FiremakingController extends Controller
         try {
             return app(Firemaking::class)->burn();
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 403);
+            return response()->json(['error' => $e->getMessage()], 200);
         }
     }
 }
