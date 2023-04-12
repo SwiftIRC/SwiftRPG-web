@@ -17,7 +17,7 @@
                         <p x-text="token"></p>
                         <br>
                         <h1>What is a token?</h1>
-                        You can messag the bot the token to log in. It's usually `/login` or `.login` depending on your
+                        You can message the bot the token to log in. It's usually `/login` or `.login` depending on your
                         platform.<br>
                         <br>
                         <code>
