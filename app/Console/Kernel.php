@@ -18,6 +18,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('tick:process')->everyMinute();
         $schedule->command('tick:specialevent')->everyMinute();
         $schedule->command('map:regenerate')->everyFiveMinutes();
+        $schedule->command('auth:clear-resets')->everyFifteenMinutes();
+        $schedule->command('sanctum:prune-expired --hours=24')->daily();
     }
 
     /**
