@@ -1,18 +1,18 @@
 <x-app-layout>
-    <div class="py-12">
+    <div class="py-12" x-data="{
+        token: '<token>',
+    
+        getToken() {
+            fetch('{{ route('auth.token') }}')
+                .then((response) => response.json())
+                .then((json) => this.token = json.token);
+            event.target.style.display = 'none';
+        }
+    }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <div x-data="{
-                        token: '<token>',
-                    
-                        getToken() {
-                            fetch('{{ route('auth.token') }}')
-                                .then((response) => response.json())
-                                .then((json) => this.token = json.token);
-                            event.target.style.display = 'none';
-                        }
-                    }">
+                    <div>
                         <button @click="getToken()">Click Here to generate a login token</button>
                         <p x-text="token"></p>
                         <br>
@@ -21,8 +21,8 @@
                         platform.<br>
                         <br>
                         <code>
-                            /login <code x-text="token"></code>
-                        </code>
+                            /login
+                        </code> and enter <code x-text="token"></code>
                         <br>
                         or
                         <br>

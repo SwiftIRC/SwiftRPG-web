@@ -45,6 +45,7 @@ class Explore extends Command
                 'direction' => $direction,
                 'error' => $response['error'],
             ];
+            $ticks = 0;
         } else {
             $metadata = [
                 'direction' => $direction,
