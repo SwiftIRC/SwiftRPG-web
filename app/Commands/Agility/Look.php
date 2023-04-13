@@ -29,17 +29,16 @@ class Look extends Command
             $response = app(Move::class)->look($user);
         }
 
-        $metadata = [
-            'direction' => $direction,
-            'response' => $response,
-            'discovered_by' => User::find($response->discovered_by),
-        ];
+        $response->direction = $direction;
+        $response->discovered_by = User::find($response->discovered_by);
 
         return response()->json([
             'skill' => 'agility',
             'experience' => $user->agility,
             'reward' => $this->generateReward(),
-            'metadata' => $metadata,
+            'metadata' => $response,
+            'ticks' => $this->quantity,
+            'seconds_until_tick' => $this->quantity,
         ]);
     }
 

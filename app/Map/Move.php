@@ -227,7 +227,10 @@ class Move
             return ['error' => 'There is no road in that direction.'];
         }
 
+        $adjacent_tile->npcs = $adjacent_tile->npcs()->get();
+        $adjacent_tile->edges = $adjacent_tile->edges()->get();
         $adjacent_tile->terrain = $adjacent_tile->terrain()->first();
+        $adjacent_tile->buildings = $adjacent_tile->buildings()->get();
 
         return $adjacent_tile;
     }

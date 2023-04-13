@@ -59,7 +59,7 @@ class Explore extends Command
 
         return response()->json([
             'skill' => 'agility',
-            'experience' => $user->agility,
+            'experience' => $user->agility + $response->just_discovered,
             'reward' => $this->generateReward(),
             'metadata' => $metadata,
             'ticks' => $ticks,
