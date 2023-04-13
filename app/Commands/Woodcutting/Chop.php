@@ -4,6 +4,7 @@ namespace App\Commands\Woodcutting;
 
 use App\Commands\Command;
 use App\Models\Item;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use RangeException;
 
@@ -48,14 +49,18 @@ class Chop extends Command
         $item = Item::where('name', 'Logs')->first();
         $logs = $user->numberInInventory($item);
 
-        return response()->json([
-            'skill' => 'woodcutting',
-            'experience' => $user->woodcutting,
-            'reward_xp' => $this->quantity,
-            'reward' => $this->generateReward($logs),
-            'ticks' => $command->ticks,
-            'seconds_until_tick' => seconds_until_tick($command->ticks),
-        ]);
+        return response()->object(
+            Collection::make(
+                [
+                    'skill' => 'woodcutting',
+                    'experience' => $user->woodcutting,
+                    'reward_xp' => $this->quantity,
+                    'reward' => $this->generateReward($logs),
+                    'ticks' => $command->ticks,
+                    'seconds_until_tick' => seconds_until_tick($command->ticks),
+                ]
+            )
+        );
     }
 
     protected function generateReward($total = 0): array
