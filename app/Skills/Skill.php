@@ -46,7 +46,6 @@ class Skill
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,
                 'metadata' => json_encode($output->original['metadata'] ?? null),
-                // 'direction' => $output->original['metadata']['direction'] ?? null,
             ]);
         }
 

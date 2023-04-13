@@ -12,12 +12,12 @@ class WoodcuttingController extends Controller
         return view('woodcutting.index');
     }
 
-    public function chop(): \Illuminate\Http\JsonResponse
+    public function chop(): \Illuminate\Http\Response
     {
         try {
             return app(Woodcutting::class)->chop();
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 200);
+            return response()->error(['error' => $e->getMessage()], 200);
         }
     }
 }

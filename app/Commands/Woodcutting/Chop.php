@@ -2,13 +2,12 @@
 
 namespace App\Commands\Woodcutting;
 
-use App\Commands\Command;
+use App\Commands\Command2;
 use App\Models\Item;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use RangeException;
 
-class Chop extends Command
+class Chop extends Command2
 {
     protected $quantity = 5;
 
@@ -32,7 +31,7 @@ class Chop extends Command
         ]);
     }
 
-    public function queue(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): \Illuminate\Http\Response
     {
         $user = Auth::user();
         $tile = $user->tile();
@@ -50,16 +49,14 @@ class Chop extends Command
         $logs = $user->numberInInventory($item);
 
         return response()->object(
-            Collection::make(
-                [
-                    'skill' => 'woodcutting',
-                    'experience' => $user->woodcutting,
-                    'reward_xp' => $this->quantity,
-                    'reward' => $this->generateReward($logs),
-                    'ticks' => $command->ticks,
-                    'seconds_until_tick' => seconds_until_tick($command->ticks),
-                ]
-            )
+            [
+                'skill' => 'woodcutting',
+                'experience' => $user->woodcutting,
+                'reward_xp' => $this->quantity,
+                'reward' => $this->generateReward($logs),
+                'ticks' => $command->ticks,
+                'seconds_until_tick' => seconds_until_tick($command->ticks),
+            ]
         );
     }
 
