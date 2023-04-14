@@ -2,12 +2,11 @@
 
 namespace App\Commands\Thieving;
 
-use App\Commands\Command;
-use Illuminate\Support\Facades\Auth;
+use App\Commands\Command2;
 use OverflowException;
 use RangeException;
 
-class Pickpocket extends Command
+class Pickpocket extends Command2
 {
     protected $quantity = 5;
 
@@ -24,12 +23,13 @@ class Pickpocket extends Command
         return response()->json();
     }
 
-    public function queue(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): \Illuminate\Http\Response
     {
-        $user = Auth::user();
+        $command = array_pop($input);
+        $request = array_pop($input);
+        $user = $request->user();
         $tile = $user->tile();
         $npcs = $tile->npcs()->get();
-        $command = array_pop($input);
 
         if (!$npcs->count()) {
             $buildings = $tile->buildings()->get();
@@ -43,22 +43,28 @@ class Pickpocket extends Command
             throw new OverflowException('You failed to pickpocket, ' . $npc->first_name . ' ' . $npc->last_name . '!');
         }
 
-        return response()->json([
-            'skill' => 'thieving',
-            'method' => 'pickpocket',
-            'experience' => $user->thieving,
-            'reward' => $this->generateReward($user->gold),
-            'ticks' => $command->ticks,
-            'seconds_until_tick' => seconds_until_tick($command->ticks),
-        ]);
+        return response()->object(
+            [
+                'skill' => 'thieving',
+                'method' => 'pickpocket',
+                'experience' => $user->thieving,
+                'reward' => $this->generateReward($user->gold),
+                'ticks' => $command->ticks,
+            ]
+        );
     }
 
     protected function generateReward($total = 0): array
     {
         return [
-            'type' => 'gold',
-            'quantity' => $this->quantity,
-            'total' => $total,
+            'loot' => [
+                [
+                    'name' => 'gold',
+                    'quantity' => $this->quantity,
+                    'total' => $total,
+                ],
+            ],
+            'experience' => $this->quantity,
         ];
     }
 }

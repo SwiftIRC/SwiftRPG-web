@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Skills\Thieving;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use OverflowException;
 use RangeException;
 
 class ThievingController extends Controller
@@ -13,12 +15,30 @@ class ThievingController extends Controller
         return view('thieving.index');
     }
 
-    public function pickpocket(): \Illuminate\Http\JsonResponse
+    public function pickpocket(Request $request): \Illuminate\Http\Response
     {
         try {
-            return app(Thieving::class)->pickpocket();
+            return app(Thieving::class)->pickpocket($request);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 200);
+            return response()->error(
+                [
+                    'error' => $e->getMessage(),
+                    'metadata' => [
+                        'hitpoints' => $request->user()->damage(0),
+                    ],
+                ],
+                200
+            );
+        } catch (OverflowException $e) {
+            return response()->error(
+                [
+                    'error' => $e->getMessage(),
+                    'metadata' => [
+                        'hitpoints' => $request->user()->damage(1),
+                    ],
+                ],
+                200
+            );
         }
     }
 

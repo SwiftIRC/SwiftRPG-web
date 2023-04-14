@@ -2,12 +2,12 @@
 
 namespace App\Commands\Agility;
 
-use App\Commands\Command;
+use App\Commands\Command2;
 use App\Map\Move;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class Look extends Command
+class Look extends Command2
 {
     protected $quantity = 0;
 
@@ -16,7 +16,7 @@ class Look extends Command
         return response()->json();
     }
 
-    public function queue(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): \Illuminate\Http\Response
     {
         $user = Auth::user();
 
@@ -24,26 +24,28 @@ class Look extends Command
         $direction = array_pop($input);
 
         if (in_array($direction, ['north', 'south', 'east', 'west'])) {
-            $response = app(Move::class)->look_at($user, $direction);
+            $tile = app(Move::class)->look_at($user, $direction);
         } else {
-            $response = app(Move::class)->look($user);
+            $tile = app(Move::class)->look($user);
         }
 
-        $response->direction = $direction;
-        $response->discovered_by = User::find($response->discovered_by);
+        $tile->direction = $direction;
+        $tile->discovered_by = User::find($tile->discovered_by);
 
-        return response()->json([
+        return response()->object([
             'skill' => 'agility',
             'experience' => $user->agility,
             'reward' => $this->generateReward(),
-            'metadata' => $response,
+            'metadata' => $tile,
             'ticks' => $this->quantity,
-            'seconds_until_tick' => $this->quantity,
         ]);
     }
 
     protected function generateReward($total = 0): array
     {
-        return [];
+        return [
+            'loot' => [],
+            'experience' => 0,
+        ];
     }
 }

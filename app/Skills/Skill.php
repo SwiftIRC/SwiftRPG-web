@@ -38,14 +38,14 @@ class Skill
 
         $output = $this->$methodName(...$parameters);
 
-        $ticks = $output->original['ticks'] ?? $command->ticks;
+        $ticks = $output->original->ticks ?? $command->ticks;
 
         if ($command->log) {
             CommandLog::create([
                 'command_id' => $command->id,
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,
-                'metadata' => json_encode($output->original['metadata'] ?? null),
+                'metadata' => json_encode($output->original->metadata ?? null),
             ]);
         }
 

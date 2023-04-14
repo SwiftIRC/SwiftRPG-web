@@ -52,10 +52,8 @@ class Chop extends Command2
             [
                 'skill' => 'woodcutting',
                 'experience' => $user->woodcutting,
-                'reward_xp' => $this->quantity,
                 'reward' => $this->generateReward($logs),
                 'ticks' => $command->ticks,
-                'seconds_until_tick' => seconds_until_tick($command->ticks),
             ]
         );
     }
@@ -63,9 +61,14 @@ class Chop extends Command2
     protected function generateReward($total = 0): array
     {
         return [
-            'type' => 'logs',
-            'quantity' => $this->quantity,
-            'total' => $total,
+            'loot' => [
+                [
+                    'name' => 'Logs',
+                    'quantity' => $this->quantity,
+                    'total' => $total,
+                ],
+            ],
+            'experience' => $this->quantity,
         ];
     }
 }

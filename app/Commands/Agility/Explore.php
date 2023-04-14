@@ -2,13 +2,13 @@
 
 namespace App\Commands\Agility;
 
-use App\Commands\Command;
+use App\Commands\Command2;
 use App\Map\Move;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use RangeException;
 
-class Explore extends Command
+class Explore extends Command2
 {
     protected $quantity = 5;
 
@@ -26,7 +26,7 @@ class Explore extends Command
         return response()->json($response);
     }
 
-    public function queue(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): \Illuminate\Http\Response
     {
         $user = Auth::user();
 
@@ -57,9 +57,11 @@ class Explore extends Command
             ];
         }
 
-        return response()->json([
+        $this->quantity += $response->just_discovered;
+
+        return response()->object([
             'skill' => 'agility',
-            'experience' => $user->agility + $response->just_discovered,
+            'experience' => $user->agility,
             'reward' => $this->generateReward(),
             'metadata' => $metadata,
             'ticks' => $ticks,
@@ -68,6 +70,9 @@ class Explore extends Command
 
     protected function generateReward($total = 0): array
     {
-        return [];
+        return [
+            'loot' => [],
+            'experience' => $this->quantity,
+        ];
     }
 }

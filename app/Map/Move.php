@@ -207,7 +207,7 @@ class Move
 
     public function look(User $user): ?Tile
     {
-        $tile = Tile::find($user->tile_id);
+        $tile = Tile::firstWhere('id', $user->tile_id);
 
         $tile->npcs = $tile->npcs()->get();
         $tile->edges = $tile->edges()->get();
@@ -219,7 +219,7 @@ class Move
 
     public function look_at(User $user, string $direction): ?Tile
     {
-        $tile = Tile::find($user->tile_id);
+        $tile = Tile::firstWhere('id', $user->tile_id);
 
         $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
 
@@ -237,7 +237,7 @@ class Move
 
     public function npcs(User $user): ?Collection
     {
-        $npcs = Tile::find($user->tile_id)->first()->npcs()->get()->each(function ($npc) {
+        $npcs = Tile::firstWhere('id', $user->tile_id)->npcs()->get()->each(function ($npc) {
             $npc->occupation = $npc->occupation()->first();
         });
 
@@ -246,6 +246,6 @@ class Move
 
     public function buildings(User $user): ?Collection
     {
-        return Tile::find($user->tile_id)->first()->buildings()->get();
+        return Tile::firstWhere('id', $user->tile_id)->buildings()->get();
     }
 }
