@@ -25,7 +25,7 @@ class NPCs extends Command
             'skill' => 'agility',
             'experience' => $user->agility,
             'reward' => $this->generateReward(),
-            'metadata' => compact('response'),
+            'metadata' => $response,
         ]);
     }
 
