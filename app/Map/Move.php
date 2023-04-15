@@ -212,7 +212,7 @@ class Move
 
         $tile->npcs = $tile->npcs()->get();
         $tile->edges = $tile->edges()->get();
-        $tile->terrain = $tile->terrain()->get();
+        $tile->terrain = $tile->terrain()->first();
         $tile->buildings = $tile->buildings()->get();
 
         return $tile;
