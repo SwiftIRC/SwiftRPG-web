@@ -19,7 +19,7 @@ class TickProcess extends Command
      *
      * @var string
      */
-    protected $signature = 'tick:process';
+    protected $signature = 'tick:process {--ticks=1}';
 
     /**
      * The console command description.
@@ -35,6 +35,18 @@ class TickProcess extends Command
      */
     public function handle()
     {
+        $ticks = $this->option('ticks');
+
+        for ($i = 0; $i < $ticks; $i++) {
+            $this->processTick();
+        }
+
+        return 0;
+    }
+
+    public function processTick()
+    {
+
         $where = CommandLog::where('ticks_remaining', '>', 0);
 
         $map = [
@@ -67,7 +79,5 @@ class TickProcess extends Command
         });
 
         $where->decrement('ticks_remaining');
-
-        return 0;
     }
 }

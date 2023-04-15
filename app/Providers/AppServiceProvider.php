@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\Response\Reward;
 use App\Http\Response\Valid;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
                 $object['reward']['experience'] ?? 0,
                 $object['reward']['loot'] ?? []
             );
+            Log::info($reward);
             $response = new Valid(
                 $object['skill'],
                 $object['experience'] ?? 0,
@@ -38,17 +40,6 @@ class AppServiceProvider extends ServiceProvider
                 $object['metadata'] ?? [],
                 $object['ticks'] ?? 0
             );
-            // $response = [
-            //     'skill' => $object['skill'],
-            //     'experience' => $object['experience'] ?? 0,
-            //     'reward' => [
-            //         'loot' => $object['reward']['loot'] ?? [],
-            //         'experience' => $object['reward']['experience'],
-            //     ],
-            //     'metadata' => $object['metadata'] ?? [],
-            //     'ticks' => $object['ticks'] ?? 0,
-            //     'seconds_until_tick' => seconds_until_tick($object['ticks'] ?? 0),
-            // ];
 
             return Response::make(
                 $response,
