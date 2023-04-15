@@ -2,13 +2,13 @@
 
 namespace App\Commands\Firemaking;
 
-use App\Commands\Command;
+use App\Commands\Command2;
 use Illuminate\Support\Facades\Auth;
 use RangeException;
 
-class Burn extends Command
+class Burn extends Command2
 {
-    protected $quantity = 0;
+    protected $quantity = 5;
 
     public function execute(object $input): \Illuminate\Http\JsonResponse
     {
@@ -33,7 +33,7 @@ class Burn extends Command
         ]);
     }
 
-    public function queue(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): \Illuminate\Http\Response
     {
         $user = Auth::user();
         $log = $user->items()->where('name', 'Logs')->withPivot('deleted_at')->first();
@@ -45,7 +45,7 @@ class Burn extends Command
 
         $logs = $user->numberInInventory($log);
 
-        return response()->json([
+        return response()->object([
             'skill' => 'firemaking',
             'experience' => $user->firemaking,
             'reward' => $this->generateReward($logs),
@@ -57,9 +57,14 @@ class Burn extends Command
     protected function generateReward($total = 0): array
     {
         return [
-            'type' => 'logs',
-            'quantity' => $this->quantity,
-            'total' => $total,
+            'loot' => [
+                [
+                    'name' => 'Logs',
+                    'quantity' => -1,
+                    'total' => $total,
+                ],
+            ],
+            'experience' => $this->quantity,
         ];
     }
 }

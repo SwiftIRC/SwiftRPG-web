@@ -38,7 +38,7 @@ class Explore extends Command2
         }
         $response = app(Move::class)->look_at($user, $direction);
 
-        $ticks = $command->ticks + (isset($response['error']) ? 0 : $response['terrain']['movement_cost']);
+        $ticks = $command->ticks + $response['terrain']['movement_cost'];
 
         if (isset($response['error'])) {
             $metadata = [

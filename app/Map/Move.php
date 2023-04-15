@@ -11,6 +11,7 @@ use App\Models\User;
 use function PHPUnit\Framework\isNull;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
+use RangeException;
 
 class Move
 {
@@ -224,7 +225,7 @@ class Move
         $adjacent_tile = $this->get_adjacent_tile($tile, $direction);
 
         if (!$adjacent_tile || !$this->check_if_edge_is_road($tile, $direction)) {
-            return ['error' => 'There is no road in that direction.'];
+            throw new RangeException('There is no road in that direction.');
         }
 
         $adjacent_tile->npcs = $adjacent_tile->npcs()->get();
