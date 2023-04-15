@@ -52,7 +52,7 @@ class Explore extends Command2
                 'x' => $response->x,
                 'y' => $response->y,
                 'terrain' => $response->terrain,
-                'discovered_by' => User::find($response->discovered_by),
+                'discovered_by' => User::firstWhere('id', $response->discovered_by),
                 'discovered_at' => $response->discovered_at,
             ];
         }
