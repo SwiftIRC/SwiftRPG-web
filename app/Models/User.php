@@ -51,7 +51,7 @@ class User extends Authenticatable
     {
         $current = $this->skills()->where('skills.id', $skill_id)->withPivot('value')->first();
 
-        if (empty($current)) {
+        if ($current === null) {
             $this->skills()->attach($skill_id, ['value' => $xp]);
             $this->save();
 
@@ -66,13 +66,13 @@ class User extends Authenticatable
 
     public function getXp(int $skill_id)
     {
-        $current_skill = $this->skills()->where('skills.id', $skill_id)->withPivot('value')->first();
+        $current = $this->skills()->where('skills.id', $skill_id)->withPivot('value')->first();
 
-        if (empty($current_skill)) {
+        if ($current === null) {
             return 0;
         }
 
-        return $current_skill->pivot->value;
+        return $current->pivot->value;
     }
 
     public function skills()

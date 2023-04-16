@@ -16,10 +16,11 @@ class Chop extends Command3
         $user = $input->user()->first();
         $command = $input->command;
 
-        // $user->addXp(2, $this->quantity);
-
         $reward = $this->generateReward($user, $command);
 
+        $reward->experience->each(function ($skill) use ($user) {
+            $user->addXp($skill->id, $skill->pivot->value);
+        });
         $reward->loot->each(function ($item) use ($user) {
             $user->addToInventory($item, $item->pivot->value);
         });
