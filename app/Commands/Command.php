@@ -5,7 +5,6 @@ namespace App\Commands;
 use App\Http\Response\Reward;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class Command
 {
@@ -26,12 +25,10 @@ class Command
     {
         $this->user = $input->user()->first();
         $this->command = $input->command;
-        Log::info($this->user);
 
         $reward = $this->generateReward();
 
         $reward->experience->each(function ($skill) {
-            Log::info($this->user);
             $this->user->addXp($skill->id, $skill->pivot->value);
         });
         $reward->loot->each(function ($item) {
