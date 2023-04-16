@@ -2,9 +2,7 @@
 
 namespace App\Providers;
 
-use App\Http\Response\Reward;
 use App\Http\Response\Valid;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,15 +26,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Response::macro('object', function (array $object) {
-            $reward = new Reward(
-                $object['reward']['experience'] ?? 0,
-                $object['reward']['loot'] ?? []
-            );
-            Log::info($reward);
+            // $reward = new Reward(
+            //     $object['reward']['experience'],
+            //     $object['reward']['loot'],
+            // );
+            // Log::info($reward);
             $response = new Valid(
                 $object['skill'],
                 $object['experience'] ?? 0,
-                $reward,
+                $object['reward'] ?? null,
                 $object['metadata'] ?? [],
                 $object['ticks'] ?? 0
             );

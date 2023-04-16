@@ -2,31 +2,33 @@
 
 namespace App\Commands\Woodcutting;
 
-use App\Commands\Command2;
-use App\Models\Item;
+use App\Commands\Command3;
+use App\Http\Response\Reward;
 use Illuminate\Support\Facades\Auth;
 use RangeException;
 
-class Chop extends Command2
+class Chop extends Command3
 {
     protected $quantity = 5;
 
     public function execute(object $input): \Illuminate\Http\JsonResponse
     {
         $user = $input->user()->first();
-        $tile = $user->tile();
+        $command = $input->command;
 
-        $user->woodcutting += $this->quantity;
-        $user->save();
+        // $user->addXp(2, $this->quantity);
 
-        $item = Item::where('name', 'Logs')->first();
-        $logs = $user->addToInventory($item, $this->quantity);
+        $reward = $this->generateReward($user, $command);
+
+        $reward->loot->each(function ($item) use ($user) {
+            $user->addToInventory($item, $item->pivot->value);
+        });
 
         return response()->json([
             'skill' => 'woodcutting',
             'experience' => $user->woodcutting,
             'reward_xp' => $this->quantity,
-            'reward' => $this->generateReward($logs),
+            'reward' => $reward,
             'execute' => true,
         ]);
     }
@@ -45,30 +47,30 @@ class Chop extends Command2
         $tile->available_trees--;
         $tile->save();
 
-        $item = Item::where('name', 'Logs')->first();
-        $logs = $user->numberInInventory($item);
-
         return response()->object(
             [
                 'skill' => 'woodcutting',
                 'experience' => $user->woodcutting,
-                'reward' => $this->generateReward($logs),
+                'reward' => $this->generateReward($user, $command),
                 'ticks' => $command->ticks,
             ]
         );
     }
 
-    protected function generateReward($total = 0): array
+    /**
+     * @param User $user
+     * @param Command $command
+     *
+     * @return Reward
+     */
+    protected function generateReward($user, $command): Reward
     {
-        return [
-            'loot' => [
-                [
-                    'name' => 'Logs',
-                    'quantity' => $this->quantity,
-                    'total' => $total,
-                ],
-            ],
-            'experience' => $this->quantity,
-        ];
+        $skill_rewards = $command->getSkillRewardsWithTotals($user);
+        $item_rewards = $command->getItemRewardsWithTotals($user);
+
+        return new Reward(
+            $skill_rewards,
+            $item_rewards,
+        );
     }
 }

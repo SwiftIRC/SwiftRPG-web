@@ -2,24 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class QuestStepDependency extends Model
 {
-    use HasFactory, HasTimestamps;
-
     protected $fillable = [
         'quest_id',
         'quest_step_id',
         'quest_step_dependency_id',
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
+    public $timestamps = false;
 
     public function quest()
     {

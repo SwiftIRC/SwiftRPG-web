@@ -13,17 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('move_logs', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('user_id');
-            $table->foreignId('old_tile_id');
-            $table->foreignId('new_tile_id');
-
-            $table->timestamps();
-
-            $table->foreign('old_tile_id')->references('id')->on('tiles');
-            $table->foreign('new_tile_id')->references('id')->on('tiles');
+            $table->foreignId('reward_id')->constrained();
+            $table->string('name');
+            $table->string('description');
+            $table->smallInteger('ticks')->default(0);
+            $table->timestamp('start_at')->nullable();
+            $table->timestamp('end_at')->nullable();
         });
     }
 
@@ -34,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('move_logs');
+        Schema::dropIfExists('events');
     }
 };

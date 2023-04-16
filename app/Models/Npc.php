@@ -5,14 +5,12 @@ namespace App\Models;
 use App\Models\Building;
 use App\Models\Occupation;
 use App\Models\Tile;
-use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Npc extends Model
 {
-    use HasFactory, HasTimestamps, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'first_name',
@@ -33,12 +31,6 @@ class Npc extends Model
         'agility',
         'farming',
         'hunter',
-    ];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
     ];
 
     public function tile()

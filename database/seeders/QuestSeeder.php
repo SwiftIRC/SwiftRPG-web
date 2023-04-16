@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Item;
 use App\Models\Quest;
-use App\Models\QuestItemReward;
 use App\Models\QuestStep;
 use App\Models\QuestStepDependency;
+use App\Models\Reward;
+use App\Models\Skill;
 use Illuminate\Database\Seeder;
 
 class QuestSeeder extends Seeder
@@ -23,10 +25,18 @@ class QuestSeeder extends Seeder
 
     public function seed_quest_one()
     {
+        $woodcutting = Skill::firstWhere('name', 'woodcutting');
+        $quest1 = Reward::create();
+        $quest1->skills()->attach($woodcutting->id, ['value' => 50]);
+        $logs = Item::firstWhere('name', 'Logs');
+        $quest1->items()->attach($logs->id, ['value' => 10]);
+        $apple = Item::firstWhere('name', 'Apple');
+        $quest1->items()->attach($apple->id, ['value' => 1]);
+
         Quest::create([
             'name' => 'Teacher\'s Pet',
             'description' => 'Use `.quest start 1` to start this quest.',
-            'woodcutting' => 50,
+            'reward_id' => $quest1->id,
         ]);
 
         QuestStep::create([
@@ -59,25 +69,18 @@ class QuestSeeder extends Seeder
             'quest_step_dependency_id' => 2,
         ]);
 
-        QuestItemReward::create([
-            'quest_id' => 1,
-            'item_id' => 1,
-            'quantity' => 10,
-        ]);
-
-        QuestItemReward::create([
-            'quest_id' => 1,
-            'item_id' => 2,
-            'quantity' => 1,
-        ]);
     }
 
     public function seed_quest_two()
     {
+        $quest2 = Reward::create();
+        $fishing = Skill::firstWhere('name', 'fishing');
+        $quest2->skills()->attach($fishing->id, ['value' => 50]);
+
         Quest::create([
             'name' => 'Reeling in the Basics',
             'description' => 'Embark on a fishing adventure, starting from the basics and working your way up to become a master fisherman, facing challenges and earning rewards along the way.',
-            'fishing' => 50,
+            'reward_id' => $quest2->id,
         ]);
 
         $step1 = QuestStep::create([

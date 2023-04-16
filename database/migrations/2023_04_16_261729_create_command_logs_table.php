@@ -15,28 +15,24 @@ return new class extends Migration
     {
         Schema::create('commands', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('reward_id')->nullable()->constrained();
             $table->string('class');
             $table->string('method');
             $table->string('verb');
             $table->smallInteger('ticks')->default(1);
             $table->boolean('log')->default(true);
-
-            $table->timestamps();
         });
 
         Schema::create('command_logs', function (Blueprint $table) {
             $table->id();
 
-            $table->bigInteger("user_id")->unsigned();
-            $table->bigInteger('command_id')->unsigned();
+            $table->foreignId("user_id")->constrained();
+            $table->foreignId('command_id')->constrained();
             $table->smallInteger('ticks')->default(1);
             $table->smallInteger('ticks_remaining')->default(1);
             $table->json('metadata')->nullable();
 
             $table->timestamps();
-
-            $table->foreign("user_id")->references("id")->on("users");
-            $table->foreign('command_id')->references('id')->on('commands');
         });
     }
 

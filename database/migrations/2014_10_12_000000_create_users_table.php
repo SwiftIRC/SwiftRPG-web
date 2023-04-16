@@ -20,24 +20,7 @@ return new class extends Migration
             $table->boolean('is_admin')->default(false);
             $table->rememberToken();
 
-            $table->unsignedBigInteger("gold")->default(0);
             $table->unsignedMediumInteger("hitpoints")->default(100);
-            $table->unsignedMediumInteger("mana")->default(100);
-            $table->unsignedMediumInteger("inventory_size")->default(5);
-
-            $table->unsignedMediumInteger("thieving")->default(0);
-            $table->unsignedMediumInteger("fishing")->default(0);
-            $table->unsignedMediumInteger("mining")->default(0);
-            $table->unsignedMediumInteger("woodcutting")->default(0);
-            $table->unsignedMediumInteger("firemaking")->default(0);
-            $table->unsignedMediumInteger("cooking")->default(0);
-            $table->unsignedMediumInteger("smithing")->default(0);
-            $table->unsignedMediumInteger("fletching")->default(0);
-            $table->unsignedMediumInteger("crafting")->default(0);
-            $table->unsignedMediumInteger("herblore")->default(0);
-            $table->unsignedMediumInteger("agility")->default(0);
-            $table->unsignedMediumInteger("farming")->default(0);
-            $table->unsignedMediumInteger("hunter")->default(0);
 
             $table->timestamps();
             $table->softDeletes();

@@ -40,12 +40,18 @@ class TickSpecialEvent extends Command
 
         $quest = new Quest();
         $quest->deleted_at = now()->addMinutes(15);
+        $quest_steps = [];
 
         $event = rand(1, 5);
         switch ($event) {
             case 1:
                 $quest->name = "Meteor Shower";
                 $quest->description = 'A meteor shower has started!';
+
+                $quest_steps[] = [
+                    'output' => 'A meteor shower has started!',
+                    'ticks' => 1,
+                ];
                 break;
             case 2:
                 $quest->name = "Solar Flare";
@@ -66,6 +72,8 @@ class TickSpecialEvent extends Command
         }
 
         $quest->save();
+
+        $quest->steps()->createMany($quest_steps);
 
         app(Client::class)->valid()->each(function ($client) use ($quest) {
             post_webhook_endpoint($client->endpoint, $quest);

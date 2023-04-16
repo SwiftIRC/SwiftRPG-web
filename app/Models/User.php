@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\ItemUser;
+use App\Models\Skill;
 use App\Models\Tile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -45,6 +46,39 @@ class User extends Authenticatable
         'created_at',
         'deleted_at',
     ];
+
+    public function addXp(int $skill_id, int $xp)
+    {
+        $current = $this->skills()->where('skills.id', $skill_id)->withPivot('value')->first();
+
+        if (empty($current)) {
+            $this->skills()->attach($skill_id, ['value' => $xp]);
+            $this->save();
+
+            return $xp;
+        }
+
+        $current->pivot->value += $xp;
+        $current->pivot->save();
+
+        return $current->pivot->value;
+    }
+
+    public function getXp(int $skill_id)
+    {
+        $current_skill = $this->skills()->where('skills.id', $skill_id)->withPivot('value')->first();
+
+        if (empty($current_skill)) {
+            return 0;
+        }
+
+        return $current_skill->pivot->value;
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class)->withPivot('value');
+    }
 
     public function addToInventory(Item $item, int $quantity = 1)
     {

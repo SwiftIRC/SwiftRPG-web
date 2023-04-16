@@ -28,10 +28,7 @@ class Valid
         return [
             'skill' => $this->skill,
             'experience' => $this->experience,
-            'reward' => [
-                'loot' => $this->reward->loot,
-                'experience' => $this->reward->experience,
-            ],
+            'reward' => $this->reward,
             'metadata' => $this->metadata,
             'ticks' => $this->ticks,
             'seconds_until_tick' => $this->seconds_until_tick,

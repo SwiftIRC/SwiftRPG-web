@@ -3,21 +3,19 @@
 namespace App\Http\Response;
 
 use App\Http\Response\Loot;
+use Illuminate\Database\Eloquent\Collection;
 
 class Reward
 {
     public $loot;
     public $experience;
 
-    public function __construct(int $experience = 0, array $loot = [])
+    public function __construct(Collection $experience, Collection $loot)
     {
-        $this->loot = [];
-
-        foreach ($loot as $item) {
-            $this->loot[] = new Loot($item['name'], $item['quantity'], $item['total']);
-        }
-
+        $this->loot = $loot;
         $this->experience = $experience;
+
+        return $this;
     }
 
     public function toArray(): array

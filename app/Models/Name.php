@@ -12,4 +12,6 @@ class Name extends Model
         'species',
         'gender',
     ];
+
+    public $timestamps = false;
 }

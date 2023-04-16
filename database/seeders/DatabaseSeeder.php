@@ -14,15 +14,18 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            SkillSeeder::class,
             NameSeeder::class,
+            ItemSeeder::class,
+            // RewardSeeder::class,
             CommandSeeder::class,
             TerrainSeeder::class,
             EdgeSeeder::class,
             TileSeeder::class,
             NpcSeeder::class,
             UserSeeder::class,
-            ItemSeeder::class,
             QuestSeeder::class,
+            // EventSeeder::class,
         ]);
     }
 }

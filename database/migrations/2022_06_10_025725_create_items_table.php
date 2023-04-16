@@ -69,33 +69,24 @@ return new class extends Migration
 
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign("effect_id")->references("id")->on("effects");
-            $table->foreign("effect_property_id")->references("id")->on("effect_properties");
         });
 
         Schema::create('effect_item', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger("item_id")->unsigned();
-            $table->bigInteger("effect_id")->unsigned();
+            $table->foreignId("item_id")->constrained();
+            $table->foreignId("effect_id")->constrained();
 
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign("item_id")->references("id")->on("items");
-            $table->foreign("effect_id")->references("id")->on("effects");
         });
 
         Schema::create('item_user', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger("user_id")->unsigned();
-            $table->bigInteger("item_id")->unsigned();
+            $table->foreignId("user_id")->constrained();
+            $table->foreignId("item_id")->constrained();
 
             $table->timestamps();
             $table->softDeletes();
-
-            $table->foreign("user_id")->references("id")->on("users");
-            $table->foreign("item_id")->references("id")->on("items");
         });
 
         Schema::create('item_properties', function (Blueprint $table) {
@@ -111,11 +102,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->softDeletes();
-            $table->bigInteger("item_id")->unsigned();
-            $table->bigInteger("item_property_id")->unsigned();
-
-            $table->foreign("item_id")->references("id")->on("items");
-            $table->foreign("item_property_id")->references("id")->on("item_properties");
+            $table->foreignId("item_id")->constrained();
+            $table->foreignId("item_property_id")->constrained();
         });
     }
 

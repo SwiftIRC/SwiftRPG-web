@@ -2,48 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Quest extends Model
 {
-    use HasFactory, HasTimestamps, SoftDeletes;
-
     protected $fillable = [
         'name',
         'description',
-        'gold',
-        'thieving',
-        'fishing',
-        'mining',
-        'woodcutting',
-        'firemaking',
-        'cooking',
-        'smithing',
-        'fletching',
-        'crafting',
-        'herblore',
-        'agility',
-        'farming',
-        'hunter',
-        'deleted_at',
     ];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
+    public $timestamps = false;
 
     public function steps()
     {
         return $this->hasMany(QuestStep::class);
     }
 
+    public function skillRewards()
+    {
+        return $this->hasMany(Reward::class)->withPivot('value');
+    }
+
     public function itemRewards()
     {
-        return $this->hasMany(QuestItemReward::class);
+        return $this->hasMany(Reward::class)->withPivot('value');
     }
 
     public function completeSteps()

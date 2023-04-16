@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Database\Eloquent\Collection;
+use App\Models\Skill;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -45,20 +45,6 @@ if (!function_exists('post_webhook_endpoint')) {
 if (!function_exists('get_skills')) {
     function get_skills()
     {
-        return Collection::make([
-            'thieving',
-            'fishing',
-            'mining',
-            'woodcutting',
-            'firemaking',
-            'cooking',
-            'smithing',
-            'fletching',
-            'crafting',
-            'herblore',
-            'agility',
-            'farming',
-            'hunter',
-        ]);
+        return Skill::all()->pluck('name');
     }
 }
