@@ -14,27 +14,27 @@ class Explore extends Command
 
     public function execute(object $input): void
     {
-        $user = $input->user()->first();
+        $this->user = $input->user()->first();
         $json = json_decode($input->metadata);
 
-        app(Move::class)->move($user, $json->direction);
+        app(Move::class)->move($this->user, $json->direction);
 
         parent::execute($input);
     }
 
     public function queue(array $input = []): \Illuminate\Http\Response
     {
-        $user = Auth::user();
+        $this->user = Auth::user();
 
-        $command = array_pop($input);
+        $this->command = array_pop($input);
         $direction = array_pop($input);
 
         if (empty($direction) || !in_array($direction, ['north', 'south', 'east', 'west'])) {
             throw new RangeException('Direction not found.');
         }
-        $response = app(Move::class)->look_at($user, $direction);
+        $response = app(Move::class)->look_at($this->user, $direction);
 
-        $ticks = $command->ticks + $response['terrain']['movement_cost'];
+        $ticks = $this->command->ticks + $response['terrain']['movement_cost'];
 
         if (isset($response['error'])) {
             $metadata = [
@@ -53,7 +53,7 @@ class Explore extends Command
             ];
         }
 
-        $reward = $this->generateReward($command);
+        $reward = $this->generateReward();
 
         $reward->experience[0]->pivot->value += $response->just_discovered;
 

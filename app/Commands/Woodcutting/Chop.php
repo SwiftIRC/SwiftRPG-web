@@ -11,10 +11,10 @@ class Chop extends Command
 {
     public function queue(array $input = []): Response
     {
-        $user = Auth::user();
-        $tile = $user->tile();
+        $this->user = Auth::user();
+        $tile = $this->user->tile();
 
-        $command = array_pop($input);
+        $this->command = array_pop($input);
 
         if ($tile->available_trees < 1) {
             throw new RangeException('There are no trees left on this tile to chop!');
@@ -25,8 +25,8 @@ class Chop extends Command
 
         return response()->object(
             [
-                'reward' => $this->generateReward($command),
-                'ticks' => $command->ticks,
+                'reward' => $this->generateReward(),
+                'ticks' => $this->command->ticks,
             ]
         );
     }
