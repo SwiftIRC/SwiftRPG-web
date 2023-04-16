@@ -26,11 +26,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Response::macro('object', function (array $object) {
-            // $reward = new Reward(
-            //     $object['reward']['experience'],
-            //     $object['reward']['loot'],
-            // );
-            // Log::info($reward);
             $response = new Valid(
                 $object['reward'] ?? null,
                 $object['metadata'] ?? [],

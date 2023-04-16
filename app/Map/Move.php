@@ -11,7 +11,6 @@ use App\Models\Tile;
 use App\Models\User;
 use function PHPUnit\Framework\isNull;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
 use RangeException;
 
 class Move
@@ -138,8 +137,6 @@ class Move
             $new_tile->discovered_at = now();
             $new_tile->save();
 
-            Log::info($new_tile->just_discovered);
-
             $user->addXp(Skill::firstWhere('name', 'agility')->id, $new_tile->just_discovered);
 
             // Add NPCs and buildings to the tile
@@ -241,6 +238,7 @@ class Move
     {
         $npcs = Tile::firstWhere('id', $user->tile_id)->npcs()->get()->each(function ($npc) {
             $npc->occupation = $npc->occupation()->first();
+            $npc->skills = $npc->skills()->get();
         });
 
         return $npcs;

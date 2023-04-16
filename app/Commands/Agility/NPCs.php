@@ -2,39 +2,24 @@
 
 namespace App\Commands\Agility;
 
-use App\Commands\Command2;
+use App\Commands\Command;
 use App\Map\Move;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class NPCs extends Command2
+class NPCs extends Command
 {
-    protected $quantity = 0;
-
-    public function execute(object $input): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): Response
     {
-        return response()->json();
-    }
+        $this->user = Auth::user();
+        $this->command = array_pop($input);
 
-    public function queue(array $input = []): \Illuminate\Http\Response
-    {
-        $user = Auth::user();
-
-        $npcs = app(Move::class)->npcs($user);
+        $npcs = app(Move::class)->npcs($this->user);
 
         return response()->object([
-            'skill' => 'agility',
-            'experience' => $user->agility,
             'reward' => $this->generateReward(),
             'metadata' => $npcs,
-            'ticks' => $this->quantity,
+            'ticks' => 0,
         ]);
-    }
-
-    protected function generateReward($total = 0): array
-    {
-        return [
-            'loot' => [],
-            'experience' => 0,
-        ];
     }
 }

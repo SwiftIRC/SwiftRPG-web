@@ -28,9 +28,9 @@ class Agility extends Skill
         }
     }
 
-    protected function npcs()
+    protected function npcs(array $input)
     {
-        return app(NPCs::class)->queue();
+        return app(NPCs::class)->queue($input);
     }
 
     protected function buildings()
