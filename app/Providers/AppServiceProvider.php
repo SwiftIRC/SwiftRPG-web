@@ -32,8 +32,6 @@ class AppServiceProvider extends ServiceProvider
             // );
             // Log::info($reward);
             $response = new Valid(
-                $object['skill'],
-                $object['experience'] ?? 0,
                 $object['reward'] ?? null,
                 $object['metadata'] ?? [],
                 $object['ticks'] ?? 0

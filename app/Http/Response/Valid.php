@@ -6,17 +6,13 @@ use App\Http\Response\Reward;
 
 class Valid
 {
-    public $skill;
-    public $experience;
     public $reward;
     public $metadata;
     public $ticks;
     public $seconds_until_tick;
 
-    public function __construct(string $skill, int $experience = 0, Reward $reward, mixed $metadata = null, int $ticks = 0)
+    public function __construct(Reward $reward, mixed $metadata = null, int $ticks = 0)
     {
-        $this->skill = $skill;
-        $this->experience = $experience;
         $this->reward = $reward;
         $this->metadata = $metadata;
         $this->ticks = $ticks;
@@ -26,8 +22,6 @@ class Valid
     public function toArray(): array
     {
         return [
-            'skill' => $this->skill,
-            'experience' => $this->experience,
             'reward' => $this->reward,
             'metadata' => $this->metadata,
             'ticks' => $this->ticks,

@@ -2,28 +2,55 @@
 
 namespace App\Commands;
 
-abstract class Command
+use App\Http\Response\Reward;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
+class Command
 {
-    protected $quantity;
+    protected $user;
+    protected $command;
+
+    public function __construct()
+    {
+        $this->user = Auth::user();
+    }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    abstract protected function execute(object $input): \Illuminate\Http\JsonResponse;
-
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    abstract protected function queue(array $input = []): \Illuminate\Http\JsonResponse;
-
-    /**
-     * Returns an object with the following properties:
-     * - type: string (i.e., gold, logs, etc.)
-     * - quantity: integer
-     * - total: integer
+     * @param object $input
      *
-     * @return array([ 'type' => string, 'quantity' => integer, 'total' => integer ])
+     * @return void
      */
-    abstract protected function generateReward($total): array;
+    public function execute(object $input): void
+    {
+        $this->user = $input->user()->first();
+        $this->command = $input->command;
+
+        $reward = $this->generateReward($this->command);
+
+        $reward->experience->each(function ($skill) {
+            $this->user->addXp($skill->id, $skill->pivot->value);
+        });
+        $reward->loot->each(function ($item) {
+            $this->user->addToInventory($item, $item->pivot->value);
+        });
+    }
+
+    /**
+     * @param User $user
+     * @param App\Models\Command $command
+     *
+     * @return Reward
+     */
+    protected function generateReward($command): Reward
+    {
+        $skill_rewards = $command->getSkillRewardsWithTotals($this->user);
+        $item_rewards = $command->getItemRewardsWithTotals($this->user);
+
+        return new Reward(
+            $skill_rewards,
+            $item_rewards,
+        );
+    }
 
 }

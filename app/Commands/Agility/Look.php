@@ -2,20 +2,13 @@
 
 namespace App\Commands\Agility;
 
-use App\Commands\Command2;
+use App\Commands\Command;
 use App\Map\Move;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
-class Look extends Command2
+class Look extends Command
 {
-    protected $quantity = 0;
-
-    public function execute(object $input): \Illuminate\Http\JsonResponse
-    {
-        return response()->json();
-    }
-
     public function queue(array $input = []): \Illuminate\Http\Response
     {
         $user = Auth::user();
@@ -33,19 +26,9 @@ class Look extends Command2
         $tile->discovered_by = User::find($tile->discovered_by);
 
         return response()->object([
-            'skill' => 'agility',
-            'experience' => $user->agility,
-            'reward' => $this->generateReward(),
+            'reward' => $this->generateReward($user, $command),
             'metadata' => $tile,
-            'ticks' => $this->quantity,
+            'ticks' => 0,
         ]);
-    }
-
-    protected function generateReward($total = 0): array
-    {
-        return [
-            'loot' => [],
-            'experience' => 0,
-        ];
     }
 }

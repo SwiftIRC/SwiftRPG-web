@@ -2,39 +2,14 @@
 
 namespace App\Commands\Woodcutting;
 
-use App\Commands\Command3;
-use App\Http\Response\Reward;
+use App\Commands\Command;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use RangeException;
 
-class Chop extends Command3
+class Chop extends Command
 {
-    protected $quantity = 5;
-
-    public function execute(object $input): \Illuminate\Http\JsonResponse
-    {
-        $user = $input->user()->first();
-        $command = $input->command;
-
-        $reward = $this->generateReward($user, $command);
-
-        $reward->experience->each(function ($skill) use ($user) {
-            $user->addXp($skill->id, $skill->pivot->value);
-        });
-        $reward->loot->each(function ($item) use ($user) {
-            $user->addToInventory($item, $item->pivot->value);
-        });
-
-        return response()->json([
-            'skill' => 'woodcutting',
-            'experience' => $user->woodcutting,
-            'reward_xp' => $this->quantity,
-            'reward' => $reward,
-            'execute' => true,
-        ]);
-    }
-
-    public function queue(array $input = []): \Illuminate\Http\Response
+    public function queue(array $input = []): Response
     {
         $user = Auth::user();
         $tile = $user->tile();
@@ -50,28 +25,10 @@ class Chop extends Command3
 
         return response()->object(
             [
-                'skill' => 'woodcutting',
-                'experience' => $user->woodcutting,
-                'reward' => $this->generateReward($user, $command),
+                'reward' => $this->generateReward($command),
                 'ticks' => $command->ticks,
             ]
         );
     }
 
-    /**
-     * @param User $user
-     * @param Command $command
-     *
-     * @return Reward
-     */
-    protected function generateReward($user, $command): Reward
-    {
-        $skill_rewards = $command->getSkillRewardsWithTotals($user);
-        $item_rewards = $command->getItemRewardsWithTotals($user);
-
-        return new Reward(
-            $skill_rewards,
-            $item_rewards,
-        );
-    }
 }
