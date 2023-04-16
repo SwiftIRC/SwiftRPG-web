@@ -2,33 +2,18 @@
 
 namespace App\Commands\Thieving;
 
-use App\Commands\Command2;
+use App\Commands\Command;
 use OverflowException;
 use RangeException;
 
-class Pickpocket extends Command2
+class Pickpocket extends Command
 {
-    protected $quantity = 5;
-
-    public function execute(object $input): \Illuminate\Http\JsonResponse
-    {
-        $user = $input->user()->first();
-
-        $increment = $this->quantity;
-
-        $user->thieving += $increment;
-        $user->addGold($increment);
-        $user->save();
-
-        return response()->json();
-    }
-
     public function queue(array $input = []): \Illuminate\Http\Response
     {
-        $command = array_pop($input);
+        $this->command = array_pop($input);
         $request = array_pop($input);
-        $user = $request->user();
-        $tile = $user->tile();
+        $this->user = $request->user();
+        $tile = $this->user->tile();
         $npcs = $tile->npcs()->get();
 
         if (!$npcs->count()) {
@@ -42,9 +27,9 @@ class Pickpocket extends Command2
             $npc = $npcs->splice($target, 1)->first();
         }
 
-        // $chance_to_fail = random_int(0, xp_to_level($user->thieving) + 1);
+        // $chance_to_fail = random_int(0, xp_to_level($this->user->thieving) + 1);
 
-        $level_difference = xp_to_level($npc->thieving) - xp_to_level($user->thieving);
+        $level_difference = xp_to_level($npc->thieving) - xp_to_level($this->user->thieving);
         $success_rate = max(10, 90 - ($level_difference * 4));
         $random = random_int(0, 100);
         if ($random > $success_rate) {
@@ -53,26 +38,9 @@ class Pickpocket extends Command2
 
         return response()->object(
             [
-                'skill' => 'thieving',
-                'method' => 'pickpocket',
-                'experience' => $user->thieving,
-                'reward' => $this->generateReward($user->gold),
-                'ticks' => $command->ticks,
+                'reward' => $this->generateReward($this->user->gold),
+                'ticks' => $this->command->ticks,
             ]
         );
-    }
-
-    protected function generateReward($total = 0): array
-    {
-        return [
-            'loot' => [
-                [
-                    'name' => 'gold',
-                    'quantity' => $this->quantity,
-                    'total' => $total,
-                ],
-            ],
-            'experience' => $this->quantity,
-        ];
     }
 }

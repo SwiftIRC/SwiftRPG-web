@@ -14,6 +14,11 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
+        Item::create([
+            'name' => 'Gold',
+            'description' => 'A gold coin',
+        ]);
+
         $logs = Item::create([
             'name' => 'Logs',
             'description' => 'A bundle of logs.',

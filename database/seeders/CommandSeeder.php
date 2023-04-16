@@ -22,6 +22,8 @@ class CommandSeeder extends Seeder
         $thieving = Skill::firstWhere('name', 'thieving');
         $pickpocket = Reward::create();
         $pickpocket->skills()->attach($thieving->id, ['value' => 5]);
+        $gold = Item::firstWhere('name', 'Gold');
+        $pickpocket->items()->attach($gold->id, ['value' => 5]);
 
         Command::create([
             'class' => 'thieving',

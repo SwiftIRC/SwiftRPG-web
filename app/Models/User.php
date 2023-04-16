@@ -24,12 +24,6 @@ class User extends Authenticatable
         'is_admin',
         'password',
         'hitpoints',
-        'mana',
-        'gold',
-        'thieving',
-        'woodcutting',
-        'firemaking',
-        'agility',
         'tile_id',
         'building_id',
     ];

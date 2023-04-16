@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string("name", 100)->unique();
             $table->string("description", 255)->nullable();
-            $table->bigInteger("weight")->unsigned();
+            $table->bigInteger("weight")->unsigned()->default(0);
             $table->float("ticks")->unsigned()->default(0);
 
             $table->timestamps();
