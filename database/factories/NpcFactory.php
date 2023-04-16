@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Name;
 use App\Models\Npc;
 use App\Models\Occupation;
+use App\Models\Skill;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -66,8 +67,8 @@ class NpcFactory extends Factory
             $base_level = rand(0, 50);
             $max_level = rand($base_level, 99);
 
-            get_skills()->each(function ($skill) use ($npc, $base_level, $max_level) {
-                $npc->$skill = level_to_xp(rand($base_level, $max_level)) + rand(0, 1000);
+            Skill::all()->each(function ($skill) use ($npc, $base_level, $max_level) {
+                $npc->skills()->attach($skill->id, ['value' => level_to_xp(rand($base_level, $max_level)) + rand(0, 1000)]);
             });
         });
     }

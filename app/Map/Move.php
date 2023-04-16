@@ -6,6 +6,7 @@ use App\Models\Building;
 use App\Models\MoveLog;
 use App\Models\Npc;
 use App\Models\Occupation;
+use App\Models\Skill;
 use App\Models\Tile;
 use App\Models\User;
 use function PHPUnit\Framework\isNull;
@@ -139,7 +140,7 @@ class Move
 
             Log::info($new_tile->just_discovered);
 
-            $user->agility += $new_tile->just_discovered;
+            $user->addXp(Skill::firstWhere('name', 'agility')->id, $new_tile->just_discovered);
 
             // Add NPCs and buildings to the tile
             $num_building = rand(0, 5);

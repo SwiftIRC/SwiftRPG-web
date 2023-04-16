@@ -47,4 +47,9 @@ class Npc extends Model
     {
         return $this->belongsTo(Occupation::class);
     }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class)->withPivot('value');
+    }
 }
