@@ -52,7 +52,7 @@ class Skill
             ]);
 
             $content = $output->original;
-            $content->log_id = $log->id;
+            $content->command_id = $log->id;
             $output->setContent($content);
         }
 
