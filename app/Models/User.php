@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\ItemUser;
 use App\Models\Skill;
 use App\Models\Tile;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -80,13 +79,14 @@ class User extends Authenticatable
             $this->items()->attach($item);
         }
 
-        return $this->items()->where('name', $item->name)->count();
+        return $this->items()->where('id', $item->id)->count();
     }
 
-    public function removeFromInventory(Item $item)
+    public function removeFromInventory(Item $item, int $quantity = 1)
     {
-        $retrievedItem = $this->items()->where('items.name', $item->name)->withPivot('id')->first();
-        ItemUser::where('id', $retrievedItem->pivot->id)->update(['deleted_at' => now()]);
+        $this->items()->where('items.id', $item->id)->withPivot('id')->limit($quantity)->get()->each(function ($item) {
+            $item->pivot->delete();
+        });
     }
 
     public function numberInInventory(Item $item)
@@ -96,7 +96,7 @@ class User extends Authenticatable
 
     public function inInventory(Item $item)
     {
-        $retrievedItem = $this->items()->where('name', $item->name)->count();
+        $retrievedItem = $this->items()->where('id', $item->id)->count();
 
         return ($retrievedItem > 0);
     }

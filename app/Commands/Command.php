@@ -32,7 +32,12 @@ class Command
             $this->user->addXp($skill->id, $skill->pivot->value);
         });
         $reward->loot->each(function ($item) {
-            $this->user->addToInventory($item, $item->pivot->value);
+            $amount = $item->pivot->value;
+            if ($amount < 1) {
+                $this->user->removeFromInventory($item, abs($amount));
+            } else {
+                $this->user->addToInventory($item, $amount);
+            }
         });
     }
 
