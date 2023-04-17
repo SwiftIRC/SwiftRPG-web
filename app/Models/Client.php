@@ -15,6 +15,7 @@ class Client extends Model
         'client_id',
         'webhook_address',
         'webhook_port',
+        'webhook_path',
     ];
 
     protected $hidden = [
@@ -38,7 +39,7 @@ class Client extends Model
     protected function endpoint(): Attribute
     {
         return Attribute::make(
-            get:fn() => 'https://' . $this->webhook_address . ':' . $this->webhook_port . '/global',
+            get:fn() => 'https://' . $this->webhook_address . ':' . $this->webhook_port . ($this->webhook_path . startsWith('/') ? $this->webhook_path : '/' . $this->webhook_path),
         );
     }
 }

@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('client_id')->unique();
             $table->string('webhook_address');
             $table->integer('webhook_port');
+            $table->string('webhook_path');
 
             $table->timestamps();
         });
