@@ -39,6 +39,8 @@ class Command
                 $this->user->addToInventory($item, $amount);
             }
         });
+
+        // TODO webhook followup
     }
 
     /**

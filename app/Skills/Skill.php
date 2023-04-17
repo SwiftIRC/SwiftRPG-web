@@ -41,12 +41,16 @@ class Skill
         $ticks = $output->original->ticks ?? $command->ticks;
 
         if ($command->log) {
-            CommandLog::create([
+            $log = CommandLog::create([
                 'command_id' => $command->id,
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,
                 'metadata' => json_encode($output->original->metadata ?? null),
             ]);
+
+            $content = $output->original;
+            $content->log_id = $log->id;
+            $output->setContent($content);
         }
 
         return $output;

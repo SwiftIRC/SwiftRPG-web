@@ -10,6 +10,7 @@ class Valid
     public $metadata;
     public $ticks;
     public $seconds_until_tick;
+    public $log_id;
 
     public function __construct(Reward $reward, mixed $metadata = null, int $ticks = 0)
     {
@@ -26,6 +27,7 @@ class Valid
             'metadata' => $this->metadata,
             'ticks' => $this->ticks,
             'seconds_until_tick' => $this->seconds_until_tick,
+            'log_id' => $this->log_id,
         ];
     }
 

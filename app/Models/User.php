@@ -79,7 +79,7 @@ class User extends Authenticatable
             $this->items()->attach($item);
         }
 
-        return $this->items()->where('id', $item->id)->count();
+        return $this->items()->where('items.id', $item->id)->count();
     }
 
     public function removeFromInventory(Item $item, int $quantity = 1)
