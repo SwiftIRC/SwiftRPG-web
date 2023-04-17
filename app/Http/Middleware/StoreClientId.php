@@ -2,10 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Client;
 use Closure;
 use Illuminate\Http\Request;
 
-class VerifyAppHeader
+class StoreClientId
 {
     /**
      * Handle an incoming request.
@@ -16,7 +17,10 @@ class VerifyAppHeader
      */
     public function handle(Request $request, Closure $next)
     {
-        abort_if(empty($request->header('X-Bot-Token')) || $request->header('X-Bot-Token') != config('app.token'), 403, "Invalid app token");
+        // abort_if(empty($request->header('X-Client-Id')), 403, "X-Client-Id header is required");
+
+        $client = Client::firstWhere('client_id', $request->header('X-Client-Id'));
+        session()->put('clientId', $client?->id);
 
         return $next($request);
     }

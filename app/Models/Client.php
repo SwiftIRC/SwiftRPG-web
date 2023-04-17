@@ -39,7 +39,7 @@ class Client extends Model
     protected function endpoint(): Attribute
     {
         return Attribute::make(
-            get:fn() => 'https://' . $this->webhook_address . ':' . $this->webhook_port . ($this->webhook_path . startsWith('/') ? $this->webhook_path : '/' . $this->webhook_path),
+            get:fn() => 'https://' . $this->webhook_address . ':' . $this->webhook_port . (str_starts_with($this->webhook_path, '/') ? $this->webhook_path : '/' . $this->webhook_path),
         );
     }
 }

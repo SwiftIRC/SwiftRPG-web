@@ -11,6 +11,8 @@ class Skill
 {
     public function __call(string $methodName, array $parameters)
     {
+        abort_if(empty(session()->get('clientId')), 403, "X-Client-Id header is required");
+
         $exploded = explode("\\", get_class($this));
         $class = strtolower(end($exploded));
 
@@ -42,6 +44,7 @@ class Skill
 
         if ($command->log) {
             $log = CommandLog::create([
+                'client_id' => session()->get('clientId'),
                 'command_id' => $command->id,
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,

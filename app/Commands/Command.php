@@ -3,6 +3,7 @@
 namespace App\Commands;
 
 use App\Http\Response\Reward;
+use App\Models\Client;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,7 +41,15 @@ class Command
             }
         });
 
-        // TODO webhook followup
+        $this->user->skills = $this->user->skills()->get();
+
+        $client = Client::firstWhere('id', $input->client_id);
+        post_webhook_endpoint($client->endpoint, [
+            'command_id' => $input->id,
+            'user' => $this->user,
+            'command' => $this->command,
+            'reward' => $reward,
+        ]);
     }
 
     /**

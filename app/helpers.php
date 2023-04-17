@@ -36,9 +36,15 @@ if (!function_exists('seconds_until_tick')) {
 if (!function_exists('post_webhook_endpoint')) {
     function post_webhook_endpoint($endpoint, $data)
     {
-        Log::info('POST ' . $endpoint . ' ' . json_encode($data));
+        if (env('APP_DEBUG') === true) {
+            Log::info('POST ' . $endpoint . ' ' . json_encode($data));
+        }
 
-        return Http::withHeaders(['X-Bot-Token' => env('BOT_TOKEN')])->withoutVerifying()->post($endpoint, $data);
+        try {
+            return Http::withHeaders(['X-Bot-Token' => env('BOT_TOKEN')])->withoutVerifying()->post($endpoint, $data);
+        } catch (\Exception$e) {
+            Log::error($e->getMessage());
+        }
     }
 }
 

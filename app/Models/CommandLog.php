@@ -14,6 +14,7 @@ class CommandLog extends Model
     protected $fillable = [
         'user_id',
         'command_id',
+        'client_id',
         'ticks',
         'ticks_remaining',
         'metadata',

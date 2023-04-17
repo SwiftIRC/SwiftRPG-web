@@ -26,6 +26,7 @@ return new class extends Migration
         Schema::create('command_logs', function (Blueprint $table) {
             $table->id();
 
+            $table->foreignId("client_id")->constrained();
             $table->foreignId("user_id")->constrained();
             $table->foreignId('command_id')->constrained();
             $table->smallInteger('ticks')->default(1);
