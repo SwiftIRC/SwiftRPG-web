@@ -2,38 +2,23 @@
 
 namespace App\Commands\Agility;
 
-use App\Commands\Command2;
+use App\Commands\Command;
 use App\Map\Move;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class Buildings extends Command2
+class Buildings extends Command
 {
-    protected $quantity = 0;
-
-    public function execute(object $input): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): Response
     {
-        return response()->json();
-    }
+        $this->user = Auth::user();
+        $this->command = array_pop($input);
 
-    public function queue(array $input = []): \Illuminate\Http\Response
-    {
-        $user = Auth::user();
-
-        $buildings = app(Move::class)->buildings($user);
+        $buildings = app(Move::class)->buildings($this->user);
 
         return response()->object([
-            'skill' => 'agility',
-            'experience' => $user->agility,
             'reward' => $this->generateReward(),
             'metadata' => $buildings,
         ]);
-    }
-
-    protected function generateReward($total = 0): array
-    {
-        return [
-            'loot' => [],
-            'experience' => $this->quantity,
-        ];
     }
 }
