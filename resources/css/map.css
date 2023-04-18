@@ -1,3 +1,5 @@
+
+
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -12,26 +14,26 @@
     flex-direction: column;
     flex: 1;
     font-family: 'Poppins', sans-serif;
-  }
+}
 
-  h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', sans-serif;
     margin: 0
-  }
+}
 
-  a {
+a {
     color: #2c3e50;
     font-family: 'Poppins', sans-serif;
-  }
+}
 
-  body, html {
+body, html {
     border: none;
     box-sizing: border-box;
     padding: 0;
     margin: 0;
     height: 100%;
-  }
-  header {
+}
+header {
     box-sizing: border-box;
     padding: 8px;
     width: 100%;
@@ -39,10 +41,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
+}
 
-  body {
+body, canvas {
     height: 100%;
     display: flex;
     flex-direction: column;
-  }
+}
