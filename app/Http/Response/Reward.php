@@ -10,7 +10,7 @@ class Reward
     public $loot;
     public $experience;
 
-    public function __construct(Collection | null $experience, Collection | null $loot)
+    public function __construct(Collection | null $experience = null, Collection | null $loot = null)
     {
         $this->loot = $loot;
         $this->experience = $experience;

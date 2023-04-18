@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Response\Reward;
 use App\Http\Response\Valid;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
@@ -26,10 +27,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Response::macro('object', function (array $object) {
+            $reward = new Reward();
+
             $response = new Valid(
-                $object['reward'] ?? null,
-                $object['metadata'] ?? [],
-                $object['ticks'] ?? 0
+                $object['reward'] ?? $reward,
+                $object['metadata'] ?? null,
+                $object['ticks'] ?? 0,
+                $object['failure'] ?? null,
             );
 
             return Response::make(
@@ -43,7 +47,7 @@ class AppServiceProvider extends ServiceProvider
 
         Response::macro('error', function (array $object) {
             $response = [
-                'error' => $object['error'],
+                'failure' => $object['error'],
                 'metadata' => $object['metadata'] ?? [],
             ];
 

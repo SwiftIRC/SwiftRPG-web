@@ -3,7 +3,6 @@
 namespace App\Commands\Thieving;
 
 use App\Commands\Command;
-use OverflowException;
 use RangeException;
 
 class Pickpocket extends Command
@@ -33,7 +32,11 @@ class Pickpocket extends Command
         $success_rate = max(10, 90 - ($level_difference * 4));
         $random = random_int(0, 100);
         if ($random > $success_rate) {
-            throw new OverflowException('You failed to pickpocket, ' . $npc->first_name . ' ' . $npc->last_name . '! (Thieving level: ' . xp_to_level($npc->thieving) . ')');
+            return response()->object(
+                [
+                    'failure' => 'You failed to pickpocket, ' . $npc->first_name . ' ' . $npc->last_name . '! (Thieving level: ' . xp_to_level($npc->thieving) . ')',
+                    'ticks' => $this->command->ticks,
+                ]);
         }
 
         return response()->object(

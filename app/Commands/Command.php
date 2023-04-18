@@ -45,10 +45,13 @@ class Command
 
         $client = Client::firstWhere('id', $input->client_id);
         post_webhook_endpoint($client->endpoint, [
-            'command_id' => $input->id,
-            'user' => $this->user,
-            'command' => $this->command,
-            'reward' => $reward,
+            'type' => 'command_complete',
+            'data' => [
+                'command_id' => $input->id,
+                'user' => $this->user,
+                'command' => $this->command,
+                'reward' => $reward,
+            ],
         ]);
     }
 
