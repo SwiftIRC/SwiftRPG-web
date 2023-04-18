@@ -2,8 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Response\Reward as RewardResponse;
 use App\Models\Client;
-use App\Models\Quest;
+use App\Models\Event;
+use App\Models\Item;
+use App\Models\Reward;
+use App\Models\Skill;
 use Illuminate\Console\Command;
 
 class TickSpecialEvent extends Command
@@ -33,50 +37,62 @@ class TickSpecialEvent extends Command
             return 0;
         }
 
-        $active_quest = Quest::withTrashed()->firstWhere('deleted_at', '>', now());
-        if (!empty($active_quest)) {
+        $active_event = Event::withTrashed()->firstWhere('deleted_at', '>', now());
+        if (!empty($active_event)) {
             return 0;
         }
 
-        $quest = new Quest();
-        $quest->deleted_at = now()->addMinutes(15);
-        $quest_steps = [];
+        $event = new Event();
+        $event->deleted_at = now()->addMinutes(15);
 
-        $event = rand(1, 5);
-        switch ($event) {
+        $reward = new Reward();
+        $reward->save();
+
+        $event->reward_id = $reward->id;
+
+        $rand_event = rand(5, 5);
+        switch ($rand_event) {
             case 1:
-                $quest->name = "Meteor Shower";
-                $quest->description = 'A meteor shower has started!';
+                $event->name = "Meteor Shower";
+                $event->description = 'A meteor shower has started!';
 
-                $quest_steps[] = [
-                    'output' => 'A meteor shower has started!',
-                    'ticks' => 1,
-                ];
+                // Mining?
                 break;
             case 2:
-                $quest->name = "Solar Flare";
-                $quest->description = 'A solar flare has started!';
+                $event->name = "Solar Flare";
+                $event->description = 'A solar flare has started!';
                 break;
             case 3:
-                $quest->name = "Solar Eclipse";
-                $quest->description = 'A solar eclipse has started!';
+                $event->name = "Solar Eclipse";
+                $event->description = 'A solar eclipse has started!';
                 break;
             case 4:
-                $quest->name = "Lunar Eclipse";
-                $quest->description = 'A lunar eclipse has started!';
+                $event->name = "Lunar Eclipse";
+                $event->description = 'A lunar eclipse has started!';
                 break;
             case 5:
-                $quest->name = "Dragon Nest";
-                $quest->description = 'A dragon has left its nest!';
+                $event->name = "Dragon Nest";
+                $event->description = 'A dragon has left its nest!';
+
+                $thieving = Skill::firstWhere('name', 'thieving');
+                $reward->skills()->attach($thieving->id, ['value' => 100]);
+                $gold = Item::firstWhere('name', 'Gold');
+                $reward->items()->attach($gold->id, ['value' => 100]);
                 break;
         }
 
-        $quest->save();
+        $event->save();
 
-        $quest->steps()->createMany($quest_steps);
-
-        app(Client::class)->valid()->each(function ($client) use ($quest) {
-            post_webhook_endpoint($client->endpoint, $quest);
+        app(Client::class)->valid()->each(function ($client) use ($event, $reward) {
+            post_webhook_endpoint($client->endpoint,
+                [
+                    'type' => 'event',
+                    'data' => [
+                        'event' => $event,
+                        'reward' => (new RewardResponse($reward->skills, $reward->items))->toArray(),
+                    ],
+                ]
+            );
         });
 
         return 0;

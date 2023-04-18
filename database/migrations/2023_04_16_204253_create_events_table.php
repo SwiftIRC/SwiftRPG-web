@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('reward_id')->constrained();
             $table->string('name');
             $table->string('description');
             $table->smallInteger('ticks')->default(0);
-            $table->timestamp('start_at')->nullable();
-            $table->timestamp('end_at')->nullable();
+
+            $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

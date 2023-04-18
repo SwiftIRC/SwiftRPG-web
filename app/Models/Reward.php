@@ -17,4 +17,9 @@ class Reward extends Model
     {
         return $this->belongsToMany(Item::class)->withPivot('value');
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }
