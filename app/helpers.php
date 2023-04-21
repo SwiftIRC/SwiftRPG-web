@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Skill;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as Collect;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
@@ -52,5 +54,23 @@ if (!function_exists('get_skills')) {
     function get_skills()
     {
         return Skill::all()->pluck('name');
+    }
+}
+
+if (!function_exists('obsoletePivots')) {
+    function obsoletePivots(Collection | Collect $collection): Collection | Collect
+    {
+        return $collection->each(function ($item) {
+            foreach ($item as $key) {
+                if ($key instanceof Collection || $key instanceof Collect) {
+                    obsoletePivots($key);
+                } else {
+                    if (isset($item->pivot)) {
+                        $item->quantity = $item->pivot->quantity;
+                        unset($item->pivot);
+                    }
+                }
+            }
+        });
     }
 }

@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('index');
 
 Route::get('/help', function () {
     return view('help');
@@ -116,7 +116,7 @@ Route::get('/look/buildings', [AgilityController::class, 'buildings']);
 Route::name('stats.')->prefix('stats')->group(function () {
     Route::get('/{user}', function ($user) {
         return User::where('name', $user)->first();
-    });
+    })->name('lookup');
 });
 
 Route::name('thieving.')->prefix('thieving')->group(function () {

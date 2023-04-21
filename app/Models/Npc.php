@@ -50,6 +50,6 @@ class Npc extends Model
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class)->withPivot('value');
+        return $this->belongsToMany(Skill::class)->withPivot('quantity');
     }
 }

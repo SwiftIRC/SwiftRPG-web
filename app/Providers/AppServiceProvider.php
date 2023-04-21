@@ -30,11 +30,28 @@ class AppServiceProvider extends ServiceProvider
             $reward = new Reward();
 
             $response = new Valid(
+                $object['command'],
                 $object['reward'] ?? $reward,
                 $object['metadata'] ?? null,
-                $object['ticks'] ?? 0,
+                $object['command']->ticks,
                 $object['failure'] ?? null,
             );
+
+            return Response::make(
+                $response->toArray(),
+                200,
+                [
+                    'Content-Type' => 'application/json',
+                ]
+            );
+        });
+
+        Response::macro('reward', function (array $object) {
+            $response = [
+                'reward' => $object['reward'],
+                'metadata' => $object['metadata'] ?? [],
+                'ticks' => $object['ticks'] ?? 0,
+            ];
 
             return Response::make(
                 $response,

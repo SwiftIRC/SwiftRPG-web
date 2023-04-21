@@ -75,9 +75,9 @@ class TickSpecialEvent extends Command
                 $event->description = 'A dragon has left its nest!';
 
                 $thieving = Skill::firstWhere('name', 'thieving');
-                $reward->skills()->attach($thieving->id, ['value' => 100]);
+                $reward->skills()->attach($thieving->id, ['quantity' => 100]);
                 $gold = Item::firstWhere('name', 'Gold');
-                $reward->items()->attach($gold->id, ['value' => 100]);
+                $reward->items()->attach($gold->id, ['quantity' => 100]);
                 break;
         }
 
@@ -86,7 +86,7 @@ class TickSpecialEvent extends Command
         app(Client::class)->valid()->each(function ($client) use ($event, $reward) {
             post_webhook_endpoint($client->endpoint,
                 [
-                    'type' => 'event',
+                    'type' => 'event_start',
                     'data' => [
                         'event' => $event,
                         'reward' => (new RewardResponse($reward->skills, $reward->items))->toArray(),

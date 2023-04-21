@@ -21,14 +21,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('reward_id')->constrained();
             $table->foreignId('item_id')->constrained();
-            $table->bigInteger('value')->default(1);
+            $table->bigInteger('quantity')->default(1);
         });
 
         Schema::create('reward_skill', function (Blueprint $table) {
             $table->id();
             $table->foreignId('reward_id')->constrained();
             $table->foreignId('skill_id')->constrained();
-            $table->unsignedMediumInteger('value')->default(1);
+            $table->unsignedMediumInteger('quantity')->default(1);
         });
 
     }

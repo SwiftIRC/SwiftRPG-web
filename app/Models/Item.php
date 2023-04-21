@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Response\Item as ResponseItem;
 use App\Models\Effect;
 use App\Models\Itemproperties;
 use App\Models\User;
@@ -31,13 +32,29 @@ class Item extends Model
         return $this->belongsToMany(Effect::class)->withTimestamps();
     }
 
-    public function user()
+    public function users()
     {
-        return $this->hasMany(User::class)->withTimestamps();
+        return $this->belongsToMany(User::class);
     }
 
     public function itemproperties()
     {
         return $this->belongsTo(ItemProperty::class)->withTimestamps();
+    }
+
+    public function acquire(User $user)
+    {
+        return new ResponseItem(
+            $item = $this,
+            $experience = User::firstWhere('users.id', $user->id)?->numberInInventory($this)
+        );
+
+        // [
+        //     'item' => [
+        //         'id' => $this->id,
+        //         'name' => $this->name,
+        //     ],
+        //     'quantity' => User::firstWhere('users.id', $user->id?->numberInInventory($this)),
+        // ];
     }
 }

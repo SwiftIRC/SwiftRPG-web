@@ -23,14 +23,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('skill_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->unsignedMediumInteger('value')->default(0);
+            $table->unsignedMediumInteger('quantity')->default(0);
         });
 
         Schema::create('npc_skill', function (Blueprint $table) {
             $table->id();
             $table->foreignId('skill_id')->constrained();
             $table->foreignId('npc_id')->constrained();
-            $table->unsignedMediumInteger('value')->default(0);
+            $table->unsignedMediumInteger('quantity')->default(0);
         });
     }
 

@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
             SkillSeeder::class,
             NameSeeder::class,
             ItemSeeder::class,
-            // RewardSeeder::class,
             CommandSeeder::class,
             TerrainSeeder::class,
             EdgeSeeder::class,
@@ -25,7 +24,6 @@ class DatabaseSeeder extends Seeder
             NpcSeeder::class,
             UserSeeder::class,
             QuestSeeder::class,
-            // EventSeeder::class,
         ]);
     }
 }

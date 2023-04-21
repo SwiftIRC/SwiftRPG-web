@@ -68,7 +68,7 @@ class NpcFactory extends Factory
             $max_level = rand($base_level, 99);
 
             Skill::all()->each(function ($skill) use ($npc, $base_level, $max_level) {
-                $npc->skills()->attach($skill->id, ['value' => level_to_xp(rand($base_level, $max_level)) + rand(0, 1000)]);
+                $npc->skills()->attach($skill->id, ['quantity' => level_to_xp(rand($base_level, $max_level)) + rand(0, 1000)]);
             });
         });
     }

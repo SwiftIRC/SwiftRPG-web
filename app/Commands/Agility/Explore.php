@@ -55,7 +55,7 @@ class Explore extends Command
 
         $reward = $this->generateReward();
 
-        $reward->experience[0]->pivot->value += $response->just_discovered;
+        $reward->experience[0]->quantity += $response->just_discovered;
 
         return response()->object([
             'reward' => $reward,

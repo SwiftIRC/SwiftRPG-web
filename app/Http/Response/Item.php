@@ -2,26 +2,34 @@
 
 namespace App\Http\Response;
 
-class Loot
-{
-    public $name;
-    public $quantity;
-    public $total;
+use App\Models\Item as ModelItem;
+use Illuminate\Support\Collection;
 
-    public function __construct(string $name, int $quantity, int $total)
+class Item
+{
+    public $item;
+
+    public function __construct(ModelItem $item)
     {
-        $this->name = $name;
-        $this->quantity = $quantity;
-        $this->total = $total;
+        $this->item = $item;
     }
 
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
-            'quantity' => $this->quantity,
-            'total' => $this->total,
+            'details' => [
+                'id' => $this->item->id,
+                'name' => $this->item->name,
+                'description' => $this->item->description,
+            ],
+            'gained' => $this->item->pivot->quantity,
+            'total' => $this->item->total,
         ];
+    }
+
+    public function collect(): Collection
+    {
+        return collect($this->toArray());
     }
 
     public function __toString(): string

@@ -38,9 +38,9 @@ class Skill
             $command,
         ]];
 
-        $output = $this->$methodName(...$parameters);
+        $response = $this->$methodName(...$parameters);
 
-        $ticks = $output->original->ticks ?? $command->ticks;
+        $ticks = $response->original->ticks ?? $command->ticks;
 
         if ($command->log) {
             $log = CommandLog::create([
@@ -48,14 +48,14 @@ class Skill
                 'command_id' => $command->id,
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,
-                'metadata' => json_encode($output->original->metadata ?? null),
+                'metadata' => json_encode($response->original->metadata ?? null),
             ]);
 
-            $content = $output->original;
-            $content->command_id = $log->id;
-            $output->setContent($content);
+            $content = $response->original;
+            $content['command_id'] = $log->id;
+            $response->setContent($content);
         }
 
-        return $output;
+        return $response;
     }
 }

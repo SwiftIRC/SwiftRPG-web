@@ -21,9 +21,9 @@ class CommandSeeder extends Seeder
 
         $thieving = Skill::firstWhere('name', 'thieving');
         $pickpocket = Reward::create();
-        $pickpocket->skills()->attach($thieving->id, ['value' => 5]);
+        $pickpocket->skills()->attach($thieving->id, ['quantity' => 5]);
         $gold = Item::firstWhere('name', 'Gold');
-        $pickpocket->items()->attach($gold->id, ['value' => 5]);
+        $pickpocket->items()->attach($gold->id, ['quantity' => 5]);
 
         Command::create([
             'class' => 'thieving',
@@ -35,9 +35,9 @@ class CommandSeeder extends Seeder
 
         $woodcutting = Skill::firstWhere('name', 'woodcutting');
         $chop = Reward::create();
-        $chop->skills()->attach($woodcutting->id, ['value' => 5]);
+        $chop->skills()->attach($woodcutting->id, ['quantity' => 5]);
         $logs = Item::firstWhere('name', 'Logs');
-        $chop->items()->attach($logs->id, ['value' => 5]);
+        $chop->items()->attach($logs->id, ['quantity' => 5]);
 
         Command::create([
             'class' => 'woodcutting',
@@ -49,8 +49,8 @@ class CommandSeeder extends Seeder
 
         $firemaking = Skill::firstWhere('name', 'firemaking');
         $burn = Reward::create();
-        $burn->skills()->attach($firemaking->id, ['value' => 5]);
-        $burn->items()->attach($logs->id, ['value' => -1]);
+        $burn->skills()->attach($firemaking->id, ['quantity' => 5]);
+        $burn->items()->attach($logs->id, ['quantity' => -1]);
 
         Command::create([
             'class' => 'firemaking',
@@ -86,7 +86,7 @@ class CommandSeeder extends Seeder
 
         $agility = Skill::firstWhere('name', 'agility');
         $explore = Reward::create();
-        $explore->skills()->attach($agility->id, ['value' => 5]);
+        $explore->skills()->attach($agility->id, ['quantity' => 5]);
 
         Command::create([
             'class' => 'agility',

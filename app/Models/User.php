@@ -42,35 +42,35 @@ class User extends Authenticatable
 
     public function addXp(int $skill_id, int $xp)
     {
-        $current = $this->skills()->where('skills.id', $skill_id)->withPivot('value')->first();
+        $current = $this->skills()->where('skills.id', $skill_id)->withPivot('quantity')->first();
 
         if ($current === null) {
-            $this->skills()->attach($skill_id, ['value' => $xp]);
+            $this->skills()->attach($skill_id, ['quantity' => $xp]);
             $this->save();
 
             return $xp;
         }
 
-        $current->pivot->value += $xp;
+        $current->pivot->quantity += $xp;
         $current->pivot->save();
 
-        return $current->pivot->value;
+        return $current->pivot->quantity;
     }
 
     public function getXp(int $skill_id)
     {
-        $current = $this->skills()->where('skills.id', $skill_id)->withPivot('value')->first();
+        $current = $this->skills()->where('skills.id', $skill_id)->withPivot('quantity')->first();
 
         if ($current === null) {
             return 0;
         }
 
-        return $current->pivot->value;
+        return $current->pivot->quantity;
     }
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class)->withPivot('value');
+        return $this->belongsToMany(Skill::class)->withPivot('quantity');
     }
 
     public function addToInventory(Item $item, int $quantity = 1)
@@ -91,12 +91,12 @@ class User extends Authenticatable
 
     public function numberInInventory(Item $item)
     {
-        return $this->items()->where('name', $item->name)->count();
+        return $this->items()->where('items.id', $item->id)->count();
     }
 
     public function inInventory(Item $item)
     {
-        $retrievedItem = $this->items()->where('id', $item->id)->count();
+        $retrievedItem = $this->items()->where('items.id', $item->id)->count();
 
         return ($retrievedItem > 0);
     }

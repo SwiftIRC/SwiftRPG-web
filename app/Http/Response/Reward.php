@@ -4,18 +4,17 @@ namespace App\Http\Response;
 
 use App\Http\Response\Loot;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as Collect;
 
 class Reward
 {
     public $loot;
     public $experience;
 
-    public function __construct(Collection | null $experience = null, Collection | null $loot = null)
+    public function __construct(Collection | Collect | array | null $experience = null, Collection | Collect | array | null $loot = null)
     {
         $this->loot = $loot;
         $this->experience = $experience;
-
-        return $this;
     }
 
     public function toArray(): array
@@ -24,6 +23,11 @@ class Reward
             'experience' => $this->experience,
             'loot' => $this->loot,
         ];
+    }
+
+    public function collect(): Collect
+    {
+        return collect($this->toArray());
     }
 
     public function __toString(): string

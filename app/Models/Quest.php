@@ -20,12 +20,12 @@ class Quest extends Model
 
     public function skillRewards()
     {
-        return $this->hasMany(Reward::class)->withPivot('value');
+        return $this->hasMany(Reward::class)->withPivot('quantity');
     }
 
     public function itemRewards()
     {
-        return $this->hasMany(Reward::class)->withPivot('value');
+        return $this->hasMany(Reward::class)->withPivot('quantity');
     }
 
     public function completeSteps()

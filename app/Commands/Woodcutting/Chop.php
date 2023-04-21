@@ -25,8 +25,8 @@ class Chop extends Command
 
         return response()->object(
             [
+                'command' => $this->command,
                 'reward' => $this->generateReward(),
-                'ticks' => $this->command->ticks,
             ]
         );
     }

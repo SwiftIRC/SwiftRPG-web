@@ -10,12 +10,12 @@ class Reward extends Model
 
     public function skills()
     {
-        return $this->belongsToMany(Skill::class)->withPivot('value');
+        return $this->belongsToMany(Skill::class)->withPivot('quantity');
     }
 
     public function items()
     {
-        return $this->belongsToMany(Item::class)->withPivot('value');
+        return $this->belongsToMany(Item::class)->withPivot('quantity');
     }
 
     public function events()

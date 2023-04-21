@@ -27,11 +27,11 @@ class QuestSeeder extends Seeder
     {
         $woodcutting = Skill::firstWhere('name', 'woodcutting');
         $quest1 = Reward::create();
-        $quest1->skills()->attach($woodcutting->id, ['value' => 50]);
+        $quest1->skills()->attach($woodcutting->id, ['quantity' => 50]);
         $logs = Item::firstWhere('name', 'Logs');
-        $quest1->items()->attach($logs->id, ['value' => 10]);
+        $quest1->items()->attach($logs->id, ['quantity' => 10]);
         $apple = Item::firstWhere('name', 'Apple');
-        $quest1->items()->attach($apple->id, ['value' => 1]);
+        $quest1->items()->attach($apple->id, ['quantity' => 1]);
 
         Quest::create([
             'name' => 'Teacher\'s Pet',
@@ -75,7 +75,7 @@ class QuestSeeder extends Seeder
     {
         $quest2 = Reward::create();
         $fishing = Skill::firstWhere('name', 'fishing');
-        $quest2->skills()->attach($fishing->id, ['value' => 50]);
+        $quest2->skills()->attach($fishing->id, ['quantity' => 50]);
 
         Quest::create([
             'name' => 'Reeling in the Basics',

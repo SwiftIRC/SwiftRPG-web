@@ -30,18 +30,21 @@ class Command
         $reward = $this->generateReward();
 
         $reward->experience->each(function ($skill) {
-            $this->user->addXp($skill->id, $skill->pivot->value);
+            $skill = $skill->toArray();
+            $this->user->addXp($skill['details']['id'], $skill['gained']);
         });
         $reward->loot->each(function ($item) {
-            $amount = $item->pivot->value;
+            $array = $item->toArray();
+            $amount = $array['gained'];
             if ($amount < 1) {
-                $this->user->removeFromInventory($item, abs($amount));
+                $this->user->removeFromInventory($item->item, abs($amount));
             } else {
-                $this->user->addToInventory($item, $amount);
+                $this->user->addToInventory($item->item, $amount);
             }
         });
 
-        $this->user->skills = $this->user->skills()->get();
+        // this relation is not desirable to send to the client
+        unset($this->command->reward);
 
         $client = Client::firstWhere('id', $input->client_id);
         post_webhook_endpoint($client->endpoint, [
@@ -61,8 +64,18 @@ class Command
      */
     protected function generateReward(): Reward
     {
-        $skill_rewards = $this->command->getSkillRewardsWithTotals($this->user);
-        $item_rewards = $this->command->getItemRewardsWithTotals($this->user);
+        $skill_rewards = collect();
+        $item_rewards = collect();
+
+        $skills = $this->command->getSkillRewardsWithTotals($this->user);
+        foreach ($skills as $skill) {
+            $skill_rewards->push($skill->acquire($this->user));
+        }
+
+        $items = $this->command->getItemRewardsWithTotals($this->user);
+        foreach ($items as $item) {
+            $item_rewards->push($item->acquire($this->user));
+        }
 
         return new Reward(
             $skill_rewards,
