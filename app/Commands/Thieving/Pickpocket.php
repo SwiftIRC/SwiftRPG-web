@@ -34,8 +34,8 @@ class Pickpocket extends Command
         if ($random > $success_rate) {
             return response()->object(
                 [
+                    'command' => $this->command,
                     'failure' => 'You failed to pickpocket, ' . $npc->first_name . ' ' . $npc->last_name . '! (Thieving level: ' . xp_to_level($npc->thieving) . ')',
-                    'ticks' => $this->command->ticks,
                 ]);
         }
 
