@@ -17,7 +17,7 @@ class Valid
 
     public function __construct(Command $command, Reward $reward, mixed $metadata = null, int $ticks = 0, mixed $failure = null)
     {
-        $this->command = $command->id;
+        $this->command = $command;
         $this->reward = $reward;
         $this->metadata = $metadata;
         $this->ticks = $ticks;
@@ -44,6 +44,12 @@ class Valid
                     'quantity' => $item->item->pivot->quantity,
                     'total' => $item->item->total,
                 ]),
+            ],
+            'command' => [
+                'name' => $this->command->class,
+                'method' => $this->command->method,
+                'verb' => $this->command->verb,
+                'emoji' => $this->command->emoji,
             ],
             'metadata' => $this->metadata,
             'ticks' => $this->ticks,

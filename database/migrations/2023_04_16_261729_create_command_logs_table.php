@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('class');
             $table->string('method');
             $table->string('verb');
+            $table->string('emoji')->nullable();
             $table->smallInteger('ticks')->default(1);
             $table->boolean('log')->default(true);
         });

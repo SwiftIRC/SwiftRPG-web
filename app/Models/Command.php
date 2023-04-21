@@ -11,6 +11,7 @@ class Command extends Model
         'class',
         'method',
         'verb',
+        'emoji',
         'ticks',
         'log',
         'movement_cost',

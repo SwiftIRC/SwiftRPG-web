@@ -29,6 +29,7 @@ class CommandSeeder extends Seeder
             'class' => 'thieving',
             'method' => 'pickpocket',
             'verb' => 'pickpocketing',
+            'emoji' => '🕵️',
             'ticks' => 1,
             'reward_id' => $pickpocket->id,
         ]);
@@ -43,6 +44,7 @@ class CommandSeeder extends Seeder
             'class' => 'woodcutting',
             'method' => 'chop',
             'verb' => 'chopping wood',
+            'emoji' => '🪓',
             'ticks' => 1,
             'reward_id' => $chop->id,
         ]);
@@ -56,6 +58,7 @@ class CommandSeeder extends Seeder
             'class' => 'firemaking',
             'method' => 'burn',
             'verb' => 'burning logs',
+            'emoji' => '🔥',
             'ticks' => 1,
             'reward_id' => $burn->id,
         ]);
@@ -64,6 +67,7 @@ class CommandSeeder extends Seeder
             'class' => 'agility',
             'method' => 'look',
             'verb' => 'looking',
+            'emoji' => '👀',
             'ticks' => 0,
             'log' => false,
         ]);
@@ -72,6 +76,7 @@ class CommandSeeder extends Seeder
             'class' => 'agility',
             'method' => 'npcs',
             'verb' => 'looking at people',
+            'emoji' => '👀',
             'ticks' => 0,
             'log' => false,
         ]);
@@ -80,6 +85,7 @@ class CommandSeeder extends Seeder
             'class' => 'agility',
             'method' => 'buildings',
             'verb' => 'looking at buildings',
+            'emoji' => '👀',
             'ticks' => 0,
             'log' => false,
         ]);
@@ -92,6 +98,7 @@ class CommandSeeder extends Seeder
             'class' => 'agility',
             'method' => 'explore',
             'verb' => 'exploring',
+            'emoji' => '🏃',
             'ticks' => 5,
             'reward_id' => $explore->id,
         ]);
@@ -100,6 +107,7 @@ class CommandSeeder extends Seeder
             'class' => 'questing',
             'method' => 'start',
             'verb' => 'questing',
+            'emoji' => '🏃',
             'ticks' => 0,
         ]);
 
@@ -107,6 +115,7 @@ class CommandSeeder extends Seeder
             'class' => 'questing',
             'method' => 'inspect',
             'verb' => 'questing',
+            'emoji' => '🏃',
             'ticks' => 0,
         ]);
     }
