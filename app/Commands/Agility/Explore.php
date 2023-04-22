@@ -5,6 +5,7 @@ namespace App\Commands\Agility;
 use App\Commands\Command;
 use App\Map\Move;
 use App\Models\User;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use RangeException;
 
@@ -22,7 +23,7 @@ class Explore extends Command
         parent::execute($input);
     }
 
-    public function queue(array $input = []): \Illuminate\Http\Response
+    public function queue(array $input = []): Response
     {
         $this->user = Auth::user();
 
@@ -36,10 +37,12 @@ class Explore extends Command
 
         $ticks = $this->command->ticks + $response['terrain']['movement_cost'];
 
+        $failure = null;
+
         if (isset($response['error'])) {
+            $failure = $response['error'];
             $metadata = [
                 'direction' => $direction,
-                'error' => $response['error'],
             ];
             $ticks = 0;
         } else {
@@ -55,11 +58,12 @@ class Explore extends Command
 
         $reward = $this->generateReward();
 
-        $reward->experience[0]->quantity += $response->just_discovered;
+        $reward->experience[0]->skill->pivot->quantity += $response->just_discovered;
 
         return response()->object([
-            'reward' => $reward,
+            'command' => $this->command,
             'metadata' => $metadata,
+            'reward' => $reward,
             'ticks' => $ticks,
         ]);
     }

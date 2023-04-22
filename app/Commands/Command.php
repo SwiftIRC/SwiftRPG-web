@@ -47,14 +47,16 @@ class Command
         unset($this->command->reward);
 
         $client = Client::firstWhere('id', $input->client_id);
+        $response = response()->object([
+            'command' => $this->command,
+            'command_id' => $input->id,
+            'reward' => $reward,
+            'user' => $this->user,
+        ]);
+
         post_webhook_endpoint($client->endpoint, [
             'type' => 'command_complete',
-            'data' => [
-                'command_id' => $input->id,
-                'user' => $this->user,
-                'command' => $this->command,
-                'reward' => $reward,
-            ],
+            'data' => $response->original,
         ]);
     }
 
@@ -68,13 +70,17 @@ class Command
         $item_rewards = collect();
 
         $skills = $this->command->getSkillRewardsWithTotals($this->user);
-        foreach ($skills as $skill) {
-            $skill_rewards->push($skill->acquire($this->user));
+        if ($skills != null) {
+            foreach ($skills as $skill) {
+                $skill_rewards->push($skill->acquire($this->user));
+            }
         }
 
         $items = $this->command->getItemRewardsWithTotals($this->user);
-        foreach ($items as $item) {
-            $item_rewards->push($item->acquire($this->user));
+        if ($items != null) {
+            foreach ($items as $item) {
+                $item_rewards->push($item->acquire($this->user));
+            }
         }
 
         return new Reward(

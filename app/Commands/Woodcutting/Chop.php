@@ -27,6 +27,7 @@ class Chop extends Command
             [
                 'command' => $this->command,
                 'reward' => $this->generateReward(),
+                'user' => $this->user,
             ]
         );
     }

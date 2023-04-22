@@ -4,25 +4,29 @@ namespace App\Http\Response;
 
 use App\Http\Response\Reward;
 use App\Models\Command;
+use App\Models\User;
 
 class Valid
 {
-    public $command;
-    public $reward;
-    public $metadata;
-    public $ticks;
-    public $seconds_until_tick;
     public $command_id;
+    public $command;
     public $failure;
+    public $metadata;
+    public $reward;
+    public $seconds_until_tick;
+    public $ticks;
+    public $user;
 
-    public function __construct(Command $command, Reward $reward, mixed $metadata = null, int $ticks = 0, mixed $failure = null)
+    public function __construct(Command $command, Reward $reward, mixed $metadata = null, mixed $failure = null, User $user, $command_id = null, $ticks = null)
     {
         $this->command = $command;
-        $this->reward = $reward;
-        $this->metadata = $metadata;
-        $this->ticks = $ticks;
-        $this->seconds_until_tick = seconds_until_tick($ticks);
+        $this->command_id = $command_id;
         $this->failure = $failure;
+        $this->metadata = $metadata;
+        $this->reward = $reward;
+        $this->ticks = $ticks ?? $command->ticks;
+        $this->seconds_until_tick = seconds_until_tick($this->ticks);
+        $this->user = $user;
     }
 
     public function toArray(): array
@@ -50,6 +54,10 @@ class Valid
                 'method' => $this->command->method,
                 'verb' => $this->command->verb,
                 'emoji' => $this->command->emoji,
+            ],
+            'user' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
             ],
             'metadata' => $this->metadata,
             'ticks' => $this->ticks,

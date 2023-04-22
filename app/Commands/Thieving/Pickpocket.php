@@ -41,8 +41,9 @@ class Pickpocket extends Command
 
         return response()->object(
             [
-                'reward' => $this->generateReward($this->user->gold),
                 'command' => $this->command,
+                'reward' => $this->generateReward($this->user->gold),
+                'user' => $this->user,
             ]
         );
     }

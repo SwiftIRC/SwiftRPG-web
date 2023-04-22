@@ -17,8 +17,9 @@ class Buildings extends Command
         $buildings = app(Move::class)->buildings($this->user);
 
         return response()->object([
-            'reward' => $this->generateReward(),
+            'command' => $this->command,
             'metadata' => $buildings,
+            'reward' => $this->generateReward(),
         ]);
     }
 }

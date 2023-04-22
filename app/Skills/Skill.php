@@ -48,7 +48,7 @@ class Skill
                 'command_id' => $command->id,
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,
-                'metadata' => json_encode($response->original->metadata ?? null),
+                'metadata' => json_encode($response->original['metadata']),
             ]);
 
             $content = $response->original;

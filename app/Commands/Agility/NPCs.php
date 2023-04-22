@@ -17,9 +17,9 @@ class NPCs extends Command
         $npcs = app(Move::class)->npcs($this->user);
 
         return response()->object([
-            'reward' => $this->generateReward(),
+            'command' => $this->command,
             'metadata' => $npcs,
-            'ticks' => 0,
+            'reward' => $this->generateReward(),
         ]);
     }
 }

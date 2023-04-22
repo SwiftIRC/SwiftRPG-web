@@ -27,9 +27,9 @@ class Look extends Command
         $tile->discovered_by = User::find($tile->discovered_by);
 
         return response()->object([
-            'reward' => $this->generateReward(),
+            'command' => $this->command,
             'metadata' => $tile,
-            'ticks' => 0,
+            'reward' => $this->generateReward(),
         ]);
     }
 }

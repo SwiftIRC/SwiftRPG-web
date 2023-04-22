@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Http\Response\Reward;
 use App\Http\Response\Valid;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,8 +34,10 @@ class AppServiceProvider extends ServiceProvider
                 $object['command'],
                 $object['reward'] ?? $reward,
                 $object['metadata'] ?? null,
-                $object['command']->ticks,
                 $object['failure'] ?? null,
+                $object['user'] ?? Auth::user(),
+                $object['command_id'] ?? null,
+                $object['ticks'] ?? null,
             );
 
             return Response::make(
