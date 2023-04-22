@@ -6,12 +6,12 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FiremakingController;
 use App\Http\Controllers\QuestController;
+use App\Http\Controllers\StatsController;
 use App\Http\Controllers\ThievingController;
 use App\Http\Controllers\WoodcuttingController;
 use App\Models\Npc;
 use App\Models\Tile;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,12 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/burn', [FiremakingController::class, 'burn'])->name('burn');
     });
     Route::name('stats.')->prefix('stats')->group(function () {
-        Route::get('/', function () {
-            return Auth::user();
-        })->name('index');
-        Route::get('/{user}', function ($user) {
-            return User::where('name', $user)->first();
-        })->name('user');
+        Route::get('/{user?}', [StatsController::class, 'lookup'])->name('lookup');
     });
     Route::name('map.')->prefix('map')->group(function () {
         Route::name('tile.')->prefix('tile')->group(function () {
