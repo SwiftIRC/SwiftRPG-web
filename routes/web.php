@@ -28,7 +28,11 @@ Route::get('/help', function () {
 })->name('help')->middleware(['auth']);
 
 Route::get('/hiscores', function () {
-    $users = User::selectRaw('*, thieving + woodcutting as total')->orderByDesc('total')->get();
+    $users = User::with(['skills' => function () {
+        return $this->orderBy('pivot_quantity', 'desc');
+    }])->get();
+
+    dd($users);
 
     return view('hiscores', compact('users'));
 })->name('hiscores')->middleware(['auth']);

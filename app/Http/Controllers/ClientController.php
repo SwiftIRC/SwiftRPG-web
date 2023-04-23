@@ -16,11 +16,15 @@ class ClientController extends Controller
             'webhook_address' => 'string|nullable',
         ]);
 
-        return Client::upsert([
-            'client_id' => $request->input('client-id'),
-            'webhook_address' => $request->input('webhook_address') ?? $request->ip(),
-            'webhook_port' => $request->input('webhook_port'),
-            'webhook_path' => $request->input('webhook_path'),
-        ], ['client_id', 'webhook_port', 'webhook_path']);
+        return Client::upsert(
+            [
+                'client_id' => $request->input('client-id'),
+                'webhook_address' => $request->input('webhook_address') ?? $request->ip(),
+                'webhook_port' => $request->input('webhook_port'),
+                'webhook_path' => $request->input('webhook_path'),
+            ],
+            ['client_id'],
+            ['webhook_address', 'webhook_port', 'webhook_path']
+        );
     }
 }

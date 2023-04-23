@@ -1,9 +1,11 @@
 <x-app-layout>
     <div class="py-12" x-data="{
         codeblock: '<token>',
-    
+
         getToken() {
-            fetch('{{ route('auth.token') }}')
+            fetch('{{ route('auth.token') }}', {
+                    'Accept': 'application/json',
+                })
                 .then((response) => response.json())
                 .then((json) => this.codeblock = json.token);
             event.target.style.display = 'none';
