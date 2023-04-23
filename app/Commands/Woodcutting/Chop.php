@@ -5,7 +5,6 @@ namespace App\Commands\Woodcutting;
 use App\Commands\Command;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use RangeException;
 
 class Chop extends Command
 {
@@ -17,7 +16,12 @@ class Chop extends Command
         $this->command = array_pop($input);
 
         if ($tile->available_trees < 1) {
-            throw new RangeException('There are no trees left on this tile to chop!');
+            return response()->object([
+                'command' => $this->command,
+                'failure' => 'There are no trees left on this tile to chop!',
+                'ticks' => 0,
+                'user' => $this->user,
+            ]);
         }
 
         $tile->available_trees--;
