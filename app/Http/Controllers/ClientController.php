@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ClientController extends Controller
 {
@@ -17,12 +16,6 @@ class ClientController extends Controller
             'webhook_address' => 'string|nullable',
         ]);
 
-        Log::info([
-            'client_id' => $request->input('client-id'),
-            'webhook_address' => $request->input('webhook_address') ?? $request->ip(),
-            'webhook_port' => $request->input('webhook_port'),
-            'webhook_path' => $request->input('webhook_path'),
-        ]);
         return Client::upsert(
             [
                 'client_id' => $request->input('client-id'),
