@@ -49,7 +49,7 @@ class Command
         $client = Client::firstWhere('id', $input->client_id);
         $response = response()->object([
             'command' => $this->command,
-            'command_id' => $input->id,
+            'webhook_id' => $input->id,
             'reward' => $reward,
             'user' => $this->user,
         ]);

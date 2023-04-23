@@ -8,7 +8,7 @@ use App\Models\User;
 
 class Valid
 {
-    public $command_id;
+    public $webhook_id;
     public $command;
     public $failure;
     public $metadata;
@@ -17,10 +17,10 @@ class Valid
     public $ticks;
     public $user;
 
-    public function __construct(Command $command, Reward $reward, mixed $metadata = null, mixed $failure = null, User $user, $command_id = null, $ticks = null)
+    public function __construct(Command $command, Reward $reward, mixed $metadata = null, mixed $failure = null, User $user, $webhook_id = null, $ticks = null)
     {
         $this->command = $command;
-        $this->command_id = $command_id;
+        $this->webhook_id = $webhook_id;
         $this->failure = $failure;
         $this->metadata = $metadata;
         $this->reward = $reward;
@@ -63,7 +63,7 @@ class Valid
             'ticks' => $this->ticks,
             'seconds_until_tick' => $this->seconds_until_tick,
             'failure' => $this->failure,
-            'command_id' => $this->command_id,
+            'webhook_id' => $this->webhook_id,
         ];
     }
 

@@ -56,7 +56,7 @@ class Skill
             ]);
 
             $content = $response->original;
-            $content['command_id'] = $log->id;
+            $content['webhook_id'] = $log->id;
             $response->setContent($content);
         }
 

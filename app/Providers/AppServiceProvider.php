@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
                 $object['metadata'] ?? null,
                 $object['failure'] ?? null,
                 $object['user'] ?? Auth::user(),
-                $object['command_id'] ?? null,
+                $object['webhook_id'] ?? null,
                 $object['ticks'] ?? $object['command']->ticks,
             );
 
