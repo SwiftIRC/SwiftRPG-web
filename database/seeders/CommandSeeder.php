@@ -17,15 +17,13 @@ class CommandSeeder extends Seeder
      */
     public function run()
     {
-        $reward = Reward::create();
-
         $thieving = Skill::firstWhere('name', 'thieving');
         $pickpocket = Reward::create();
         $pickpocket->skills()->attach($thieving->id, ['quantity' => 5]);
         $gold = Item::firstWhere('name', 'Gold');
         $pickpocket->items()->attach($gold->id, ['quantity' => 5]);
 
-        Command::create([
+        Command::factory()->create([
             'class' => 'thieving',
             'method' => 'pickpocket',
             'verb' => 'pickpocketing',
@@ -40,7 +38,7 @@ class CommandSeeder extends Seeder
         $logs = Item::firstWhere('name', 'Logs');
         $chop->items()->attach($logs->id, ['quantity' => 5]);
 
-        Command::create([
+        Command::factory()->create([
             'class' => 'woodcutting',
             'method' => 'chop',
             'verb' => 'chopping wood',
@@ -54,7 +52,7 @@ class CommandSeeder extends Seeder
         $burn->skills()->attach($firemaking->id, ['quantity' => 5]);
         $burn->items()->attach($logs->id, ['quantity' => -1]);
 
-        Command::create([
+        Command::factory()->create([
             'class' => 'firemaking',
             'method' => 'burn',
             'verb' => 'burning logs',
@@ -63,7 +61,7 @@ class CommandSeeder extends Seeder
             'reward_id' => $burn->id,
         ]);
 
-        Command::create([
+        Command::factory()->create([
             'class' => 'agility',
             'method' => 'look',
             'verb' => 'looking',
@@ -72,7 +70,7 @@ class CommandSeeder extends Seeder
             'log' => false,
         ]);
 
-        Command::create([
+        Command::factory()->create([
             'class' => 'agility',
             'method' => 'npcs',
             'verb' => 'looking at people',
@@ -81,7 +79,7 @@ class CommandSeeder extends Seeder
             'log' => false,
         ]);
 
-        Command::create([
+        Command::factory()->create([
             'class' => 'agility',
             'method' => 'buildings',
             'verb' => 'looking at buildings',
@@ -94,7 +92,7 @@ class CommandSeeder extends Seeder
         $explore = Reward::create();
         $explore->skills()->attach($agility->id, ['quantity' => 5]);
 
-        Command::create([
+        Command::factory()->create([
             'class' => 'agility',
             'method' => 'explore',
             'verb' => 'exploring',
@@ -103,7 +101,7 @@ class CommandSeeder extends Seeder
             'reward_id' => $explore->id,
         ]);
 
-        Command::create([
+        Command::factory()->create([
             'class' => 'questing',
             'method' => 'start',
             'verb' => 'questing',
@@ -111,7 +109,7 @@ class CommandSeeder extends Seeder
             'ticks' => 0,
         ]);
 
-        Command::create([
+        Command::factory()->create([
             'class' => 'questing',
             'method' => 'inspect',
             'verb' => 'questing',

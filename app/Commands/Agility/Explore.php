@@ -7,7 +7,6 @@ use App\Map\Move;
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use RangeException;
 
 class Explore extends Command
 {
@@ -28,10 +27,15 @@ class Explore extends Command
         $this->user = Auth::user();
 
         $this->command = array_pop($input);
-        $direction = array_pop($input);
+        $direction = array_pop($input)['direction'];
 
         if (empty($direction) || !in_array($direction, ['north', 'south', 'east', 'west'])) {
-            throw new RangeException('Direction not found.');
+            return response()->object(
+                [
+                    'command' => $this->command,
+                    'failure' => 'Direction not found.',
+                    'ticks' => 0,
+                ]);
         }
         $response = app(Move::class)->look_at($this->user, $direction);
 
@@ -39,11 +43,12 @@ class Explore extends Command
 
         $failure = null;
 
+        $metadata = [
+            'direction' => $direction,
+        ];
+
         if (isset($response['error'])) {
             $failure = $response['error'];
-            $metadata = [
-                'direction' => $direction,
-            ];
             $ticks = 0;
         } else {
             $metadata = [
@@ -65,6 +70,7 @@ class Explore extends Command
             'metadata' => $metadata,
             'reward' => $reward,
             'ticks' => $ticks,
+            'failure' => $failure,
         ]);
     }
 

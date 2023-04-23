@@ -16,7 +16,7 @@ class TileSeeder extends Seeder
      */
     public function run()
     {
-        $terrain = Terrain::where('id', 1)->first(); # Grass
+        $terrain = Terrain::all()->first(); # Grass
 
         $tiles = [
             Tile::create([

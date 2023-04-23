@@ -15,11 +15,11 @@ class EdgeSeeder extends Seeder
      */
     public function run()
     {
-        $grass = Terrain::where('id', 1)->first();
-        $forest = Terrain::where('id', 2)->first();
-        $sand = Terrain::where('id', 3)->first();
-        $water = Terrain::where('id', 4)->first();
-        $mountains = Terrain::where('id', 5)->first();
+        $grass = Terrain::firstWhere('name', 'Grass');
+        $forest = Terrain::firstWhere('name', 'Forest');
+        $sand = Terrain::firstWhere('name', 'Sand');
+        $water = Terrain::firstWhere('name', 'Water');
+        $mountains = Terrain::firstWhere('name', 'Mountains');
 
         Edge::create([
             'name' => 'Grass',

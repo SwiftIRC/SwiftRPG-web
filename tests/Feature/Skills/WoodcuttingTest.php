@@ -4,7 +4,7 @@ namespace Tests\Feature\Skills;
 
 use App\Models\Command;
 use App\Models\Item;
-use App\Models\Tile;
+use App\Models\Skill;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -13,30 +13,16 @@ class WoodcuttingTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function test_user_can_chop()
     {
-        $tile = Tile::all()->first();
-        $user = User::factory()->create([
-            'tile_id' => $tile->id,
-        ]);
+        $user = User::factory()->create();
 
-        $item = Item::factory()->create([
-            'name' => 'Logs',
-        ]);
+        $item = Item::firstWhere('name', 'Logs');
 
-        $command = Command::create([
-            'class' => 'woodcutting',
-            'method' => 'chop',
-            'verb' => 'chopping wood',
-            'ticks' => 1,
-        ]);
+        $command = Command::where('class', 'woodcutting')->where('method', 'chop')->first();
+        $woodcutting = Skill::firstWhere('name', 'woodcutting');
 
-        $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Bot-Token' => config('app.token')]);
+        $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Client-Id' => 'this-is-a-test', 'X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(200);
 
@@ -45,48 +31,38 @@ class WoodcuttingTest extends TestCase
             'command_id' => $command->id,
         ]);
 
-        $this->assertDatabaseHas('users', [
-            'id' => $user->id,
-            'woodcutting' => 0,
+        $this->assertDatabaseMissing('skill_user', [
+            'user_id' => $user->id,
+            'skill_id' => $woodcutting->id,
+            'quantity' => 0,
         ]);
 
         $this->artisan('tick:process');
 
-        $this->assertDatabaseHas('item_user', [
-            'user_id' => $user->id,
-            'item_id' => $item->id,
-        ]);
+        $this->assertDatabaseCount('item_user', 5);
 
-        $this->assertDatabaseHas('users', [
-            'id' => $user->id,
-            'woodcutting' => 5,
+        $this->assertDatabaseHas('skill_user', [
+            'user_id' => $user->id,
+            'skill_id' => $woodcutting->id,
+            'quantity' => 5,
         ]);
 
     }
 
     public function test_user_cannot_chop()
     {
-        $tile = Tile::all()->first();
-        $user = User::factory()->create([
-            'tile_id' => $tile->id,
-        ]);
-        $item = Item::factory()->create([
-            'name' => 'Logs',
-        ]);
+        $user = User::factory()->create();
 
-        $command = Command::create([
-            'class' => 'woodcutting',
-            'method' => 'chop',
-            'verb' => 'chopping wood',
-            'ticks' => 1,
-        ]);
-
-        $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Bot-Token' => config('app.token')]);
+        $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Client-Id' => 'this-is-a-test', 'X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(200);
 
-        $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Bot-Token' => config('app.token')]);
+        $response = $this->actingAs($user)->post('/api/woodcutting/chop', [], ['X-Client-Id' => 'this-is-a-test', 'X-Bot-Token' => config('app.token')]);
 
         $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'failure',
+            'metadata',
+        ]);
     }
 }

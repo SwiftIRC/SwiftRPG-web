@@ -4,7 +4,6 @@ namespace Tests\Feature\Map;
 
 use App\Models\Command;
 use App\Models\Edge;
-use App\Models\Npc;
 use App\Models\Terrain;
 use App\Models\Tile;
 use App\Models\User;
@@ -46,9 +45,7 @@ class UserTest extends TestCase
         $terrain = Terrain::all()->first();
         $tile = Tile::all()->first();
 
-        $user = User::factory()->create([
-            'tile_id' => $tile->id,
-        ]);
+        $user = User::factory()->create();
 
         $tile2 = Tile::create([
             'discovered_by' => $user->id,
@@ -85,24 +82,14 @@ class UserTest extends TestCase
             $tile->edges()->attach($edge, ['is_road' => true]);
         }
 
-        $command = Command::create([
-            'class' => 'agility',
-            'method' => 'explore',
-            'verb' => 'exploring',
-            'ticks' => 1,
-        ]);
+        $command = Command::where('class', 'agility')->where('method', 'explore')->first();
 
         $response = $this->actingAs($user)->post('/api/map/user/explore', [
             'direction' => 'north',
-        ]);
+        ], ['X-Client-Id' => 'this-is-a-test', 'X-Bot-Token' => config('app.token')]);
 
         $response->assertJson([
-            'metadata' => [
-                'response' => [
-                    'x' => $tile->x,
-                    'y' => $tile->y + 1,
-                ],
-            ],
+            'ticks' => $terrain->movement_cost + $command->ticks,
         ]);
 
         $this->assertDatabaseHas('users', [
@@ -110,7 +97,7 @@ class UserTest extends TestCase
             'tile_id' => $tile->id,
         ]);
 
-        $this->artisan('tick:process');
+        $this->artisan('tick:process --ticks=10');
 
         $this->assertDatabaseHas('users', [
             'id' => $user->id,
@@ -128,12 +115,12 @@ class UserTest extends TestCase
     {
         $terrain = Terrain::all()->first();
 
-        $tile = Tile::all()->first();
+        $tile = Tile::firstWhere('psuedo_id', '0,0');
 
         $tile2 = Tile::create([
             'x' => $tile->x,
             'y' => $tile->y + 1,
-            'psuedo_id' => implode([1, ',', 1]),
+            'psuedo_id' => implode([$tile->x, ',', $tile->y + 1]),
             'terrain_id' => $terrain->id,
         ]);
 
@@ -164,16 +151,18 @@ class UserTest extends TestCase
             'tile_id' => $tile2->id,
         ]);
 
-        $command = Command::create([
-            'class' => 'agility',
-            'method' => 'explore',
-            'verb' => 'exploring',
-            'ticks' => 5,
-        ]);
+        $command = Command::where('class', 'agility')->where('method', 'explore')->first();
 
-        $response = $this->actingAs($user)->post('/api/map/user/explore', [
-            'direction' => 'north',
-        ]);
+        $response = $this->actingAs($user)->post(
+            '/api/map/user/explore',
+            [
+                'direction' => 'north',
+            ],
+            [
+                'X-Client-Id' => 'this-is-a-test',
+                'X-Bot-Token' => config('app.token'),
+            ]
+        );
 
         $response->assertStatus(200);
 
@@ -183,46 +172,37 @@ class UserTest extends TestCase
         ]);
 
         $response->assertJson([
-            'ticks' => $command->ticks,
-            'metadata' => [
-                'response' => [
-                    'error' => 'There is no road in that direction.',
-                ],
-            ],
+            'metadata' => [],
+            'failure' => 'There is no road in that direction.',
         ]);
 
     }
 
     public function test_user_can_look()
     {
-        $terrain = Terrain::all()->first();
-        $tile = Tile::all()->first();
-        $user = User::factory()->create([
-            'tile_id' => $tile->id,
-        ]);
+        $user = User::factory()->create();
 
-        $npcs = Npc::factory()->count(3);
-        foreach ($npcs as $npc) {
-            $tile->npcs()->attach($npc);
-        }
+        $command = Command::where('class', 'agility')->where('method', 'look')->first();
 
-        $command = Command::create([
-            'class' => 'agility',
-            'method' => 'look',
-            'verb' => 'looking',
-            'ticks' => 0,
-            'log' => false,
-        ]);
-
-        $response = $this->actingAs($user)->get('/api/map/user/look');
-
-        $response->assertStatus(200);
+        $response = $this->actingAs($user)->get('/api/map/user/look', ['X-Client-Id' => 'this-is-a-test', 'X-Bot-Token' => config('app.token')]);
 
         $response->assertJson([
+            'command' => [
+                'method' => $command->method,
+                'verb' => $command->verb,
+            ],
+            'failure' => null,
+        ]);
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'reward' => [
+                'experience',
+                'loot',
+            ],
             'metadata' => [
-                'response' => [
-                    'id' => $tile->id,
-                ],
+                'buildings',
+                'npcs',
             ],
         ]);
     }

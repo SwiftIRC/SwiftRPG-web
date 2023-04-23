@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Command extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'reward_id',
         'class',
@@ -14,7 +17,6 @@ class Command extends Model
         'emoji',
         'ticks',
         'log',
-        'movement_cost',
     ];
 
     public $timestamps = false;

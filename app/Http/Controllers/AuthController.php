@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -11,7 +12,7 @@ class AuthController extends Controller
      * Generate a token for the user to use when
      * logging into a client (e.g. Discord or IRC bot)
      */
-    public function token(Request $request): \Illuminate\Http\JsonResponse
+    public function token(Request $request): JsonResponse
     {
         $token = $request->user()->createToken('client-auth', ['login']);
 
@@ -26,7 +27,7 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request): \Illuminate\Http\JsonResponse
+    public function login(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();
 

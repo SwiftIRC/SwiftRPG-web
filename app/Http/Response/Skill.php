@@ -21,8 +21,8 @@ class Skill
                 'id' => $this->skill->id,
                 'name' => $this->skill->name,
             ],
-            'gained' => ($this->skill->total == null ? null : $this->skill->pivot->quantity),
-            'total' => ($this->skill->total == null ? $this->skill->pivot->quantity : $this->skill->total),
+            'gained' => $this->skill->pivot->quantity,
+            'total' => $this->skill->total,
         ];
     }
 

@@ -33,14 +33,14 @@ class Valid
     {
         return [
             'reward' => [
-                'experience' => $this->reward->experience->map(fn($skill) => [
+                'experience' => $this->reward->experience?->map(fn($skill) => [
                     'skill' => [
                         'name' => $skill->skill->name,
                     ],
                     'quantity' => $skill->skill->pivot->quantity,
                     'total' => $skill->skill->total,
                 ]),
-                'loot' => $this->reward->loot->map(fn($item) => [
+                'loot' => $this->reward->loot?->map(fn($item) => [
                     'item' => [
                         'name' => $item->item->name,
                         'description' => $item->item->description,

@@ -15,7 +15,7 @@ class Look extends Command
         $this->user = Auth::user();
 
         $this->command = array_pop($input);
-        $direction = array_pop($input);
+        $direction = array_pop($input)['direction'];
 
         if (in_array($direction, ['north', 'south', 'east', 'west'])) {
             $tile = app(Move::class)->look_at($this->user, $direction);

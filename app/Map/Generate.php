@@ -308,7 +308,7 @@ class Generate
 
     public function map(): int
     {
-        $this->follow_roads(Tile::where('id', 1)->first());
+        $this->follow_roads(Tile::firstWhere('psuedo_id', '0,0'));
 
         $this->fill_in_missing_tiles_if_isolated();
 

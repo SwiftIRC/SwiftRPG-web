@@ -11,18 +11,28 @@ class AgilityController extends Controller
     public function explore(Request $request)
     {
         try {
-            return app(Agility::class)->explore($request->direction);
+            return app(Agility::class)->explore($request);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 200);
+            return response()->error(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                200
+            );
         }
     }
 
     public function look(Request $request)
     {
         try {
-            return app(Agility::class)->look($request->direction);
+            return app(Agility::class)->look($request);
         } catch (RangeException $e) {
-            return response()->json(['error' => $e->getMessage()], 200);
+            return response()->error(
+                [
+                    'error' => $e->getMessage(),
+                ],
+                200
+            );
         }
     }
 

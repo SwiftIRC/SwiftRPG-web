@@ -30,7 +30,11 @@ class Skill
             $plural_ticks = $last_run->ticks_remaining > 1 ? 's' : '';
             $plural_seconds = seconds_until_tick($last_run->ticks_remaining) > 1 ? 's' : '';
 
-            throw new RangeException($last_run->ticks_remaining . ' tick' . $plural_ticks . ' (' . seconds_until_tick($last_run->ticks_remaining) . ' second' . $plural_seconds . ') remaining until you are done with ' . $last_run->command->verb . ".");
+            return response()->object([
+                'command' => $last_run->command,
+                'failure' => $last_run->ticks_remaining . ' tick' . $plural_ticks . ' (' . seconds_until_tick($last_run->ticks_remaining) . ' second' . $plural_seconds . ') remaining until you are done with ' . $last_run->command->verb . ".",
+                'ticks' => $last_run->ticks_remaining,
+            ]);
         }
 
         $parameters = [[
@@ -40,7 +44,7 @@ class Skill
 
         $response = $this->$methodName(...$parameters);
 
-        $ticks = $response->original->ticks ?? $command->ticks;
+        $ticks = $response->original['ticks'] ?? $command->ticks;
 
         if ($command->log) {
             $log = CommandLog::create([
@@ -48,7 +52,7 @@ class Skill
                 'command_id' => $command->id,
                 'ticks' => $ticks,
                 'ticks_remaining' => $ticks,
-                'metadata' => json_encode($response->original['metadata']),
+                'metadata' => json_encode($response->original['metadata'] ?? null),
             ]);
 
             $content = $response->original;

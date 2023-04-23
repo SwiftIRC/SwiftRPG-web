@@ -5,7 +5,6 @@ namespace App\Commands\Firemaking;
 use App\Commands\Command;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use RangeException;
 
 class Burn extends Command
 {
@@ -16,7 +15,12 @@ class Burn extends Command
         $this->command = array_pop($input);
 
         if (!isset($log)) {
-            throw new RangeException('There are no logs in your inventory to burn!');
+            return response()->object(
+                [
+                    'command' => $this->command,
+                    'failure' => 'There are no logs in your inventory to burn!',
+                ]
+            );
         }
 
         return response()->object([

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\Tile;
 use App\Models\User;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
-use App\Providers\RouteServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class RegisteredUserController extends Controller
 {
@@ -36,13 +36,13 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['bail', 'required', 'unique:users,name', 'alpha_dash', 'max:15'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'password' => Hash::make($request->password),
-            'tile_id' => Tile::all()->first()->id,
+            'tile_id' => Tile::firstWhere('psuedo_id', '0,0')->id,
         ]);
 
         event(new Registered($user));

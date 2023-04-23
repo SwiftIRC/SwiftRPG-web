@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
                 $object['failure'] ?? null,
                 $object['user'] ?? Auth::user(),
                 $object['command_id'] ?? null,
-                $object['ticks'] ?? null,
+                $object['ticks'] ?? $object['command']->ticks,
             );
 
             return Response::make(
