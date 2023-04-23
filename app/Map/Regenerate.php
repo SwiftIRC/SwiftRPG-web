@@ -10,7 +10,7 @@ class Regenerate
 {
     public function map()
     {
-        $tiles = Tile::where('available_trees', '<', 'max_trees')->where('last_disturbed', '<', DB::raw('NOW() - 300'))->get();
+        $tiles = Tile::where('available_trees', '<', 'max_trees')->where('last_disturbed', '<', DB::raw('CURRENT_TIMESTAMP'))->get();
 
         $toggled = false;
 
