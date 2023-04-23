@@ -4,7 +4,9 @@
 
         getToken() {
             fetch('{{ route('auth.token') }}', {
-                    'Accept': 'application/json',
+                    headers: {
+                        'Accept': 'application/json',
+                    }
                 })
                 .then((response) => response.json())
                 .then((json) => this.codeblock = json.token);

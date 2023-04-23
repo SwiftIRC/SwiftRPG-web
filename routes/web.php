@@ -28,8 +28,8 @@ Route::get('/help', function () {
 })->name('help')->middleware(['auth']);
 
 Route::get('/hiscores', function () {
-    $users = User::with(['skills' => function () {
-        return $this->orderBy('pivot_quantity', 'desc');
+    $users = User::with(['skills' => function ($query) {
+        return $query->orderBy('pivot_quantity', 'desc');
     }])->get();
 
     dd($users);
