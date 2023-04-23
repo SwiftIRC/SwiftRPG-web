@@ -18,7 +18,7 @@ class TerrainFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'description' => $this->faker->sentence,
+            'description' => $this->faker->sentence(),
         ];
     }
 }
