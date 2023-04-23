@@ -20,7 +20,6 @@ class StatsController extends Controller
 
         return [
             'user' => [
-                'id' => $user->id,
                 'name' => $user->name,
             ],
             'skills' => $user->skills()->get()->map(function ($skill) {
