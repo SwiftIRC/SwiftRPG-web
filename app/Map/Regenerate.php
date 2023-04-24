@@ -10,29 +10,8 @@ class Regenerate
 {
     public function map()
     {
-        $tiles = Tile::where('available_trees', '<', 'max_trees')->where('last_disturbed', '<', DB::raw('CURRENT_TIMESTAMP'))->get();
+        $tile_ids = User::all()->pluck('tile_id')->unique();
 
-        $toggled = false;
-
-        foreach ($tiles as $tile) {
-            if ($this->tile($tile)) {
-                $toggled = true;
-            }
-        }
-        return $toggled;
-    }
-
-    public function tile(Tile $tile)
-    {
-        $players = User::where('tile_id', $tile->id)->get();
-
-        if (!$players->count()) {
-            $tile->available_trees++;
-            $tile->save();
-
-            return true;
-        }
-
-        return false;
+        return Tile::where('available_trees', '<', DB::raw('max_trees'))->whereDate('last_disturbed', '<=', now()->subMinutes(5))->whereNotIn('id', $tile_ids)->increment('available_trees');
     }
 }
