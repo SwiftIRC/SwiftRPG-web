@@ -39,24 +39,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
             });
         });
     });
-
-    Route::name('thieving.')->prefix('thieving')->group(function () {
-        Route::get('/', [ThievingController::class, 'index'])->name('index');
-        Route::post('/pickpocket', [ThievingController::class, 'pickpocket'])->name('pickpocket');
-        Route::post('/steal', [ThievingController::class, 'steal'])->name('steal');
-        Route::post('/pilfer', [ThievingController::class, 'pilfer'])->name('pilfer');
-        Route::post('/plunder', [ThievingController::class, 'plunder'])->name('plunder');
-    });
-    Route::name('woodcutting.')->prefix('woodcutting')->group(function () {
-        Route::get('/', [WoodcuttingController::class, 'index'])->name('index');
-        Route::post('/chop', [WoodcuttingController::class, 'chop'])->name('chop');
+    Route::name('events.')->prefix('events')->group(function () {
+        Route::get('/', [EventController::class, 'index'])->name('index');
+        Route::post('/', [EventController::class, 'engage'])->name('engage');
     });
     Route::name('firemaking.')->prefix('firemaking')->group(function () {
         Route::get('/', [FiremakingController::class, 'index'])->name('index');
         Route::post('/burn', [FiremakingController::class, 'burn'])->name('burn');
-    });
-    Route::name('stats.')->prefix('stats')->group(function () {
-        Route::get('/{user?}', [StatsController::class, 'lookup'])->name('lookup');
     });
     Route::name('map.')->prefix('map')->group(function () {
         Route::name('tile.')->prefix('tile')->group(function () {
@@ -90,8 +79,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/start/{quest_id}/{step_id?}', [QuestController::class, 'start'])->name('start');
         Route::get('/inspect/{quest_id}', [QuestController::class, 'inspect'])->name('inspect');
     });
-    Route::name('events.')->prefix('events')->group(function () {
-        Route::get('/', [EventController::class, 'index'])->name('index');
-        Route::post('/', [EventController::class, 'engage'])->name('engage');
+    Route::name('stats.')->prefix('stats')->group(function () {
+        Route::get('/{user?}', [StatsController::class, 'lookup'])->name('lookup');
+    });
+    Route::name('thieving.')->prefix('thieving')->group(function () {
+        Route::get('/', [ThievingController::class, 'index'])->name('index');
+        Route::post('/pickpocket', [ThievingController::class, 'pickpocket'])->name('pickpocket');
+        Route::post('/steal', [ThievingController::class, 'steal'])->name('steal');
+        Route::post('/pilfer', [ThievingController::class, 'pilfer'])->name('pilfer');
+        Route::post('/plunder', [ThievingController::class, 'plunder'])->name('plunder');
+    });
+    Route::name('woodcutting.')->prefix('woodcutting')->group(function () {
+        Route::get('/', [WoodcuttingController::class, 'index'])->name('index');
+        Route::post('/chop', [WoodcuttingController::class, 'chop'])->name('chop');
     });
 });
