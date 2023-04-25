@@ -105,7 +105,7 @@ class CommandSeeder extends Seeder
             'class' => 'questing',
             'method' => 'start',
             'verb' => 'questing',
-            'emoji' => '🏃',
+            'emoji' => '📜',
             'ticks' => 0,
         ]);
 
@@ -113,8 +113,16 @@ class CommandSeeder extends Seeder
             'class' => 'questing',
             'method' => 'inspect',
             'verb' => 'questing',
-            'emoji' => '🏃',
+            'emoji' => '📜',
             'ticks' => 0,
         ]);
+
+        Command::factory()->create([
+            'class' => 'eventing',
+            'method' => 'engage',
+            'verb' => 'engaging a special event',
+            'emoji' => '🌟',
+            'ticks' => 1,
+        ])
     }
 }
