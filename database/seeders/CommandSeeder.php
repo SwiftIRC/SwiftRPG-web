@@ -123,6 +123,6 @@ class CommandSeeder extends Seeder
             'verb' => 'engaging a special event',
             'emoji' => '🌟',
             'ticks' => 1,
-        ])
+        ]);
     }
 }
