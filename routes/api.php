@@ -41,7 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
     Route::name('events.')->prefix('events')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('index');
-        Route::post('/', [EventController::class, 'engage'])->name('engage');
+        Route::post('/engage', [EventController::class, 'engage'])->name('engage');
     });
     Route::name('firemaking.')->prefix('firemaking')->group(function () {
         Route::get('/', [FiremakingController::class, 'index'])->name('index');
