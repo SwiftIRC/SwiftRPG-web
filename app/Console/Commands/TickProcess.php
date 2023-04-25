@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Commands\Agility\Explore;
+use App\Commands\Events\Engage;
 use App\Commands\Firemaking\Burn;
 use App\Commands\Questing\Inspect;
 use App\Commands\Questing\Start;
@@ -53,18 +54,21 @@ class TickProcess extends Command
             'agility' => [
                 'explore' => Explore::class,
             ],
+            'eventing' => [
+                'engage' => Engage::class,
+            ],
             'firemaking' => [
                 'burn' => Burn::class,
+            ],
+            'questing' => [
+                'start' => Start::class,
+                'inspect' => Inspect::class,
             ],
             'thieving' => [
                 'pickpocket' => Pickpocket::class,
             ],
             'woodcutting' => [
                 'chop' => Chop::class,
-            ],
-            'questing' => [
-                'start' => Start::class,
-                'inspect' => Inspect::class,
             ],
         ];
 
