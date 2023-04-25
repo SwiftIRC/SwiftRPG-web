@@ -17,7 +17,7 @@ class TickSpecialEvent extends Command
      *
      * @var string
      */
-    protected $signature = 'tick:specialevent';
+    protected $signature = 'tick:specialevent {--trigger=false}';
 
     /**
      * The console command description.
@@ -33,7 +33,7 @@ class TickSpecialEvent extends Command
      */
     public function handle()
     {
-        if (rand(0, 1000) > 0) {
+        if (!$this->option('trigger') && rand(0, 1000) > 0) {
             return 0;
         }
 
