@@ -74,12 +74,10 @@ class TickProcess extends Command
 
         $commands = CommandModel::all();
 
-        $where->get()->each(function ($row) use ($commands, $map) {
-            if ($row->ticks_remaining == 1) {
-                $row->command = $commands->firstWhere('id', $row->command_id);
+        $where->where('ticks_remaining', '=', 1)->get()->each(function ($row) use ($commands, $map) {
+            $row->command = $commands->firstWhere('id', $row->command_id);
 
-                app($map[$row->command->class][$row->command->method])->execute($row);
-            }
+            app($map[$row->command->class][$row->command->method])->execute($row);
         });
 
         $where->decrement('ticks_remaining');
