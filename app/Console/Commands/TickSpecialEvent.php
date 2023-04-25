@@ -84,7 +84,8 @@ class TickSpecialEvent extends Command
         $event->save();
 
         app(Client::class)->valid()->each(function ($client) use ($event, $reward) {
-            post_webhook_endpoint($client->endpoint,
+            post_webhook_endpoint(
+                $client->endpoint,
                 [
                     'type' => 'event_start',
                     'data' => [
