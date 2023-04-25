@@ -22,7 +22,7 @@ class Engage extends Command
                     'failure' => 'No active event.',
                     'ticks' => 0,
                 ],
-                400
+                200
             );
         }
 
