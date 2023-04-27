@@ -11,18 +11,18 @@ class Reward
     public $loot;
     public $experience;
 
-    public function __construct(Collection | Collect | array | null $experience = null, Collection | Collect | array | null $loot = null)
+    public function __construct(Collection | Collect | null $experience = null, Collection | Collect | null $loot = null)
     {
-        $this->loot = $loot;
         $this->experience = $experience;
+        $this->loot = $loot;
     }
 
     public function toArray(): array
     {
-        return [
-            'experience' => $this->experience,
-            'loot' => $this->loot,
-        ];
+        $experience = $this->experience?->toArray();
+        $loot = $this->loot?->toArray();
+
+        return compact(['experience', 'loot']);
     }
 
     public function collect(): Collect

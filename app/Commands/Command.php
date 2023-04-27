@@ -30,21 +30,16 @@ class Command
         $reward = $this->generateReward();
 
         $reward->experience->each(function ($skill) {
-            $skill = $skill->toArray();
-            $this->user->addXp($skill['details']['id'], $skill['gained']);
+            $this->user->addXp($skill->id, $skill->pivot->quantity);
         });
         $reward->loot->each(function ($item) {
-            $array = $item->toArray();
-            $amount = $array['gained'];
+            $amount = $item->pivot->quantity;
             if ($amount < 1) {
-                $this->user->removeFromInventory($item->item, abs($amount));
+                $this->user->removeFromInventory($item, abs($amount));
             } else {
-                $this->user->addToInventory($item->item, $amount);
+                $this->user->addToInventory($item, $amount);
             }
         });
-
-        // this relation is not desirable to send to the client
-        unset($this->command->reward);
 
         $client = Client::firstWhere('id', $input->client_id);
         $response = response()->object([
@@ -66,26 +61,12 @@ class Command
      */
     protected function generateReward(): Reward
     {
-        $skill_rewards = collect();
-        $item_rewards = collect();
-
         $skills = $this->command->getSkillRewardsWithTotals($this->user);
-        if ($skills != null) {
-            foreach ($skills as $skill) {
-                $skill_rewards->push($skill->acquire($this->user));
-            }
-        }
-
         $items = $this->command->getItemRewardsWithTotals($this->user);
-        if ($items != null) {
-            foreach ($items as $item) {
-                $item_rewards->push($item->acquire($this->user));
-            }
-        }
 
         return new Reward(
-            $skill_rewards,
-            $item_rewards,
+            $experience = $skills,
+            $loot = $items,
         );
     }
 

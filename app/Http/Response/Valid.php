@@ -5,6 +5,7 @@ namespace App\Http\Response;
 use App\Http\Response\Reward;
 use App\Models\Command;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class Valid
 {
@@ -31,23 +32,11 @@ class Valid
 
     public function toArray(): array
     {
+        Log::info($this->reward->experience?->map(fn($skill) => $skill->acquire($this->user)->toArray()));
         return [
             'reward' => [
-                'experience' => $this->reward->experience?->map(fn($skill) => [
-                    'skill' => [
-                        'name' => $skill->skill->name,
-                    ],
-                    'quantity' => $skill->skill->pivot->quantity,
-                    'total' => $skill->skill->total,
-                ]),
-                'loot' => $this->reward->loot?->map(fn($item) => [
-                    'item' => [
-                        'name' => $item->item->name,
-                        'description' => $item->item->description,
-                    ],
-                    'quantity' => $item->item->pivot->quantity,
-                    'total' => $item->item->total,
-                ]),
+                'experience' => $this->reward->experience?->map(fn($skill) => $skill->acquire($this->user)->toArray()),
+                'loot' => $this->reward->loot?->map(fn($item) => $item->acquire($this->user)->toArray()),
             ],
             'command' => [
                 'name' => $this->command->class,

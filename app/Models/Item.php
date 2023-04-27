@@ -48,13 +48,5 @@ class Item extends Model
             $item = $this,
             $experience = User::firstWhere('users.id', $user->id)?->numberInInventory($this)
         );
-
-        // [
-        //     'item' => [
-        //         'id' => $this->id,
-        //         'name' => $this->name,
-        //     ],
-        //     'quantity' => User::firstWhere('users.id', $user->id?->numberInInventory($this)),
-        // ];
     }
 }

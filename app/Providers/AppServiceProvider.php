@@ -48,36 +48,5 @@ class AppServiceProvider extends ServiceProvider
                 ]
             );
         });
-
-        Response::macro('reward', function (array $object) {
-            $response = [
-                'reward' => $object['reward'],
-                'metadata' => $object['metadata'] ?? [],
-                'ticks' => $object['ticks'] ?? 0,
-            ];
-
-            return Response::make(
-                $response,
-                200,
-                [
-                    'Content-Type' => 'application/json',
-                ]
-            );
-        });
-
-        Response::macro('error', function (array $object) {
-            $response = [
-                'failure' => $object['error'],
-                'metadata' => $object['metadata'] ?? [],
-            ];
-
-            return Response::make(
-                $response,
-                200,
-                [
-                    'Content-Type' => 'application/json',
-                ]
-            );
-        });
     }
 }

@@ -47,8 +47,9 @@ class TickProcess extends Command
 
     public function processTick()
     {
+        $final_tick = CommandLog::where('ticks_remaining', '>', 0)->where('ticks_remaining', '=', 1)->get();
 
-        $where = CommandLog::where('ticks_remaining', '>', 0);
+        CommandLog::where('ticks_remaining', '>', 0)->decrement('ticks_remaining');
 
         $map = [
             'agility' => [
@@ -74,12 +75,11 @@ class TickProcess extends Command
 
         $commands = CommandModel::all();
 
-        $where->where('ticks_remaining', '=', 1)->get()->each(function ($row) use ($commands, $map) {
+        $final_tick->each(function ($row) use ($commands, $map) {
             $row->command = $commands->firstWhere('id', $row->command_id);
 
             app($map[$row->command->class][$row->command->method])->execute($row);
         });
 
-        $where->decrement('ticks_remaining');
     }
 }
