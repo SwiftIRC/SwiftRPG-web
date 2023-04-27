@@ -18,7 +18,7 @@ class Engage extends Command
         $this->user = $input->user()->first();
         $this->command = $input->command;
         $event_json = json_decode($input->metadata, true);
-        $this->event = Event::withTrashed()->firstWhere('id', $event_json['id']);
+        $this->event = Event::withTrashed()->firstWhere('id', $event_json['event_id']);
 
         $reward = $this->generateReward();
 
@@ -67,7 +67,7 @@ class Engage extends Command
 
         return response()->object([
             'command' => $this->command,
-            'metadata' => $this->event,
+            'metadata' => ['event_id' => $this->event->id],
             'reward' => $this->generateReward(),
             'ticks' => $this->command->ticks,
         ]);
