@@ -36,10 +36,10 @@ class TickSpecialEvent extends Command
             return 0;
         }
 
-        // $active_event = Event::withTrashed()->firstWhere('deleted_at', '>', now());
-        // if (!empty($active_event)) {
-        //     return 0;
-        // }
+        $active_event = Event::withTrashed()->firstWhere('deleted_at', '>', now());
+        if (!empty($active_event)) {
+            return 0;
+        }
 
         $event_obj = new Event();
         $event_obj->deleted_at = now()->addMinutes(15);
