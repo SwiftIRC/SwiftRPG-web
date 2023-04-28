@@ -26,7 +26,7 @@ class Skill extends Model
         return $this->belongsToMany(User::class)->withPivot('quantity');
     }
 
-    public function acquire(User $user)
+    public function acquire()
     {
         return new ResponseSkill($this);
     }

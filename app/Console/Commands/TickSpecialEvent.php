@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Response\Reward as RewardResponse;
 use App\Models\Client;
 use App\Models\Event;
 use App\Models\Item;
@@ -33,65 +32,72 @@ class TickSpecialEvent extends Command
      */
     public function handle()
     {
-        if (!$this->option('trigger') && rand(0, 1000) > 0) {
+        if ($this->option('trigger') == "false" && rand(0, 1000) > 0) {
             return 0;
         }
 
-        $active_event = Event::withTrashed()->firstWhere('deleted_at', '>', now());
-        if (!empty($active_event)) {
-            return 0;
-        }
+        // $active_event = Event::withTrashed()->firstWhere('deleted_at', '>', now());
+        // if (!empty($active_event)) {
+        //     return 0;
+        // }
 
-        $event = new Event();
-        $event->deleted_at = now()->addMinutes(15);
+        $event_obj = new Event();
+        $event_obj->deleted_at = now()->addMinutes(15);
 
-        $reward = new Reward();
-        $reward->save();
+        $reward_obj = new Reward();
+        $reward_obj->save();
 
-        $event->reward_id = $reward->id;
+        $event_obj->reward_id = $reward_obj->id;
 
         $rand_event = rand(5, 5);
         switch ($rand_event) {
             case 1:
-                $event->name = "Meteor Shower";
-                $event->description = 'A meteor shower has started!';
+                $event_obj->name = "Meteor Shower";
+                $event_obj->description = 'A meteor shower has started!';
 
                 // Mining?
                 break;
             case 2:
-                $event->name = "Solar Flare";
-                $event->description = 'A solar flare has started!';
+                $event_obj->name = "Solar Flare";
+                $event_obj->description = 'A solar flare has started!';
                 break;
             case 3:
-                $event->name = "Solar Eclipse";
-                $event->description = 'A solar eclipse has started!';
+                $event_obj->name = "Solar Eclipse";
+                $event_obj->description = 'A solar eclipse has started!';
                 break;
             case 4:
-                $event->name = "Lunar Eclipse";
-                $event->description = 'A lunar eclipse has started!';
+                $event_obj->name = "Lunar Eclipse";
+                $event_obj->description = 'A lunar eclipse has started!';
                 break;
             case 5:
-                $event->name = "Dragon Nest";
-                $event->description = 'A dragon has left its nest!';
+                $event_obj->name = "Dragon Nest";
+                $event_obj->description = 'A dragon has left its nest!';
 
                 $thieving = Skill::firstWhere('name', 'thieving');
-                $reward->skills()->attach($thieving->id, ['quantity' => 100]);
+                $reward_obj->skills()->attach($thieving->id, ['quantity' => 100]);
                 $gold = Item::firstWhere('name', 'Gold');
-                $reward->items()->attach($gold->id, ['quantity' => 100]);
+                $reward_obj->items()->attach($gold->id, ['quantity' => 100]);
                 break;
         }
 
-        $event->save();
+        $event_obj->save();
+
+        $reward = [
+            'experience' => $reward_obj->skills?->map(fn($skill) => $skill->acquire()->toArray()),
+            'loot' => $reward_obj->items?->map(fn($item) => $item->acquire()->toArray()),
+        ];
+
+        $event = [
+            'name' => $event_obj->name,
+            'description' => $event_obj->description,
+        ];
 
         app(Client::class)->valid()->each(function ($client) use ($event, $reward) {
             post_webhook_endpoint(
                 $client->endpoint,
                 [
                     'type' => 'event_start',
-                    'data' => [
-                        'event' => $event,
-                        'reward' => (new RewardResponse($reward->skills, $reward->items))->toArray(),
-                    ],
+                    'data' => compact('event', 'reward'),
                 ]
             );
         });

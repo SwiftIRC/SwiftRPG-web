@@ -33,7 +33,7 @@ class Client extends Model
 
     public function valid()
     {
-        return $this->where('updated_at', '>=', now()->subMinutes(5))->get();
+        return $this->whereDate('updated_at', '>=', now()->subMinutes(5))->get();
     }
 
     protected function endpoint(): Attribute

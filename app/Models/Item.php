@@ -42,11 +42,10 @@ class Item extends Model
         return $this->belongsTo(ItemProperty::class)->withTimestamps();
     }
 
-    public function acquire(User $user)
+    public function acquire(User $user = null)
     {
         return new ResponseItem(
             $item = $this,
-            $experience = User::firstWhere('users.id', $user->id)?->numberInInventory($this)
         );
     }
 }
