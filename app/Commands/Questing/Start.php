@@ -3,64 +3,84 @@
 namespace App\Commands\Questing;
 
 use App\Commands\Command;
+use App\Http\Response\Reward;
+use App\Models\Client;
 use App\Models\Quest;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class Start extends Command
 {
-    protected $quantity = 0;
+    protected $quest;
 
-    public function execute(object $input): \Illuminate\Http\JsonResponse
+    public function execute(object $input): void
     {
-        $user = $input->user()->first();
+        $this->user = $input->user()->first();
         $json = json_decode($input->metadata);
         $quest = Collection::make([$json->response])[0];
+        $this->quest = Quest::with('steps')->firstWhere('id', $quest->id);
 
         if (count($quest->incompleteSteps) == 1 && $quest->incompleteSteps[0]->id == $quest->requested_step_id) {
-
             $skills = get_skills();
 
-            $skills->each(function ($skill) use ($user, $quest) {
-                $user->{$skill} += $quest->{$skill};
+            $skills->each(function ($skill) use ($quest) {
+                $this->user->{$skill} += $quest->{$skill};
             });
 
-            $user->addGold($quest->gold);
-            $user->save();
+            $this->user->addGold($quest->gold);
+            $this->user->save();
         }
 
-        return response()->json();
+        $client = Client::firstWhere('id', $input->client_id);
+        $response = response()->object([
+            'command' => $this->command,
+            'webhook_id' => $input->id,
+            'reward' => $this->generateReward(),
+            'user' => $this->user,
+        ]);
+
+        post_webhook_endpoint($client->endpoint, [
+            'type' => 'command_complete',
+            'data' => $response->original,
+        ]);
     }
 
-    public function queue(array $input = []): \Illuminate\Http\JsonResponse
+    public function queue(array $input = []): Response
     {
-        $user = Auth::user();
+        $this->user = Auth::user();
 
-        $command = array_pop($input);
+        $this->command = array_pop($input);
         $request = array_pop($input);
 
         $step_id = $request->step_id;
         $quest_id = $request->quest_id;
 
+        $this->quest = Quest::with('steps')->firstWhere('id', $quest_id);
+
+        $ticks = $this->quest->steps->filter(function ($step) use ($step_id) {
+            return $step->id == $step_id;
+        })->first()->ticks;
+
         $response = app(Quest::class)->start($quest_id, $step_id ?? 1);
 
-        return response()->json([
-            'skill' => 'questing',
-            'method' => 'start',
-            'experience' => 0,
+        return response()->object([
+            'command' => $this->command,
             'reward' => $this->generateReward(),
+            'user' => $this->user,
             'metadata' => compact('response'),
-            'ticks' => $command->ticks + $response->step->ticks,
-            'seconds_until_tick' => 0,
+            'ticks' => $ticks,
         ]);
     }
 
-    protected function generateReward($total = 0): array
+    protected function generateReward($total = 0): Reward
     {
-        return [
-            'type' => 'gold',
-            'quantity' => $this->quantity,
-            'total' => $total,
-        ];
+        $skills = $this->quest->getSkillRewardsWithTotals($this->user);
+        $items = $this->quest->getItemRewardsWithTotals($this->user);
+
+        return new Reward(
+            $experience = $skills,
+            $loot = $items,
+        );
     }
 }

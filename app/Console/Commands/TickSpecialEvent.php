@@ -32,12 +32,49 @@ class TickSpecialEvent extends Command
      */
     public function handle()
     {
-        if ($this->option('trigger') == "false" && rand(0, 1000) > 0) {
+        $active_event = Event::withTrashed()->firstWhere('deleted_at', '>', now());
+        if (!empty($active_event)) {
+            $end_date = $active_event->deleted_at;
+
+            // When there're N minutes left we will send a notification to all clients
+            if (now()->diffInMinutes($end_date) <= 1) {
+                app(Client::class)->valid()->each(function ($client) use ($active_event) {
+                    post_webhook_endpoint(
+                        $client->endpoint,
+                        [
+                            'type' => 'event_ending',
+                            'data' => [
+                                'event' => [
+                                    'name' => $active_event->name,
+                                    'description' => $active_event->description,
+                                ],
+                                'seconds_remaining' => now()->diffInSeconds($active_event->deleted_at),
+                            ],
+                        ]
+                    );
+                });
+            } elseif (now()->diffInMinutes($end_date) == 5) {
+                app(Client::class)->valid()->each(function ($client) use ($active_event) {
+                    post_webhook_endpoint(
+                        $client->endpoint,
+                        [
+                            'type' => 'event_ending',
+                            'data' => [
+                                'event' => [
+                                    'name' => $active_event->name,
+                                    'description' => $active_event->description,
+                                ],
+                                'seconds_remaining' => now()->diffInSeconds($active_event->deleted_at),
+                            ],
+                        ]
+                    );
+                });
+            }
+
             return 0;
         }
 
-        $active_event = Event::withTrashed()->firstWhere('deleted_at', '>', now());
-        if (!empty($active_event)) {
+        if ($this->option('trigger') == "false" && rand(0, 1000) > 0) {
             return 0;
         }
 
