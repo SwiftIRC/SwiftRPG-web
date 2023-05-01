@@ -21,6 +21,11 @@ class Quest extends Model
         return $this->hasMany(QuestStep::class);
     }
 
+    public function reward()
+    {
+        return $this->belongsTo(Reward::class);
+    }
+
     public function skillRewards()
     {
         return $this->hasMany(Reward::class)->withPivot('quantity');
@@ -42,8 +47,7 @@ class Quest extends Model
             ->selectRaw('quest_step_dependencies.*')
             ->leftJoin('quest_steps', 'quest_steps.quest_id', '=', 'quests.id')
             ->leftJoin('quest_step_dependencies', 'quest_step_dependencies.quest_step_id', '=', 'quest_steps.id')
-            ->groupBy('quest_step_dependencies.quest_id')
-        ;
+            ->groupBy('quest_step_dependencies.quest_id');
     }
 
     public function start(int $quest_id, int $step_id = 1)

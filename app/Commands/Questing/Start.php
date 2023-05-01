@@ -64,11 +64,28 @@ class Start extends Command
 
         $response = app(Quest::class)->start($quest_id, $step_id ?? 1);
 
+        if ($response->completeStep != null) {
+            return response()->object([
+                'command' => $this->command,
+                'failure' => 'You have already completed this step of the quest!',
+                'ticks' => 0,
+                'user' => $this->user,
+            ]);
+        }
+
         return response()->object([
             'command' => $this->command,
             'reward' => $this->generateReward(),
             'user' => $this->user,
-            'metadata' => compact('response'),
+            'metadata' => [
+                'complete_steps' => $response->completeSteps,
+                'details' => [
+                    'name' => $response->name,
+                    'description' => $response->description,
+                ],
+                'incomplete_dependencies' => $response->incompleteDependencies,
+                'incomplete_steps' => $response->incompleteSteps,
+            ],
             'ticks' => $ticks,
         ]);
     }

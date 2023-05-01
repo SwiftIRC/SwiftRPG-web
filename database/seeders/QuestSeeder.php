@@ -20,7 +20,7 @@ class QuestSeeder extends Seeder
     public function run()
     {
         $this->seed_quest_one();
-        // $this->seed_quest_two();
+        $this->seed_quest_two();
     }
 
     public function seed_quest_one()
@@ -124,12 +124,6 @@ class QuestSeeder extends Seeder
             'quest_step_id' => $step4->id,
             'quest_step_dependency_id' => $step3->id,
         ]);
-
-        // QuestItemReward::create([
-        //     'quest_id' => 2,
-        //     'item_id' => 3, // TODO revisit this
-        //     'quantity' => 50, // && this
-        // ]);
 
     }
 }

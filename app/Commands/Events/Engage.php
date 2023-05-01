@@ -79,9 +79,7 @@ class Engage extends Command
      */
     protected function generateReward(): Reward
     {
-        // dd($this->event);
         $skills = $this->event->getSkillRewardsWithTotals($this->user);
-
         $items = $this->event->getItemRewardsWithTotals($this->user);
 
         return new Reward(
