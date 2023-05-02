@@ -28,11 +28,12 @@ Route::get('/help', function () {
 })->name('help')->middleware(['auth']);
 
 Route::get('/hiscores', function () {
-    $users = User::with(['skills' => function ($query) {
-        return $query->orderBy('pivot_quantity', 'desc');
-    }])->get();
-
-    dd($users);
+    $users = User::with('skills')->get()->map(function ($user) {
+        $user->total_xp = $user->skills->sum('pivot.quantity');
+        return $user;
+    })->sort(function ($a, $b) {
+        return $b->skills->sum('pivot.quantity') <=> $a->skills->sum('pivot.quantity');
+    });
 
     return view('hiscores', compact('users'));
 })->name('hiscores')->middleware(['auth']);

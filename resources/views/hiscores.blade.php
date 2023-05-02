@@ -7,7 +7,13 @@
                         @foreach ($users as $user)
                             <li>
                                 <strong>{{ $user->name }}</strong>
-                                ({{ $user->total }}xp)
+                                ({{ $user->total_xp }}xp)
+
+                                @foreach ($user->skills as $skill)
+                                    <span class="ml-4">
+                                        {{ $skill->name }}: {{ $skill->pivot->quantity }}xp
+                                    </span>
+                                @endforeach
                             </li>
                         @endforeach
                     </ol>
