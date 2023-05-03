@@ -18,10 +18,10 @@ class Start extends Command
     {
         $this->user = $input->user()->first();
         $json = json_decode($input->metadata);
-        $quest = Collection::make([$json->response])[0];
+        $quest = Collection::make([$json])[0];
         $this->quest = Quest::with('steps')->firstWhere('id', $quest->id);
 
-        if (count($quest->incompleteSteps) == 1 && $quest->incompleteSteps[0]->id == $quest->requested_step_id) {
+        if (count($quest->incomplete_steps) == 1 && $quest->incomplete_steps[0]->id == $quest->requested_step_id) {
             $skills = get_skills();
 
             $skills->each(function ($skill) use ($quest) {
@@ -53,16 +53,14 @@ class Start extends Command
         $this->command = array_pop($input);
         $request = array_pop($input);
 
-        $step_id = $request->step_id;
+        $step_id = $request->step_id ?? 1;
         $quest_id = $request->quest_id;
 
         $this->quest = Quest::with('steps')->firstWhere('id', $quest_id);
 
-        $ticks = $this->quest->steps->filter(function ($step) use ($step_id) {
-            return $step->id == $step_id;
-        })->first()->ticks;
+        $ticks = $this->quest->steps[$step_id]->ticks;
 
-        $response = app(Quest::class)->start($quest_id, $step_id ?? 1);
+        $response = app(Quest::class)->start($quest_id, $step_id);
 
         if ($response->completeStep != null) {
             return response()->object([
