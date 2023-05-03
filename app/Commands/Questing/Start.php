@@ -17,11 +17,12 @@ class Start extends Command
     public function execute(object $input): void
     {
         $this->user = $input->user()->first();
+        $this->command = $input->command;
         $json = json_decode($input->metadata);
-        $quest = Collection::make([$json])[0];
-        $this->quest = Quest::with('steps')->firstWhere('id', $quest->id);
+        $quest = Collection::make([$json])->first();
+        $this->quest = Quest::with('steps')->firstWhere('id', $quest->details->id);
 
-        if (count($quest->incomplete_steps) == 1 && $quest->incomplete_steps[0]->id == $quest->requested_step_id) {
+        if (count($quest->incomplete_steps) == 1 && $quest->incomplete_steps[0]->id == $quest->details->step_id) {
             $skills = get_skills();
 
             $skills->each(function ($skill) use ($quest) {
@@ -58,7 +59,7 @@ class Start extends Command
 
         $this->quest = Quest::with('steps')->firstWhere('id', $quest_id);
 
-        $ticks = $this->quest->steps[$step_id]->ticks;
+        $ticks = $this->quest->steps[$step_id - 1]->ticks;
 
         $response = app(Quest::class)->start($quest_id, $step_id);
 
@@ -66,6 +67,16 @@ class Start extends Command
             return response()->object([
                 'command' => $this->command,
                 'failure' => 'You have already completed this step of the quest!',
+                'ticks' => 0,
+                'user' => $this->user,
+            ]);
+        } elseif ($response->incompleteDependencies > 0) {
+            return response()->object([
+                'command' => $this->command,
+                'failure' => 'You have not completed the required steps to start this quest!',
+                'metadata' => [
+                    'incomplete_dependencies' => $response->incompleteDependencies,
+                ],
                 'ticks' => 0,
                 'user' => $this->user,
             ]);
@@ -78,8 +89,10 @@ class Start extends Command
             'metadata' => [
                 'complete_steps' => $response->completeSteps,
                 'details' => [
+                    'id' => $response->id,
                     'name' => $response->name,
                     'description' => $response->description,
+                    'step_id' => $response->requested_step_id,
                 ],
                 'incomplete_dependencies' => $response->incompleteDependencies,
                 'incomplete_steps' => $response->incompleteSteps,
