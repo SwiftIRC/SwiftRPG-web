@@ -22,15 +22,20 @@ class Start extends Command
         $quest = Collection::make([$json])->first();
         $this->quest = Quest::with('steps')->firstWhere('id', $quest->details->id);
 
-        if (count($quest->incomplete_steps) == 1 && $quest->incomplete_steps[0]->id == $quest->details->step_id) {
-            $skills = get_skills();
+        if (count($quest->incomplete_steps) == 1 && $quest->incomplete_steps[0]->id == $quest->step_details->id) {
+            $reward = $this->generateReward();
 
-            $skills->each(function ($skill) use ($quest) {
-                $this->user->{$skill} += $quest->{$skill};
+            $reward->experience->each(function ($skill) {
+                $this->user->addXp($skill->id, $skill->pivot->quantity);
             });
-
-            $this->user->addGold($quest->gold);
-            $this->user->save();
+            $reward->loot->each(function ($item) {
+                $amount = $item->pivot->quantity;
+                if ($amount < 1) {
+                    $this->user->removeFromInventory($item, abs($amount));
+                } else {
+                    $this->user->addToInventory($item, $amount);
+                }
+            });
         }
 
         $client = Client::firstWhere('id', $input->client_id);
@@ -55,9 +60,28 @@ class Start extends Command
         $request = array_pop($input);
 
         $step_id = $request->step_id ?? 1;
+        if ($step_id < 1) {
+            $step_id = 1;
+        }
         $quest_id = $request->quest_id;
 
         $this->quest = Quest::with('steps')->firstWhere('id', $quest_id);
+
+        if ($this->quest == null) {
+            return response()->object([
+                'command' => $this->command,
+                'failure' => 'This quest does not exist!',
+                'ticks' => 0,
+                'user' => $this->user,
+            ]);
+        } elseif ($step_id > $this->quest->steps->count()) {
+            return response()->object([
+                'command' => $this->command,
+                'failure' => 'This quest does not have that many steps!',
+                'ticks' => 0,
+                'user' => $this->user,
+            ]);
+        }
 
         $ticks = $this->quest->steps[$step_id - 1]->ticks;
 
@@ -75,7 +99,14 @@ class Start extends Command
                 'command' => $this->command,
                 'failure' => 'You have not completed the required steps to start this quest!',
                 'metadata' => [
+                    'details' => [
+                        'id' => $response->id,
+                        'name' => $response->name,
+                        'description' => $response->description,
+                        'step_id' => $response->requested_step_id,
+                    ],
                     'incomplete_dependencies' => $response->incompleteDependencies,
+                    'incomplete_steps' => $response->incompleteSteps,
                 ],
                 'ticks' => 0,
                 'user' => $this->user,
@@ -87,12 +118,14 @@ class Start extends Command
             'reward' => $this->generateReward(),
             'user' => $this->user,
             'metadata' => [
-                'complete_steps' => $response->completeSteps,
                 'details' => [
                     'id' => $response->id,
                     'name' => $response->name,
                     'description' => $response->description,
-                    'step_id' => $response->requested_step_id,
+                ],
+                'step_details' => [
+                    'id' => $response->requested_step_id,
+                    'output' => $response->step->output,
                 ],
                 'incomplete_dependencies' => $response->incompleteDependencies,
                 'incomplete_steps' => $response->incompleteSteps,

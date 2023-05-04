@@ -24,7 +24,9 @@ class StatsController extends Controller
             ],
             'skills' => $user->skills()->get()->map(function ($skill) {
                 return (new Skill($skill))->toArray();
-            }),
+            })->sort(function ($a, $b) {
+                return ($b['details']['name'] <=> $a['details']['name']) * -1; // reverse sort
+            })->values(),
         ];
     }
 }
