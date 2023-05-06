@@ -47,7 +47,9 @@ class Quest extends Model
             ->selectRaw('quest_step_dependencies.*')
             ->leftJoin('quest_steps', 'quest_steps.quest_id', '=', 'quests.id')
             ->leftJoin('quest_step_dependencies', 'quest_step_dependencies.quest_step_id', '=', 'quest_steps.id')
-            ->groupBy('quest_step_dependencies.quest_id');
+            ->groupBy('quest_step_dependencies.quest_id')
+            ->whereNotNull('quest_steps.quest_id')
+            ->whereNotNull('quest_step_dependencies.quest_id');
     }
 
     public function start(int $quest_id, int $step_id = 1)
@@ -107,5 +109,11 @@ class Quest extends Model
             $item = Item::firstWhere('id', $item_reward->pivot->item_id);
             $item_reward->total = $user->numberInInventory($item);
         });
+    }
+
+    public function getAllWithTotals(User $user)
+    {
+        return $this->with('steps')
+            ->leftJoin('completed_quest_steps', 'completed_quest_steps.quest_id', '=', 'quests.id');
     }
 }

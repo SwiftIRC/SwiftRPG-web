@@ -3,6 +3,7 @@
 namespace App\Commands\Questing;
 
 use App\Commands\Command;
+use App\Http\Response\Quest as ResponseQuest;
 use App\Http\Response\Reward;
 use App\Models\Client;
 use App\Models\Quest;
@@ -99,14 +100,7 @@ class Start extends Command
                 'command' => $this->command,
                 'failure' => 'You have not completed the required steps to start this quest!',
                 'metadata' => [
-                    'details' => [
-                        'id' => $response->id,
-                        'name' => $response->name,
-                        'description' => $response->description,
-                        'step_id' => $response->requested_step_id,
-                    ],
-                    'incomplete_dependencies' => $response->incompleteDependencies,
-                    'incomplete_steps' => $response->incompleteSteps,
+
                 ],
                 'ticks' => 0,
                 'user' => $this->user,
@@ -117,19 +111,7 @@ class Start extends Command
             'command' => $this->command,
             'reward' => $this->generateReward(),
             'user' => $this->user,
-            'metadata' => [
-                'details' => [
-                    'id' => $response->id,
-                    'name' => $response->name,
-                    'description' => $response->description,
-                ],
-                'step_details' => [
-                    'id' => $response->requested_step_id,
-                    'output' => $response->step->output,
-                ],
-                'incomplete_dependencies' => $response->incompleteDependencies,
-                'incomplete_steps' => $response->incompleteSteps,
-            ],
+            'metadata' => (new ResponseQuest($response))->toArray(),
             'ticks' => $ticks,
         ]);
     }
