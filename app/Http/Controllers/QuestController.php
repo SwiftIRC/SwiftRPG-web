@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quest;
 use App\Skills\Questing;
 use Illuminate\Http\Request;
 use RangeException;
@@ -9,7 +10,18 @@ use RangeException;
 class QuestController extends Controller
 {
     function list(Request $request) {
-        return response()->json($request->user()->quests()->get());
+        //
+        $started = $request->user()->quests()->get();
+        $unstarted = Quest::whereNotIn('id', $started->pluck('id')->toArray())->get()->map(function ($quest) {
+            $quest->completed = 0;
+            $quest->total = $quest->steps()->count();
+            return $quest;
+        });
+        $quests = $started->concat($unstarted)->sort(function ($a, $b) {
+            return $a->id <=> $b->id;
+        })->values();
+
+        return response()->json($quests);
     }
 
     public function start(Request $request)
