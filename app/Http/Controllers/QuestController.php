@@ -12,9 +12,9 @@ class QuestController extends Controller
     function list(Request $request) {
         //
         $started = $request->user()->quests()->get();
-        $unstarted = Quest::whereNotIn('id', $started->pluck('id')->toArray())->get()->map(function ($quest) {
+        $unstarted = Quest::with('steps')->whereNotIn('id', $started->pluck('id')->toArray())->get()->map(function ($quest) {
             $quest->completed = 0;
-            $quest->total = $quest->steps()->count();
+            $quest->total = $quest->steps->count();
             return $quest;
         });
         $quests = $started->concat($unstarted)->sort(function ($a, $b) {
