@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Commands\Agility\Explore;
 use App\Commands\Events\Engage;
 use App\Commands\Firemaking\Burn;
+use App\Commands\Fishing\Fish;
 use App\Commands\Questing\Inspect;
 use App\Commands\Questing\Start;
 use App\Commands\Thieving\Pickpocket;
@@ -60,6 +61,9 @@ class TickProcess extends Command
             ],
             'firemaking' => [
                 'burn' => Burn::class,
+            ],
+            'fishing' => [
+                'fish' => Fish::class,
             ],
             'questing' => [
                 'start' => Start::class,

@@ -35,32 +35,32 @@ class Tile extends Model
         'just_discovered',
     ];
 
-    public function buildings(): ?BelongsToMany
+    public function buildings():  ? BelongsToMany
     {
         return $this->belongsToMany(Building::class);
     }
 
-    public function npcs(): ?BelongsToMany
+    public function npcs() :  ? BelongsToMany
     {
         return $this->belongsToMany(Npc::class)->withTimestamps();
     }
 
-    public function edges(): ?BelongsToMany
+    public function edges() :  ? BelongsToMany
     {
         return $this->belongsToMany(Edge::class)->withPivot('direction', 'is_road');
     }
 
-    public function terrain(): ?BelongsTo
+    public function terrain() :  ? BelongsTo
     {
         return $this->belongsTo(Terrain::class);
     }
 
-    public function users(): ?BelongsTo
+    public function users() :  ? BelongsTo
     {
         return $this->belongsTo(User::class, 'id', 'tile_id');
     }
 
-    protected function justDiscovered(): Attribute
+    protected function justDiscovered() : Attribute
     {
         return Attribute::make(
             get:fn() => ($this->discovered_by === null ? 50 : 0),

@@ -2,14 +2,11 @@
 
 namespace Tests\Feature\Map;
 
-use App\Models\Npc;
-use Tests\TestCase;
-use App\Models\Edge;
+use App\Models\Terrain;
 use App\Models\Tile;
 use App\Models\User;
-use App\Models\Terrain;
-use App\Models\Building;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TileTest extends TestCase
 {

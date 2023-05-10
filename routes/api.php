@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FiremakingController;
+use App\Http\Controllers\FishingController;
 use App\Http\Controllers\QuestController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\ThievingController;
@@ -44,8 +45,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/engage', [EventController::class, 'engage'])->name('engage');
     });
     Route::name('firemaking.')->prefix('firemaking')->group(function () {
-        Route::get('/', [FiremakingController::class, 'index'])->name('index');
         Route::post('/burn', [FiremakingController::class, 'burn'])->name('burn');
+    });
+    Route::name('fishing.')->prefix('fishing')->group(function () {
+        Route::post('/fish', [FishingController::class, 'fish'])->name('fish');
     });
     Route::name('map.')->prefix('map')->group(function () {
         Route::name('tile.')->prefix('tile')->group(function () {
@@ -65,7 +68,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             });
             Route::post('/explore', [AgilityController::class, 'explore'])->name('explore');
             Route::get('/{user}', function ($user) {
-                return response()->json(User::where('name', $user)->first()->tile());
+                return response()->json(User::where('name', $user)->first()->tile()->get());
             })->name('lookup');
         });
     });

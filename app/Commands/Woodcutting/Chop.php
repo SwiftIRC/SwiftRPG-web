@@ -11,7 +11,7 @@ class Chop extends Command
     public function queue(array $input = []): Response
     {
         $this->user = Auth::user();
-        $tile = $this->user->tile();
+        $tile = $this->user->tile()->first();
 
         $this->command = array_pop($input);
 

@@ -55,31 +55,22 @@ class UserTest extends TestCase
             'terrain_id' => $terrain->id,
         ]);
 
-        $edges = [
-            Edge::create([
-                'name' => 'north',
-                'direction' => 'north',
-                'terrain_id' => $terrain->id,
-            ]),
-            Edge::create([
-                'name' => 'east',
-                'direction' => 'east',
-                'terrain_id' => $terrain->id,
-            ]),
-            Edge::create([
-                'name' => 'south',
-                'direction' => 'south',
-                'terrain_id' => $terrain->id,
-            ]),
-            Edge::create([
-                'name' => 'west',
-                'direction' => 'west',
-                'terrain_id' => $terrain->id,
-            ]),
+        $directions = [
+            'north',
+            'east',
+            'south',
+            'west',
         ];
 
-        foreach ($edges as $edge) {
-            $tile->edges()->attach($edge, ['is_road' => true]);
+        foreach ($directions as $direction) {
+            $edge = Edge::create([
+                'name' => $direction,
+                'direction' => $direction,
+            ]);
+
+            $tile->edges()->attach($edge, [
+                'is_road' => true,
+            ]);
         }
 
         $command = Command::where('class', 'agility')->where('method', 'explore')->first();

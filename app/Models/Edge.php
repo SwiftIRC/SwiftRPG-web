@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Edge extends Model
 {
@@ -25,12 +24,12 @@ class Edge extends Model
         'deleted_at',
     ];
 
-    public function tile(): ?HasMany
+    public function tile()
     {
-        return $this->hasMany(Tile::class);
+        return $this->belongsToMany(Tile::class);
     }
 
-    public function terrain(): ?BelongsTo
+    public function terrain():  ? BelongsTo
     {
         return $this->belongsTo(Terrain::class);
     }

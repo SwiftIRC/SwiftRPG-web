@@ -12,7 +12,7 @@ class Pickpocket extends Command
         $this->command = array_pop($input);
         $request = array_pop($input);
         $this->user = $request->user();
-        $tile = $this->user->tile();
+        $tile = $this->user->tile()->first();
         $npcs = $tile->npcs()->get();
 
         if (!$npcs->count()) {

@@ -9,7 +9,6 @@ use App\Models\Occupation;
 use App\Models\Skill;
 use App\Models\Tile;
 use App\Models\User;
-use function PHPUnit\Framework\isNull;
 use Illuminate\Database\Eloquent\Collection;
 use RangeException;
 
@@ -29,7 +28,7 @@ class Move
         return $adjacent_tile ? $this->check_if_edge_is_road($adjacent_tile, $this->invert_direction($direction)) : 0;
     }
 
-    public function get_adjacent_tile(Tile $tile, string $direction): ?Tile
+    public function get_adjacent_tile(Tile $tile, string $direction):  ? Tile
     {
         $x = $tile->x;
         $y = $tile->y;
@@ -87,7 +86,7 @@ class Move
         $inverted_direction = $this->invert_direction($direction);
 
         $adjacent_tile = Tile::where('x', $x)->where('y', $y)->first();
-        if ($adjacent_tile) {
+        if (!is_null($adjacent_tile)) {
             $adjacent_edge = $adjacent_tile->edges()->where('direction', $inverted_direction)->first();
 
             return $adjacent_edge;
@@ -97,23 +96,14 @@ class Move
 
     public function move(User $user, string $direction)
     {
-        $current_tile = Tile::where('id', $user->tile_id)->first();
+        $current_tile = $user->tile()->first();
 
         if (!$this->check_if_edge_is_road($current_tile, $direction)) {
             return ['error' => 'There is no road in that direction.'];
         }
 
-        $x = $user->tile()->x;
-        $y = $user->tile()->y;
-
-        $directions = [
-            'north' => false,
-            'east' => false,
-            'south' => false,
-            'west' => false,
-        ];
-
-        $directions[$direction] = true;
+        $x = $current_tile->x;
+        $y = $current_tile->y;
 
         switch ($direction) {
             case 'north':
@@ -132,7 +122,7 @@ class Move
 
         $new_tile = Tile::where('x', $x)->where('y', $y)->first();
 
-        if (isNull($new_tile->discovered_by)) {
+        if (is_null($new_tile->discovered_by)) {
             $new_tile->discovered_by = $user->id;
             $new_tile->discovered_at = now();
             $new_tile->save();
@@ -154,7 +144,7 @@ class Move
             $available_occupations = [];
             foreach ($buildings as $building) {
                 $zones = $building->zones;
-                if (isNull($zones)) {
+                if (is_null($zones)) {
                     continue;
                 }
                 $zone = $zones->first();
@@ -204,7 +194,7 @@ class Move
         return $new_tile;
     }
 
-    public function look(User $user): ?Tile
+    public function look(User $user):  ? Tile
     {
         $tile = Tile::firstWhere('id', $user->tile_id);
 
@@ -216,7 +206,7 @@ class Move
         return $tile;
     }
 
-    public function look_at(User $user, string $direction): ?Tile
+    public function look_at(User $user, string $direction) :  ? Tile
     {
         $tile = Tile::firstWhere('id', $user->tile_id);
 
@@ -234,7 +224,7 @@ class Move
         return $adjacent_tile;
     }
 
-    public function npcs(User $user): ?Collection
+    public function npcs(User $user) :  ? Collection
     {
         $npcs = Tile::firstWhere('id', $user->tile_id)->npcs()->get()->each(function ($npc) {
             $npc->occupation = $npc->occupation()->first();
@@ -244,7 +234,7 @@ class Move
         return $npcs;
     }
 
-    public function buildings(User $user): ?Collection
+    public function buildings(User $user) :  ? Collection
     {
         return Tile::firstWhere('id', $user->tile_id)->buildings()->get();
     }

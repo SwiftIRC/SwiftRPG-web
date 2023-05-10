@@ -124,5 +124,13 @@ class CommandSeeder extends Seeder
             'emoji' => '🌟',
             'ticks' => 1,
         ]);
+
+        Command::factory()->create([
+            'class' => 'fishing',
+            'method' => 'fish',
+            'verb' => 'fishing',
+            'emoji' => '🎣',
+            'ticks' => 1,
+        ]);
     }
 }

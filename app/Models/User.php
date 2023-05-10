@@ -124,7 +124,7 @@ class User extends Authenticatable
 
     public function tile()
     {
-        return $this->hasOne(Tile::class, 'id', 'tile_id')->first();
+        return $this->hasOne(Tile::class, 'id', 'tile_id');
     }
 
     public function items()

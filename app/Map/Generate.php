@@ -95,7 +95,7 @@ class Generate
         }
     }
 
-    public function fill_in_with_water(Tile $tile): ?Tile
+    public function fill_in_with_water(Tile $tile):  ? Tile
     {
         $tile_check = Tile::where('x', $tile->x)->where('y', $tile->y);
         if ($tile_check->count() > 0) {
@@ -115,20 +115,45 @@ class Generate
         foreach ($directions as $direction) {
             $adjacent_edge = app(Move::class)->get_adjacent_edge($tile, $direction);
 
-            if ($adjacent_edge) {
-                $adjacent_edge->terrain_id = $water->id;
-                $adjacent_edge->save();
+            if ($adjacent_edge != false) {
+                $adjacent_tile = Tile::find($adjacent_edge->pivot->tile_id);
+                $adjacent_direction = $adjacent_edge->pivot->direction;
+
+                $edges = $adjacent_tile->edges->map(function ($edge_index) use ($adjacent_direction, $edge) {
+                    if ($edge_index->pivot->direction == $adjacent_direction) {
+                        return [
+                            $edge->id =>
+                            [
+                                'direction' => $adjacent_direction,
+                                'is_road' => 0,
+                            ],
+                        ];
+                    }
+                    return [
+                        $edge_index->id =>
+                        [
+                            'direction' => $edge_index->pivot->direction,
+                            'is_road' => $edge_index->pivot->is_road,
+                        ],
+                    ];
+                });
+                $adjacent_tile->edges()->sync([]);
+
+                $edges->each(function ($edge) use ($adjacent_tile) {
+                    $adjacent_tile->edges()->attach($edge);
+                });
             }
 
             $tile->edges()->attach($edge, [
                 'direction' => $direction,
+                'is_road' => 0,
             ]);
         }
 
         return $tile;
     }
 
-    public function find_all_empty_tiles(int $max_x, int $max_y, int $min_x, int $min_y, array $tile_coords): array
+    public function find_all_empty_tiles(int $max_x, int $max_y, int $min_x, int $min_y, array $tile_coords) : array
     {
         $empty_tiles = [];
         for ($x = $min_x; $x <= $max_x; $x++) {
@@ -294,8 +319,6 @@ class Generate
                 $edge = Edge::where('name', '!=', 'Water')->get()->random();
                 $is_road = rand(0, 100) <= 45; // 45% chance of being a road - this is the magic number
             }
-
-            $edge->terrain_id = $tile->terrain_id;
 
             $tile->edges()->attach($edge, [
                 'direction' => $direction,
