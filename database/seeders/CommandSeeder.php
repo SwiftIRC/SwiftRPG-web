@@ -125,12 +125,19 @@ class CommandSeeder extends Seeder
             'ticks' => 1,
         ]);
 
+        $fishing = Skill::firstWhere('name', 'fishing');
+        $fish = Item::where('name', 'Raw Fish')->first();
+        $fish_cmd = Reward::create();
+        $fish_cmd->skills()->attach($fishing->id, ['quantity' => 5]);
+        $fish_cmd->items()->attach($fish->id, ['quantity' => 1]);
+
         Command::factory()->create([
             'class' => 'fishing',
             'method' => 'fish',
             'verb' => 'fishing',
             'emoji' => '🎣',
             'ticks' => 1,
+            'reward_id' => $fish_cmd->id,
         ]);
     }
 }

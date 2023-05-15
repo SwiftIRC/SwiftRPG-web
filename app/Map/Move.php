@@ -2,6 +2,9 @@
 
 namespace App\Map;
 
+use App\Http\Response\Building as ResponseBuilding;
+use App\Http\Response\Edge;
+use App\Http\Response\Npc as ResponseNpc;
 use App\Models\Building;
 use App\Models\MoveLog;
 use App\Models\Npc;
@@ -34,7 +37,7 @@ class Move
         $y = $tile->y;
 
         switch ($direction) {
-            case 'north':
+            case 'north' :
                 $y++;
                 break;
             case 'east':
@@ -198,10 +201,16 @@ class Move
     {
         $tile = Tile::firstWhere('id', $user->tile_id);
 
-        $tile->npcs = $tile->npcs()->get();
-        $tile->edges = $tile->edges()->get();
+        $tile->npcs = $tile->npcs()->get()->map(function ($npc) {
+            return (new ResponseNpc($npc))->toArray();
+        });
+        $tile->edges = $tile->edges()->get()->map(function ($edge) {
+            return (new Edge($edge))->toArray();
+        });
         $tile->terrain = $tile->terrain()->first();
-        $tile->buildings = $tile->buildings()->get();
+        $tile->buildings = $tile->buildings()->get()->map(function ($building) {
+            return (new ResponseBuilding($building))->toArray();
+        });
 
         return $tile;
     }
@@ -216,10 +225,16 @@ class Move
             throw new RangeException('There is no road in that direction.');
         }
 
-        $adjacent_tile->npcs = $adjacent_tile->npcs()->get();
-        $adjacent_tile->edges = $adjacent_tile->edges()->get();
+        $adjacent_tile->npcs = $adjacent_tile->npcs()->get()->map(function ($npc) {
+            return (new ResponseNpc($npc))->toArray();
+        });
+        $adjacent_tile->edges = $adjacent_tile->edges()->get()->map(function ($edge) {
+            return (new Edge($edge))->toArray();
+        });
         $adjacent_tile->terrain = $adjacent_tile->terrain()->first();
-        $adjacent_tile->buildings = $adjacent_tile->buildings()->get();
+        $adjacent_tile->buildings = $adjacent_tile->buildings()->get()->map(function ($building) {
+            return (new ResponseBuilding($building))->toArray();
+        });
 
         return $adjacent_tile;
     }

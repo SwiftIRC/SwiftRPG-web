@@ -96,5 +96,12 @@ class ItemSeeder extends Seeder
             // 'stackable' => false,
             // 'durability' => 100,
         ]);
+
+        $fish = Item::create([
+            'name' => 'Raw Fish',
+            'description' => 'A raw fish.',
+            'weight' => 1,
+            'ticks' => 1,
+        ]);
     }
 }
