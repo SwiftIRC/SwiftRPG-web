@@ -26,21 +26,12 @@
                     Skills
 
                     <ol class="list-decimal">
-                        <li>
-                            Thieving:
-                            {{ xp_to_level($user->thieving) }}
-                            ({{ $user->thieving }}xp)
-                        </li>
-                        <li>
-                            Woodcutting:
-                            {{ xp_to_level($user->woodcutting) }}
-                            ({{ $user->woodcutting }}xp)
-                        </li>
-                        <li>
-                            Firemaking:
-                            {{ xp_to_level($user->firemaking) }}
-                            ({{ $user->firemaking }}xp)
-                        </li>
+                        @foreach ($user->skills as $skill)
+                            <li class="ml-4">
+                                {{ ucwords($skill->name) }}: {{ xp_to_level($skill->pivot->quantity) }}
+                                ({{ $skill->pivot->quantity }}xp)
+                            </li>
+                        @endforeach
                     </ol>
                 </div>
             </div>

@@ -57,6 +57,7 @@ Route::get('/admin', function () {
 Route::get('/dashboard', function () {
     $user = Auth::user();
     $user->items = $user->items()->get();
+    $user->skills = $user->skills()->get();
 
     return view('dashboard', compact('user'));
 })->middleware(['auth'])->name('dashboard');
