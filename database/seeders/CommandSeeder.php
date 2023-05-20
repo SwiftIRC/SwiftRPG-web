@@ -126,10 +126,10 @@ class CommandSeeder extends Seeder
         ]);
 
         $fishing = Skill::firstWhere('name', 'fishing');
-        $fish = Item::where('name', 'Raw Fish')->first();
+        $raw_fish = Item::where('name', 'Raw Fish')->first();
         $fish_cmd = Reward::create();
         $fish_cmd->skills()->attach($fishing->id, ['quantity' => 5]);
-        $fish_cmd->items()->attach($fish->id, ['quantity' => 1]);
+        $fish_cmd->items()->attach($raw_fish->id, ['quantity' => 1]);
 
         Command::factory()->create([
             'class' => 'fishing',
@@ -138,6 +138,22 @@ class CommandSeeder extends Seeder
             'emoji' => '🎣',
             'ticks' => 1,
             'reward_id' => $fish_cmd->id,
+        ]);
+
+        $cooking = Skill::firstWhere('name', 'cooking');
+        $fish = Item::where('name', 'Fish')->first();
+        $cook_cmd = Reward::create();
+        $cook_cmd->skills()->attach($cooking->id, ['quantity' => 5]);
+        $cook_cmd->items()->attach($raw_fish->id, ['quantity' => -1]);
+        $cook_cmd->items()->attach($fish->id, ['quantity' => 1]);
+
+        Command::factory()->create([
+            'class' => 'cooking',
+            'method' => 'cook',
+            'verb' => 'cooking',
+            'emoji' => '🍳',
+            'ticks' => 1,
+            'reward_id' => $cook_cmd->id,
         ]);
     }
 }

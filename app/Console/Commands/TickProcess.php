@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Commands\Agility\Explore;
+use App\Commands\Cooking\Cook;
 use App\Commands\Events\Engage;
 use App\Commands\Firemaking\Burn;
 use App\Commands\Fishing\Fish;
@@ -55,6 +56,9 @@ class TickProcess extends Command
         $map = [
             'agility' => [
                 'explore' => Explore::class,
+            ],
+            'cooking' => [
+                'cook' => Cook::class,
             ],
             'eventing' => [
                 'engage' => Engage::class,

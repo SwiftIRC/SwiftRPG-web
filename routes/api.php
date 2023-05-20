@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgilityController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FiremakingController;
 use App\Http\Controllers\FishingController;
@@ -39,6 +40,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 Route::get('login', [AuthController::class, 'login'])->name('login');
             });
         });
+    });
+    Route::name('cooking.')->prefix('cooking')->group(function () {
+        Route::post('/cook', [CookingController::class, 'cook'])->name('cook');
     });
     Route::name('events.')->prefix('events')->group(function () {
         Route::get('/', [EventController::class, 'index'])->name('index');
