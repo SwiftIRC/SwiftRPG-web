@@ -33,6 +33,7 @@ body, html {
     margin: 0;
     height: 100%;
 }
+
 header {
     box-sizing: border-box;
     padding: 8px;
@@ -43,7 +44,7 @@ header {
     align-items: center;
 }
 
-body, canvas, div {
+body, canvas, #app {
     height: 100%;
     display: flex;
     flex-direction: column;
