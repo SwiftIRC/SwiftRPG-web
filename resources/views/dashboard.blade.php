@@ -5,12 +5,12 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h2 class="mb-2 mt-0 text-4xl font-medium leading-tight text-primary">Items</h2>
                     <p>
-                        Total Unique Items:
-                        {{ $user->items->count() }}
-                    </p>
-                    <p>
                         Total Items:
                         {{ $user->items->sum('quantity') }}
+                    </p>
+                    <p>
+                        Total Unique Items:
+                        {{ $user->items->count() }}
                     </p>
 
                     <ol class="list-decimal">
