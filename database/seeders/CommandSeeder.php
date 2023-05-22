@@ -155,5 +155,66 @@ class CommandSeeder extends Seeder
             'ticks' => 1,
             'reward_id' => $cook_cmd->id,
         ]);
+
+        $mining = Skill::firstWhere('name', 'mining');
+        $ore = Item::where('name', 'Iron Ore')->first();
+        $mine_cmd = Reward::create();
+        $mine_cmd->skills()->attach($mining->id, ['quantity' => 5]);
+        $mine_cmd->items()->attach($ore->id, ['quantity' => 1]);
+
+        Command::factory()->create([
+            'class' => 'mining',
+            'method' => 'mine',
+            'verb' => 'mining',
+            'emoji' => '⛏️',
+            'ticks' => 1,
+            'reward_id' => $mine_cmd->id,
+        ]);
+
+        $smithing = Skill::firstWhere('name', 'smithing');
+        $bar = Item::where('name', 'Iron Bar')->first();
+        $smelt_cmd = Reward::create();
+        $smelt_cmd->skills()->attach($smithing->id, ['quantity' => 5]);
+        $smelt_cmd->items()->attach($ore->id, ['quantity' => -1]);
+        $smelt_cmd->items()->attach($bar->id, ['quantity' => 1]);
+
+        Command::factory()->create([
+            'class' => 'smithing',
+            'method' => 'smelt',
+            'verb' => 'smelting',
+            'emoji' => '🏭',
+            'ticks' => 1,
+            'reward_id' => $smelt_cmd->id,
+        ]);
+
+        $smith_cmd = Reward::create();
+        $smith_cmd->skills()->attach($smithing->id, ['quantity' => 5]);
+        $smith_cmd->items()->attach($bar->id, ['quantity' => -1]);
+        $sword = Item::where('name', 'Iron Sword')->first();
+        $smith_cmd->items()->attach($sword->id, ['quantity' => 1]);
+
+        Command::factory()->create([
+            'class' => 'smithing',
+            'method' => 'smith',
+            'verb' => 'smithing',
+            'emoji' => '🔨',
+            'ticks' => 1,
+            'reward_id' => $smith_cmd->id,
+        ]);
+
+        $reinforce = Reward::create();
+        $reinforce->skills()->attach($smithing->id, ['quantity' => 5]);
+        $reinforce->items()->attach($sword->id, ['quantity' => -2]);
+        $durable_sword = Item::where('name', 'Durable Iron Sword')->first();
+        $reinforce->items()->attach($durable_sword->id, ['quantity' => 1]);
+
+        Command::factory()->create([
+            'class' => 'smithing',
+            'method' => 'reinforce',
+            'verb' => 'reinforcing',
+            'emoji' => '⚒️',
+            'ticks' => 1,
+            'reward_id' => $reinforce->id,
+        ]);
     }
 }

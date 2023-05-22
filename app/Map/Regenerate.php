@@ -12,6 +12,10 @@ class Regenerate
     {
         $tile_ids = User::all()->pluck('tile_id')->unique();
 
-        return Tile::where('available_trees', '<', DB::raw('max_trees'))->whereDate('last_disturbed', '<=', now()->subMinutes(5))->whereNotIn('id', $tile_ids)->increment('available_trees');
+        Tile::where('available_trees', '<', DB::raw('max_trees'))->whereDate('last_disturbed', '<=', now()->subMinutes(5))->whereNotIn('id', $tile_ids)->increment('available_trees');
+
+        Tile::where('available_ore', '<', DB::raw('max_ore'))->whereDate('last_disturbed', '<=', now()->subMinutes(5))->whereNotIn('id', $tile_ids)->increment('available_ore');
+
+        return 0;
     }
 }

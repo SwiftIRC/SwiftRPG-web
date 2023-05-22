@@ -7,7 +7,9 @@ use App\Http\Controllers\CookingController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FiremakingController;
 use App\Http\Controllers\FishingController;
+use App\Http\Controllers\MiningController;
 use App\Http\Controllers\QuestController;
+use App\Http\Controllers\SmithingController;
 use App\Http\Controllers\StatsController;
 use App\Http\Controllers\ThievingController;
 use App\Http\Controllers\WoodcuttingController;
@@ -76,6 +78,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
             })->name('lookup');
         });
     });
+    Route::name('mining.')->prefix('mining')->group(function () {
+        Route::post('/mine', [MiningController::class, 'mine'])->name('mine');
+    });
     Route::name('npc.')->prefix('npc')->group(function () {
         Route::get('/{npc}', function ($npc) {
             return Npc::id($npc)->first();
@@ -85,6 +90,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [QuestController::class, 'list'])->name('list');
         Route::get('/start/{quest_id}/{step_id?}', [QuestController::class, 'start'])->name('start');
         Route::get('/inspect/{quest_id}', [QuestController::class, 'inspect'])->name('inspect');
+    });
+    Route::name('smithing.')->prefix('smithing')->group(function () {
+        Route::post('/smelt', [SmithingController::class, 'smelt'])->name('smelt');
+        Route::post('/smith', [SmithingController::class, 'smith'])->name('smith');
+        Route::post('/reinforce', [SmithingController::class, 'reinforce'])->name('reinforce');
     });
     Route::name('stats.')->prefix('stats')->group(function () {
         Route::get('/{user?}', [StatsController::class, 'lookup'])->name('lookup');

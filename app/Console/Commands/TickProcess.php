@@ -7,8 +7,12 @@ use App\Commands\Cooking\Cook;
 use App\Commands\Events\Engage;
 use App\Commands\Firemaking\Burn;
 use App\Commands\Fishing\Fish;
+use App\Commands\Mining\Mine;
 use App\Commands\Questing\Inspect;
 use App\Commands\Questing\Start;
+use App\Commands\Smithing\Reinforce;
+use App\Commands\Smithing\Smelt;
+use App\Commands\Smithing\Smith;
 use App\Commands\Thieving\Pickpocket;
 use App\Commands\Woodcutting\Chop;
 use App\Models\Command as CommandModel;
@@ -69,9 +73,17 @@ class TickProcess extends Command
             'fishing' => [
                 'fish' => Fish::class,
             ],
+            'mining' => [
+                'mine' => Mine::class,
+            ],
             'questing' => [
                 'start' => Start::class,
                 'inspect' => Inspect::class,
+            ],
+            'smithing' => [
+                'reinforce' => Reinforce::class,
+                'smelt' => Smelt::class,
+                'smith' => Smith::class,
             ],
             'thieving' => [
                 'pickpocket' => Pickpocket::class,

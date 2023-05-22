@@ -291,18 +291,23 @@ class Generate
             $tile->terrain_id = 1;
         }
 
+        $ore = 0;
         if ($tile->terrain_id == 1) { // Grass
             $trees = rand(0, 100);
         } elseif ($tile->terrain_id == 2) { // Forest
             $trees = rand(50, 200);
         } elseif ($tile->terrain_id == 5) { // Mountain
             $trees = rand(0, 15);
+            $ore = 3 * $trees;
         } else {
             $trees = 0;
         }
 
         $tile->max_trees = $trees;
         $tile->available_trees = $trees;
+
+        $tile->max_ore = $ore;
+        $tile->available_ore = $ore;
 
         $tile->save();
 

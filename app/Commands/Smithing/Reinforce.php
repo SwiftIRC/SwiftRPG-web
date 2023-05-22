@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Commands\Firemaking;
+namespace App\Commands\Smithing;
 
 use App\Commands\Command;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class Burn extends Command
+class Reinforce extends Command
 {
     public function queue(array $input = []): Response
     {
         $this->user = Auth::user();
-        $log = $this->user->items()->where('name', 'Logs')->withPivot('deleted_at')->first();
+        $sword = $this->user->items()->where('name', 'Iron Sword')->withPivot('deleted_at')->first();
         $this->command = array_pop($input);
 
-        if (!isset($log)) {
+        if (!$sword || $sword->count() < 2) {
             return response()->object(
                 [
                     'command' => $this->command,
-                    'failure' => 'There are no logs in your inventory to burn!',
+                    'failure' => 'There need two iron swords in your inventory to reinforce them!',
                     'ticks' => 0,
                 ]
             );

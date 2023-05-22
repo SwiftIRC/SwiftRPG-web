@@ -38,6 +38,9 @@ return new class extends Migration
             $table->unsignedSmallInteger('max_trees')->default(0);
             $table->unsignedSmallInteger('available_trees')->default(0);
 
+            $table->unsignedSmallInteger('max_ore')->default(0);
+            $table->unsignedSmallInteger('available_ore')->default(0);
+
             $table->timestamp('last_disturbed')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -1,24 +1,24 @@
 <?php
 
-namespace App\Commands\Firemaking;
+namespace App\Commands\Smithing;
 
 use App\Commands\Command;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class Burn extends Command
+class Smelt extends Command
 {
     public function queue(array $input = []): Response
     {
         $this->user = Auth::user();
-        $log = $this->user->items()->where('name', 'Logs')->withPivot('deleted_at')->first();
+        $ore = $this->user->items()->where('name', 'Iron Ore')->withPivot('deleted_at')->first();
         $this->command = array_pop($input);
 
-        if (!isset($log)) {
+        if (!isset($ore)) {
             return response()->object(
                 [
                     'command' => $this->command,
-                    'failure' => 'There are no logs in your inventory to burn!',
+                    'failure' => 'There is no iron ore in your inventory to smelt!',
                     'ticks' => 0,
                 ]
             );
