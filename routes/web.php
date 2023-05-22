@@ -30,6 +30,7 @@ Route::get('/help', function () {
 Route::get('/hiscores', function () {
     $users = User::with('skills')->get()->map(function ($user) {
         $user->total_xp = $user->skills->sum('pivot.quantity');
+
         return $user;
     })->sort(function ($a, $b) {
         return $b->skills->sum('pivot.quantity') <=> $a->skills->sum('pivot.quantity');
