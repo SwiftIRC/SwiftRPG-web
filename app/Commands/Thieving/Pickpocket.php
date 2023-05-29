@@ -2,8 +2,9 @@
 
 namespace App\Commands\Thieving;
 
-use App\Commands\Command;
 use RangeException;
+use App\Commands\Command;
+use Illuminate\Support\Facades\Log;
 
 class Pickpocket extends Command
 {
@@ -15,9 +16,15 @@ class Pickpocket extends Command
         $tile = $this->user->tile()->first();
         $npcs = $tile->npcs()->get();
 
-        if (!$npcs->count()) {
+        if (!count($npcs)) {
             $buildings = $tile->buildings()->get();
-            throw new RangeException('You failed to pickpocket because there was nobody around! ' . ($buildings->count() ? 'Check a building?' : ''));
+            return response()->object(
+                [
+                    'command' => $this->command,
+                    'failure' => 'You failed to pickpocket because there was nobody around! ' . ($buildings->count() ? 'Check a building?' : ''),
+                    'ticks' => 0,
+                ]
+            );
         }
 
         $npc = $npcs->random();

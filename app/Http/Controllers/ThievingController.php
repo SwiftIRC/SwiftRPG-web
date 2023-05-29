@@ -17,29 +17,7 @@ class ThievingController extends Controller
 
     public function pickpocket(Request $request): \Illuminate\Http\Response
     {
-        try {
-            return app(Thieving::class)->pickpocket($request);
-        } catch (RangeException $e) {
-            return response()->error(
-                [
-                    'error' => $e->getMessage(),
-                    'metadata' => [
-                        'hitpoints' => $request->user()->damage(0),
-                    ],
-                ],
-                200
-            );
-        } catch (OverflowException $e) {
-            return response()->error(
-                [
-                    'error' => $e->getMessage(),
-                    'metadata' => [
-                        'hitpoints' => $request->user()->damage(1),
-                    ],
-                ],
-                200
-            );
-        }
+        return app(Thieving::class)->pickpocket($request);
     }
 
     public function steal()
