@@ -32,7 +32,7 @@ class TickSpecialEvent extends Command
      */
     public function handle()
     {
-        $active_event = Event::withTrashed()->firstWhere('deleted_at', '>', now());
+        $active_event = Event::withTrashed()->firstWhere('deleted_at', '>', now()->subMinutes(1));
         if (!empty($active_event)) {
             $end_date = $active_event->deleted_at;
 
@@ -48,7 +48,7 @@ class TickSpecialEvent extends Command
                                     'name' => $active_event->name,
                                     'description' => $active_event->description,
                                 ],
-                                'seconds_remaining' => now()->diffInSeconds($active_event->deleted_at),
+                                'seconds_remaining' => now()->diffInSeconds($active_event->deleted_at, false),
                             ],
                         ]
                     );
